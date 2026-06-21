@@ -8,7 +8,7 @@
 //  Ambos se combinan para dar contexto completo a la IA
 // ============================================================
 
-import { HISTORIAS_DATA, getHistoriaById, getHistoriasActivas as getHistoriasActivasFromData, existeHistoria as existeHistoriaFromData, getSystemPromptHistoria as getSystemPromptHistoriaFromData, getMensajeBienvenidaHistoria as getMensajeBienvenidaHistoriaFromData, getPersonajesHistoria as getPersonajesHistoriaFromData, getImagenSelectorHistoria as getImagenSelectorHistoriaFromData, getImagenTagsMapping as getImagenTagsMappingFromData } from './historias/nino_rpg.js';
+import { HISTORIAS_DATA, getHistoriaById, getHistoriasActivas as getHistoriasActivasFromData, existeHistoria as existeHistoriaFromData, getSystemPromptHistoria as getSystemPromptHistoriaFromData, getMensajeBienvenidaHistoria as getMensajeBienvenidaHistoriaFromData, getPersonajesHistoria as getPersonajesHistoriaFromData, getImagenSelectorHistoria as getImagenSelectorHistoriaFromData, getImagenTagsMapping as getImagenTagsMappingFromData } from './nino_rpg.js';
 
 /**
  * Configuración de historias paralelas disponibles
