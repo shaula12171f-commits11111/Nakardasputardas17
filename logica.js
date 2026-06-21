@@ -1313,6 +1313,14 @@ function esRespuestaValida(datos) {
         return false;
     }
     
+    // Validar que imagen_tag exista y no sea "none" o inválido
+    if (datos.imagen_tag) {
+        const tagInvalidos = ['none', 'null', 'undefined', '', 'invalid', 'error'];
+        if (tagInvalidos.includes(datos.imagen_tag.toLowerCase().trim())) {
+            return false;
+        }
+    }
+    
     return true;
 }
 
@@ -1666,7 +1674,7 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
             respuestasPorChica.push({
                 chica: nombreChica,
                 respuesta: datos && datos.respuesta ? datos.respuesta : '...',
-                imagen_tag: datos && datos.imagen_tag ? datos.imagen_tag : 'hablando'
+                imagen_tag: (datos && datos.imagen_tag && datos.imagen_tag.toLowerCase().trim() !== 'none') ? datos.imagen_tag : 'hablando'
             });
             
             // Ya no se usa contextoAcumulado porque ahora todo el historial va en contextoUnificado
@@ -1685,7 +1693,9 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
         
         // Usar la imagen de la chica principal (primera en responder)
         const chicaPrincipal = respuestasPorChica[0]?.chica || chicaSeleccionada;
-        const tagImagenPrincipal = respuestasPorChica[0] && respuestasPorChica[0].imagen_tag ? respuestasPorChica[0].imagen_tag : 'hablando';
+        const tagImagenPrincipal = respuestasPorChica[0] && respuestasPorChica[0].imagen_tag && respuestasPorChica[0].imagen_tag.toLowerCase().trim() !== 'none' 
+            ? respuestasPorChica[0].imagen_tag 
+            : 'hablando';
         const historiaId = window.historiaParalelaActiva || null;
         const resultadoImagen = obtenerURLImagen(chicaPrincipal, tagImagenPrincipal, historiaId);
         const urlImagenPrincipal = resultadoImagen.urlImagen;
@@ -2157,13 +2167,17 @@ async function procesarRespuesta(datos, mensajeOriginal) {
     if (tieneRespuestasIndividuales && datos.respuestasIndividuales.length > 0) {
         // Usar la imagen de la primera chica como principal (para compatibilidad)
         const primeraChica = datos.respuestasIndividuales[0];
-        tagImagen = primeraChica && primeraChica.imagen_tag ? primeraChica.imagen_tag : 'hablando';
+        tagImagen = primeraChica && primeraChica.imagen_tag && primeraChica.imagen_tag.toLowerCase().trim() !== 'none' 
+            ? primeraChica.imagen_tag 
+            : 'hablando';
         const resultadoImagen = obtenerURLImagen(primeraChica.chica, tagImagen, historiaId);
         urlImagen = resultadoImagen.urlImagen;
         urlAudio = resultadoImagen.urlAudio;
     } else {
         // Seleccionar imagen automaticamente para la chica principal (caso de una sola chica)
-        tagImagen = datos && datos.imagen_tag ? datos.imagen_tag : 'normal';
+        tagImagen = datos && datos.imagen_tag && datos.imagen_tag.toLowerCase().trim() !== 'none' 
+            ? datos.imagen_tag 
+            : 'normal';
         const resultadoImagen = obtenerURLImagen(chicaSeleccionada, tagImagen, historiaId);
         urlImagen = resultadoImagen.urlImagen;
         urlAudio = resultadoImagen.urlAudio;
@@ -2386,7 +2400,7 @@ function obtenerURLImagen(nombreChica, tag, historiaId = null) {
     let urlAudio = imgObj?.audio || null;
     
     // MEJORA #1: Si no encuentra el tag exacto, usar el sistema inteligente de búsqueda de tags pertinentes
-    if (!urlImagen && chicaData.imagenes && Object.keys(chicaData.imagenes).length > 0) {
+    if ((!urlImagen || tag.toLowerCase().trim() === 'none') && chicaData.imagenes && Object.keys(chicaData.imagenes).length > 0) {
         const tagsDisponibles = Object.keys(chicaData.imagenes);
         
         // Intentar encontrar el tag más pertinente usando múltiples criterios
