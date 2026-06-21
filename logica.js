@@ -1260,13 +1260,120 @@ function parsearJSON(raw) {
         return parsed;
     } catch (e) {
         // ==========================================
+        // ESTRATEGIA 6: REPARACIÓN DE STRINGS UNTERMINADOS (NUEVA)
+        // El error "Unterminated string" significa que falta cerrar comillas
+        // Esto pasa cuando la API corta la respuesta a mitad de un string
+        // ==========================================
+        const errorUnterminado = e.message.match(/Unterminated string in JSON at position (\d+)/);
+        if (errorUnterminado) {
+            const posicionError = parseInt(errorUnterminado[1]);
+            logQuinti('WARN', `parsearJSON: String unterminado detectado en posición ${posicionError}, intentando reparar...`);
+            
+            // Extraer el JSON hasta la posición del error
+            let jsonCortado = texto.substring(0, posicionError);
+            
+            // Buscar la última comilla abierta sin cerrar
+            // y agregar el cierre faltante
+            let comillasAbiertas = 0;
+            let escapeActivo = false;
+            let ultimaComillaAbierta = -1;
+            
+            for (let i = 0; i < jsonCortado.length; i++) {
+                const char = jsonCortado[i];
+                
+                if (escapeActivo) {
+                    escapeActivo = false;
+                    continue;
+                }
+                
+                if (char === '\\') {
+                    escapeActivo = true;
+                    continue;
+                }
+                
+                if (char === '"') {
+                    if (comillasAbiertas === 0) {
+                        ultimaComillaAbierta = i;
+                        comillasAbiertas++;
+                    } else {
+                        comillasAbiertas--;
+                        ultimaComillaAbierta = -1;
+                    }
+                }
+            }
+            
+            // Si hay una comilla abierta sin cerrar, cerrarla
+            if (ultimaComillaAbierta !== -1) {
+                logQuinti('DEBUG', `parsearJSON: Encontrada comilla sin cerrar en posición ${ultimaComillaAbierta}`);
+                
+                // Agregar cierre de comilla y llave
+                jsonCortado += '"';
+                
+                // Verificar si también falta cerrar la llave
+                const llavesAbiertas = (jsonCortado.match(/\{/g) || []).length;
+                const llavesCerradas = (jsonCortado.match(/\}/g) || []).length;
+                
+                if (llavesAbiertas > llavesCerradas) {
+                    jsonCortado += '}';
+                    logQuinti('DEBUG', `parsearJSON: Agregada llave de cierre faltante`);
+                }
+                
+                logQuinti('INFO', `parsearJSON: JSON reparado (longitud original: ${texto.length}, reparado: ${jsonCortado.length})`);
+                
+                try {
+                    const parsed = JSON.parse(jsonCortado);
+                    parsed.texto_original = textoOriginalCompleto;
+                    parsed.fueReparado = true;
+                    parsed.posicionReparada = posicionError;
+                    logQuinti('INFO', 'parsearJSON: Estrategia 6 exitosa (reparación de string unterminado)');
+                    return parsed;
+                } catch (e2) {
+                    logQuinti('DEBUG', `parsearJSON: Estrategia 6 falló - ${e2.message}`);
+                }
+            }
+        }
+        
+        // ==========================================
+        // ESTRATEGIA 7: EXTRACCIÓN FORZOSA DEL CONTENIDO VÁLIDO (NUEVA)
+        // Si todo falla, extraer manualmente el valor de "respuesta" aunque el JSON esté roto
+        // ==========================================
+        logQuinti('WARN', 'parsearJSON: Intentando extracción forzosa del contenido...');
+        
+        // Buscar el patrón "respuesta":"..." o "respuesta": "..."
+        const respuestaMatch = texto.match(/["']respuesta["']\s*:\s*["']([\s\S]*?)["']/);
+        if (respuestaMatch) {
+            const contenidoRespuesta = respuestaMatch[1];
+            logQuinti('INFO', `parsearJSON: Contenido extraído manualmente (longitud: ${contenidoRespuesta.length})`);
+            
+            // Buscar también imagen_tag si existe
+            const imagenTagMatch = texto.match(/["']imagen_?tag["']\s*:\s*["']([^"']+?)["']/);
+            const imagenTag = imagenTagMatch ? imagenTagMatch[1] : null;
+            
+            // Devolver objeto reconstruido
+            const resultado = {
+                respuesta: contenidoRespuesta,
+                fueReparado: true,
+                metodoReparacion: 'extraccion_forzosa'
+            };
+            
+            if (imagenTag) {
+                resultado.imagen_tag = imagenTag;
+            }
+            
+            logQuinti('INFO', 'parsearJSON: Estrategia 7 exitosa (extracción forzosa)');
+            return resultado;
+        }
+        
+        // ==========================================
         // FALLBACK FINAL: Si TODO falla, devolver null
         // El sistema usará fallbacks.js para generar respuesta alternativa
         // ==========================================
         logQuinti('ERROR', 'parsearJSON: TODOS LOS INTENTOS FALLARON', {
-            contenidoInicio: texto.substring(0, 300),
+            contenidoInicio: texto.substring(0, 500),
             longitudTotal: texto.length,
-            errorUltimoIntento: e.message
+            errorUltimoIntento: e.message,
+            tipoError: e.name,
+            stackTrace: e.stack?.substring(0, 200)
         });
         return null;
     }
@@ -1999,8 +2106,15 @@ async function intentarLlamadaAPI(mensajes, modelo, forzarJSON = false) {
                     
                     if (resultadoJSON === null) {
                         logQuinti('ERROR', 'API devolvió contenido pero no es JSON válido (retry)', {
-                            contenido: contenido.substring(0, 200),
-                            keyUsada: keyNumero
+                            contenido: contenido.substring(0, 500),
+                            longitudTotal: contenido.length,
+                            keyUsada: keyNumero,
+                            primeros100Chars: contenido.substring(0, 100),
+                            ultimos100Chars: contenido.substring(Math.max(0, contenido.length - 100)),
+                            contieneRespuestaTag: contenido.includes('"respuesta"') || contenido.includes("'respuesta'"),
+                            contieneImagenTag: contenido.includes('"imagen_tag"') || contenido.includes("'imagen_tag'"),
+                            tieneBloquesMarkdown: contenido.includes('```'),
+                            caracteresEspeciales: JSON.stringify(contenido.substring(0, 200)).replace(/\\\\/g, '\\')
                         });
                     }
                     
@@ -2047,8 +2161,15 @@ async function intentarLlamadaAPI(mensajes, modelo, forzarJSON = false) {
                 // Si el parseo falla y devuelve null, registrar error detallado
                 if (resultadoJSON === null) {
                     logQuinti('ERROR', 'API devolvió contenido pero no es JSON válido', {
-                        contenido: contenido.substring(0, 200),
-                        keyUsada: keyNumero
+                        contenido: contenido.substring(0, 500),
+                        longitudTotal: contenido.length,
+                        keyUsada: keyNumero,
+                        primeros100Chars: contenido.substring(0, 100),
+                        ultimos100Chars: contenido.substring(Math.max(0, contenido.length - 100)),
+                        contieneRespuestaTag: contenido.includes('"respuesta"') || contenido.includes("'respuesta'"),
+                        contieneImagenTag: contenido.includes('"imagen_tag"') || contenido.includes("'imagen_tag'"),
+                        tieneBloquesMarkdown: contenido.includes('```'),
+                        caracteresEspeciales: JSON.stringify(contenido.substring(0, 200)).replace(/\\\\/g, '\\')
                     });
                 }
                 
