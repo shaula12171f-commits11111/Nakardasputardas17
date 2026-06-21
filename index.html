@@ -1712,6 +1712,9 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             inicializarSelector();
         }
         
+        // Exponer guardarNombre globalmente inmediatamente
+        window.guardarNombre = guardarNombre;
+        
         // Cargar nombre guardado si existe - PERO SIEMPRE MOSTRAR PANTALLA DE NOMBRE
         function cargarNombreGuardado() {
             // Limpiar nombre guardado para que siempre pida el nombre al entrar
