@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuintiAmigas - Chat</title>
+    <link rel="icon" type="image/jpeg" href="https://pbs.twimg.com/media/HCrpe4jWQAAstF7?format=jpg&name=small">
+    <link rel="stylesheet" href="../1_style.css">
+    <style>
+        /* Selector de chicas - UI OSCURA MEJORADA */
+        .selector-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 25px;
+            background: rgba(20, 20, 30, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(147, 112, 219, 0.3);
+        }
+        
+        .selector-header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2, #8B5CF6);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+        
+        .selector-header h2 {
+            font-size: 28px;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .chicas-selector {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+        
+        .chica-button {
+            position: relative;
+            width: 180px;
+            height: 240px;
+            border: 4px solid #8B5CF6;
+            border-radius: 20px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: #1a1a2e;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .chica-button:hover {
+            transform: translateY(-5px) scale(1.03);
+            border-color: #A78BFA;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6);
+        }
+        
+        .chica-button.selected {
+            border-color: #C4B5FD;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.9), inset 0 0 20px rgba(139, 92, 246, 0.4);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.9); }
+            50% { box-shadow: 0 0 50px rgba(139, 92, 246, 1); }
+        }
+        
+        .chica-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .chica-button:hover img {
+            transform: scale(1.1);
+        }
+        
+        .chica-button .nombre-chica {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(139, 92, 246, 0.95));
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        .chat-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px;
+            background: rgba(20, 20, 30, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            display: none;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .chat-container.active {
+            display: block;
+        }
+        
+        .chat-header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2, #8B5CF6);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+        
+        .chat-header h2 {
+            font-size: 26px;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .chica-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            border: 2px solid #8B5CF6;
+        }
+        
+        .chica-info img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #A78BFA;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5);
+        }
+        
+        .chica-info-text h3 {
+            margin: 0;
+            color: #C4B5FD;
+            font-size: 24px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .chica-info-text p {
+            margin: 8px 0 0;
+            color: #a0a0b0;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        
+        .chat-messages {
+            height: 500px;
+            overflow-y: auto;
+            border: 2px solid #8B5CF6;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #0f0f1a;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .message {
+            margin: 10px 0;
+            padding: 15px 20px;
+            border-radius: 15px;
+            max-width: 85%;
+            word-wrap: break-word;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #1e3a5f, #2d5a87);
+            color: #e0e0ff;
+            margin-left: auto;
+            text-align: right;
+            box-shadow: 0 3px 10px rgba(30, 58, 95, 0.5);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .bot-message {
+            background: linear-gradient(135deg, #2d1b4e, #1a1a2e);
+            color: #e0e0ff;
+            box-shadow: 0 3px 10px rgba(45, 27, 78, 0.5);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        /* NARRACIÓN CON ESTILO DIFERENTE - Texto entre asteriscos */
+        .bot-message em.narracion,
+        .bot-message i.narracion {
+            color: #FBBF24 !important; /* Ámbar dorado brillante */
+            font-style: italic;
+            font-weight: 500;
+            text-shadow: 0 0 2px rgba(251, 191, 36, 0.3);
+            background: rgba(251, 191, 36, 0.08);
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+        
+        /* Fallback para cualquier em o i dentro del mensaje del bot */
+        .bot-message em,
+        .bot-message i {
+            color: #FCD34D;
+            font-style: italic;
+            font-weight: 500;
+        }
+        
+        .bot-message img {
+            max-width: 400px;
+            max-height: 500px;
+            width: auto;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+            margin: 15px auto 10px auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            border: 3px solid rgba(139, 92, 246, 0.5);
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #8B5CF6;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            background: #1a1a2e;
+            color: #e0e0ff;
+        }
+        
+        .chat-input:focus {
+            border-color: #A78BFA;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+        }
+        
+        .send-button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        
+        .send-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5);
+        }
+        
+        .send-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .typing-indicator {
+            display: none;
+            color: #A78BFA;
+            font-style: italic;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .start-chat-btn {
+            display: block;
+            margin: 25px auto;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2, #8B5CF6);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .start-chat-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.7);
+        }
+        
+        .start-chat-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .typing-indicator {
+            display: none;
+            color: #A78BFA;
+            font-style: italic;
+            margin: 15px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 3px solid #8B5CF6;
+            border-radius: 30px;
+            font-size: 17px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: #1a1a2e;
+            color: #e0e0ff;
+            min-width: 0; /* Previene desbordamiento en móviles */
+        }
+        
+        .chat-input:focus {
+            border-color: #A78BFA;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+        }
+        
+        .send-button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2, #8B5CF6);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 17px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            white-space: nowrap; /* Evita que el texto se rompa en móviles */
+        }
+        
+        .send-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.7);
+        }
+        
+        .send-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ============================================
+           MEDIA QUERIES PARA CELULARES (MEJORA UI)
+           ============================================ */
+        
+        /* Pantallas menores a 768px (tablets y celulares) */
+        @media (max-width: 768px) {
+            .selector-container,
+            .chat-container {
+                margin: 10px auto;
+                padding: 15px;
+                max-width: 95%;
+            }
+            
+            .selector-header h2 {
+                font-size: 22px;
+            }
+            
+            .chicas-selector {
+                gap: 15px;
+            }
+            
+            .chica-button {
+                width: 140px;
+                height: 200px;
+            }
+            
+            .chica-button .nombre-chica {
+                font-size: 14px;
+                padding: 8px;
+            }
+            
+            .chat-header h2 {
+                font-size: 20px;
+            }
+            
+            .chica-info {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .chica-info img {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .chica-info-text h3 {
+                font-size: 20px;
+            }
+            
+            .chica-info-text p {
+                font-size: 14px;
+            }
+            
+            .chat-messages {
+                height: 400px;
+                padding: 15px;
+            }
+            
+            .message {
+                padding: 12px 15px;
+                font-size: 15px;
+                max-width: 90%;
+            }
+            
+            .chat-input-container {
+                flex-direction: row;
+                gap: 8px;
+            }
+            
+            .chat-input {
+                padding: 12px 15px;
+                font-size: 16px;
+            }
+            
+            .send-button {
+                padding: 12px 20px;
+                font-size: 15px;
+            }
+            
+            .start-chat-btn {
+                padding: 15px 30px;
+                font-size: 18px;
+            }
+            
+            .fixed-bottom-buttons {
+                bottom: 15px;
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .bottom-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+                min-width: auto;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .modal-header h2 {
+                font-size: 22px;
+            }
+        }
+        
+        /* Pantallas menores a 480px (celulares pequeños) */
+        @media (max-width: 480px) {
+            .selector-container,
+            .chat-container {
+                margin: 5px auto;
+                padding: 10px;
+                max-width: 98%;
+            }
+            
+            .selector-header h2 {
+                font-size: 18px;
+            }
+            
+            .selector-header p {
+                font-size: 14px;
+            }
+            
+            .chicas-selector {
+                gap: 10px;
+            }
+            
+            .chica-button {
+                width: 110px;
+                height: 160px;
+                border-width: 3px;
+            }
+            
+            .chica-button .nombre-chica {
+                font-size: 12px;
+                padding: 6px;
+            }
+            
+            .chat-header {
+                padding: 15px;
+            }
+            
+            .chat-header h2 {
+                font-size: 18px;
+            }
+            
+            .chica-info img {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .chica-info-text h3 {
+                font-size: 18px;
+            }
+            
+            .chica-info-text p {
+                font-size: 13px;
+            }
+            
+            .chat-messages {
+                height: 350px;
+                padding: 10px;
+            }
+            
+            .message {
+                padding: 10px 12px;
+                font-size: 14px;
+                max-width: 95%;
+            }
+            
+            .chat-input-container {
+                gap: 6px;
+            }
+            
+            .chat-input {
+                padding: 10px 12px;
+                font-size: 14px;
+                border-width: 2px;
+            }
+            
+            .send-button {
+                padding: 10px 15px;
+                font-size: 14px;
+                min-width: 70px;
+            }
+            
+            .start-chat-btn {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+            
+            .typing-indicator {
+                font-size: 14px;
+            }
+            
+            .fixed-bottom-buttons {
+                bottom: 10px;
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .bottom-btn {
+                padding: 10px 15px;
+                font-size: 13px;
+                min-width: auto;
+            }
+            
+            .modal-header h2 {
+                font-size: 20px;
+            }
+            
+            .historia-card h3 {
+                font-size: 18px;
+            }
+            
+            .historia-card p {
+                font-size: 13px;
+            }
+            
+            .historia-card .imagen-historia {
+                height: 150px;
+            }
+        }
+
+        /* Botones fijos en la parte inferior - centrados y sin superposición */
+        .fixed-bottom-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            z-index: 100;
+            pointer-events: none; /* Permite clicks a través del contenedor */
+        }
+
+        .bottom-btn {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.6);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            pointer-events: auto; /* Reactiva clicks en los botones */
+        }
+
+        .bottom-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.8);
+        }
+
+        /* Botón de Historias Paralelas - ya no se usa posicion fija individual */
+        .historias-paralelas-btn {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.6);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .historias-paralelas-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.8);
+        }
+
+        /* Modal de Historias Paralelas */
+        .modal-historias {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 25px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.7);
+            border: 3px solid #8B5CF6;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #8B5CF6;
+        }
+
+        .modal-header h2 {
+            color: #C4B5FD;
+            margin: 0;
+            font-size: 26px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-btn {
+            background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.6);
+        }
+
+        .historias-lista {
+            display: grid;
+            gap: 20px;
+        }
+
+        .historia-card {
+            background: #0f0f1a;
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid #8B5CF6;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .historia-card:hover {
+            transform: translateY(-5px);
+            border-color: #A78BFA;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+        }
+
+        .historia-card h3 {
+            color: #C4B5FD;
+            margin: 0 0 10px 0;
+            font-size: 22px;
+        }
+
+        .historia-card p {
+            color: #a0a0b0;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .historia-card .imagen-historia {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #8B5CF6;
+        }
+
+        /* Estilos para el panel de guardado de chats */
+        .slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+
+        .slot-card {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #8B5CF6;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slot-card.has-data {
+            border-color: #4CAF50;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .slot-card.empty {
+            border-color: #8B5CF6;
+            opacity: 0.8;
+        }
+
+        .slot-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+        }
+
+        .slot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .slot-number {
+            color: #C4B5FD;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .slot-status {
+            font-size: 20px;
+        }
+
+        .slot-status.empty {
+            opacity: 0.5;
+        }
+
+        .slot-info {
+            margin-bottom: 15px;
+        }
+
+        .slot-date {
+            color: #a0a0b0;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .slot-chicas {
+            color: #A78BFA;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .slot-messages {
+            color: #8B5CF6;
+            font-size: 13px;
+        }
+
+        .slot-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-load,
+        .btn-delete,
+        .btn-save-here {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-load {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-load:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #f44336, #da1e1e);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.5);
+        }
+
+        .btn-save-here {
+            background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-save-here:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.5);
+        }
+
+        .slot-empty-info {
+            text-align: center;
+            color: #a0a0b0;
+            padding: 20px 0;
+        }
+
+        .slot-empty-info p {
+            margin: 0 0 15px 0;
+            font-style: italic;
+        }
+
+        .no-chats {
+            text-align: center;
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+    <button id="boton-casa" class="btn-casa" onclick="volverAlInicio()" title="Volver al inicio">
+        🏠
+    </button>
+
+    <!-- Pantalla de ingreso del nombre -->
+    <div class="selector-container" id="nombreContainer">
+        <div class="selector-header">
+            <h2>💕 Bienvenido a QuintiAmigas 💕</h2>
+            <p>Antes de comenzar, ¿cuál es tu nombre?</p>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 30px;">
+            <input type="text" id="nombreUsuarioInput" class="chat-input" placeholder="Escribe tu nombre aquí..." style="max-width: 400px; text-align: center; font-size: 18px; padding: 15px;" onkeypress="if(event.key === 'Enter') guardarNombre()">
+            <button class="start-chat-btn" onclick="guardarNombre()" style="margin-top: 10px;">
+                💫 Comenzar Aventura
+            </button>
+        </div>
+    </div>
+
+    <!-- Selector de Chicas -->
+    <div class="selector-container" id="selectorContainer" style="display: none;">
+        <div class="selector-header">
+            <h2>💕 Selecciona tu Chica 💕</h2>
+            <p>Hola <span id="nombreUsuarioDisplay"></span>, elige a una de las quintillizas Nakano para chatear</p>
+        </div>
+        
+        <div class="chicas-selector" id="chicasSelector">
+            <!-- Los botones se generan dinámicamente con JS -->
+        </div>
+        
+        <button class="start-chat-btn" id="startChatBtn" onclick="iniciarChat()" disabled>
+            💬 Comenzar Chat
+        </button>
+    </div>
+
+    <!-- Botones fijos en la parte inferior -->
+    <div class="fixed-bottom-buttons">
+        <button class="bottom-btn" id="historiasParalelasBtn" onclick="abrirHistoriasParalelas()">
+            📖 Historias Paralelas
+        </button>
+        <button class="bottom-btn" id="chatSaveBtn" onclick="toggleChatSavePanel()" title="Guardar/Cargar Chats">
+            💾 Guardar Chat
+        </button>
+    </div>
+
+    <!-- Modal de Historias Paralelas -->
+    <div class="modal-historias" id="modalHistorias" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📖 Historias Paralelas</h2>
+                <button class="close-btn" onclick="cerrarHistoriasParalelas()">×</button>
+            </div>
+            <div class="historias-lista" id="historiasLista">
+                <!-- Las historias se generan dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de Guardado/Carga de Chats -->
+    <div class="modal-historias" id="chatSavePanel" style="display: none;">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2>💾 Guardado de Chats</h2>
+                <button class="close-btn" onclick="toggleChatSavePanel()">×</button>
+            </div>
+            <div class="modal-body" style="padding: 25px;">
+                <div class="save-panel-info" style="margin-bottom: 20px; padding: 15px; background: rgba(139, 92, 246, 0.1); border-radius: 10px; border-left: 4px solid #8B5CF6;">
+                    <p style="margin: 0 0 10px 0; color: #C4B5FD; font-size: 15px;">
+                        💡 <strong>Instrucciones:</strong> Guarda tu conversación actual en un slot para recuperarla después. 
+                        Los chats se almacenan en la memoria de tu navegador y persisten aunque cierres la página.
+                    </p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                        <button class="send-button" onclick="ChatSaveSystem.exportAllChats()" style="font-size: 14px; padding: 10px 20px;">
+                            📤 Exportar Todos
+                        </button>
+                        <label class="send-button" style="font-size: 14px; padding: 10px 20px; cursor: pointer; display: inline-block;">
+                            📥 Importar
+                            <input type="file" accept=".json" onchange="ChatSaveSystem.importChats(this.files[0])" style="display: none;">
+                        </label>
+                    </div>
+                </div>
+                <div id="chatSlotsPanel">
+                    <!-- Los slots se generan dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <h2>💬 Chat con <span id="chicaNombreHeader"></span></h2>
+        </div>
+        
+        <div class="chica-info">
+            <img id="chicaImagenPerfil" src="" alt="Perfil">
+            <div class="chica-info-text">
+                <h3 id="chicaNombreInfo"></h3>
+                <p id="chicaDescripcion"></p>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                ¡Hola! Soy <span id="chicaNombreSaludo"></span> 🌸 ¿En qué puedo ayudarte hoy?
+            </div>
+            <!-- Mensaje de ejemplo con narración para demostrar el estilo -->
+            <div class="message bot-message" style="margin-top: 10px; border-left: 3px solid #FBBF24;">
+                <strong>Ejemplo:</strong> <em class="narracion">*sonríe cálidamente*</em> Este texto dorado es la narración entre asteriscos. ¡Así se verá en el chat! ✨
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typingIndicator" style="display: none;">
+            <span id="chicaNombreEscribiendo"></span> está escribiendo...
+        </div>
+        
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="userInput" placeholder="Escribe tu mensaje..." onkeypress="handleKeyPress(event)">
+            <button class="send-button" id="sendButton" onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+
+    <!-- Cargar scripts en orden: imagenes, logica (con reintentos y logs), luego UI -->
+    <script type="module" src="imagenes.js"></script>
+    <script type="module" src="logica.js"></script>
+    <script type="module" src="parserAcciones.js"></script>
+    <script type="module" src="historiasParalelas.js"></script>
+    <script type="module" src="antiRepeticion.js"></script>
+    <!-- Cargar tests unitarios en desarrollo (descomentar para ejecutar tests) -->
+    <!-- <script type="module" src="logica.test.js"></script> -->
+    <script type="module">
+        // Importar funciones necesarias de logica.js e imagenes.js
+        import { getChicasDisponibles, seleccionarChica, conversar, logQuinti, logErrorAPI, formatearErrorUsuario, getChicasEnChat, actualizarAccionEnCurso, getAccionEnCurso, getChicaSeleccionada, getImagenSelector, formatearTextoConAsteriscos, parsearJSON, obtenerURLImagen } from './logica.js';
+        import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion } from './antiRepeticion.js';
+        import { QuintiImagenesPrueba } from './imagenes.js';
+        
+        let chicaSeleccionadaActual = null;
+        let historialMensajesUI = []; // Historial local para la UI
+        let accionEnCurso = null; // Mantiene el estado de la acción actual (ej: 'besando', 'chupando')
+        let contadorTurnosAccion = 0; // Cuenta cuántos turnos lleva la acción actual
+        const MAX_TURNOS_ACCION = 3; // Después de 3 turnos, la acción puede terminar naturalmente
+        
+        // SISTEMA DE AUDIO - Control global de reproducción
+        let audiosActivos = new Map(); // Mapa de elementos de audio activos por ID único
+        
+        /**
+         * Pausa todos los audios activos actualmente
+         */
+        function pausarTodosLosAudios() {
+            // Pausar audios del mapa de control
+            audiosActivos.forEach((audio, id) => {
+                if (!audio.paused) {
+                    audio.pause();
+                }
+            });
+            
+            // Pausar TODOS los elementos de audio en el DOM (incluyendo los insertados como HTML)
+            const allAudios = document.querySelectorAll('audio');
+            allAudios.forEach(audio => {
+                if (!audio.paused) {
+                    audio.pause();
+                }
+            });
+        }
+        
+        /**
+         * Crea un elemento de audio y lo registra en el sistema de control
+         * @param {string} url - URL del archivo de audio
+         * @param {string} idChica - Identificador de la chica (para tracking)
+         * @returns {HTMLAudioElement} - Elemento de audio configurado
+         */
+        function crearAudioControlado(url, idChica) {
+            // Pausar todos los audios anteriores antes de reproducir uno nuevo
+            pausarTodosLosAudios();
+            
+            const audio = new Audio(url);
+            audio.controls = true;
+            audio.autoplay = true;
+            audio.loop = true;
+            audio.style.cssText = "display: block; margin: 10px auto; width: 100%; max-width: 400px;";
+            
+            // Generar ID único para este audio
+            const audioId = `${idChica}_${Date.now()}`;
+            audiosActivos.set(audioId, audio);
+            
+            // Limpiar del mapa cuando termine (por si acaso)
+            audio.addEventListener('ended', () => {
+                audiosActivos.delete(audioId);
+            });
+            
+            return audio;
+        }
+        
+        /**
+         * Convierte un elemento de audio a string HTML
+         * @param {HTMLAudioElement} audio - Elemento de audio
+         * @param {string} url - URL del audio (fallback)
+         * @returns {string} - HTML del audio
+         */
+        function audioToHTML(audio, url) {
+            const source = audio.querySelector('source')?.src || url;
+            return `<audio controls autoplay loop style="display: block; margin: 10px auto; width: 100%; max-width: 400px;"><source src="${source}" type="audio/mpeg">Tu navegador no soporta el elemento de audio.</audio>`;
+        }
+        
+        // Inicializar el selector cuando carga la página
+        function inicializarSelector() {
+            const selectorDiv = document.getElementById('chicasSelector');
+            const chicas = getChicasDisponibles();
+            
+            selectorDiv.innerHTML = '';
+            
+            chicas.forEach(nombre => {
+                const infoChica = QuintiImagenesPrueba[nombre];
+                if (infoChica) {
+                    const btn = document.createElement('div');
+                    btn.className = 'chica-button';
+                    btn.onclick = () => seleccionarChicaVisual(nombre);
+                    
+                    const img = document.createElement('img');
+                    img.src = infoChica.imagenSelector;
+                    img.alt = infoChica.nombre;
+                    
+                    const nombreDiv = document.createElement('div');
+                    nombreDiv.className = 'nombre-chica';
+                    nombreDiv.textContent = infoChica.nombre;
+                    
+                    btn.appendChild(img);
+                    btn.appendChild(nombreDiv);
+                    selectorDiv.appendChild(btn);
+                }
+            });
+        }
+        
+        // Seleccionar una chica visualmente
+        function seleccionarChicaVisual(nombre) {
+            // Remover selección previa
+            document.querySelectorAll('.chica-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Marcar como seleccionada
+            event.currentTarget.classList.add('selected');
+            chicaSeleccionadaActual = nombre;
+            
+            // Habilitar botón de comenzar chat
+            document.getElementById('startChatBtn').disabled = false;
+        }
+        
+        // Iniciar el chat con la chica seleccionada
+        function iniciarChat() {
+            if (!chicaSeleccionadaActual) return;
+            
+            // Seleccionar la chica en la lógica
+            seleccionarChica(chicaSeleccionadaActual);
+            
+            // Ocultar selector, mostrar chat
+            document.getElementById('selectorContainer').style.display = 'none';
+            document.getElementById('chatContainer').classList.add('active');
+            
+            // Actualizar información de la chica en el chat
+            const infoChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
+            document.getElementById('chicaNombreHeader').textContent = infoChica.nombre;
+            document.getElementById('chicaNombreInfo').textContent = infoChica.nombre;
+            document.getElementById('chicaDescripcion').textContent = infoChica.descripcion;
+            document.getElementById('chicaImagenPerfil').src = infoChica.imagenSelector;
+            document.getElementById('chicaNombreSaludo').textContent = infoChica.nombre.split(' ')[0];
+            document.getElementById('chicaNombreEscribiendo').textContent = infoChica.nombre.split(' ')[0];
+            
+            // Limpiar mensajes y agregar saludo personalizado
+            const messagesDiv = document.getElementById('chatMessages');
+            historialMensajesUI = [];
+            messagesDiv.innerHTML = `
+                <div class="message bot-message">
+                    ¡Hola! Soy ${infoChica.nombre.split(' ')[0]} 🌸 ¿En qué puedo ayudarte hoy?
+                </div>
+            `;
+        }
+        
+        function volverAlInicio() {
+            window.location.href = '../index.html';
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        /**
+         * Función principal para enviar mensajes
+         * Implementa logging de errores y muestra imágenes según respuesta de IA
+         */
+
+        /**
+ * Detecta acciones en el mensaje del usuario para determinar qué tag de imagen usar
+ * @param {string} mensajeUsuario - El mensaje original del usuario
+ * @returns {string|null} - Tag de imagen detectado o null si no hay acción clara
+ */
+function detectarAccionEnMensaje(mensajeUsuario) {
+    const mensajeLower = mensajeUsuario.toLowerCase();
+    
+    // Acciones comunes y sus tags correspondientes
+    const accionesTags = [
+        { patron: /bes|kiss/i, tag: 'besando' },
+        { patron: /chup|oral|mamad/i, tag: 'chupando_todo_el_pene' },
+        { patron: /punta/i, tag: 'chupando_solo_la_punta_del_pene' },
+        { patron: /mitad/i, tag: 'chupando_solo_la_mitad_del_pene' },
+        { patron: /bola|testicul/i, tag: 'chupando_bolas' },
+        { patron: /doggy|cuatro patas/i, tag: 'doggystyle' },
+        { patron: /misioner/i, tag: 'misionero' },
+        { patron: /desnud|sin ropa|quita/i, tag: 'desnuda' },
+        { patron: /anal/i, tag: 'anal' },
+        { patron: /paja|handjob/i, tag: 'handjob_paja' },
+        { patron: /cowgirl|encima/i, tag: 'reverse_cowgirl' },
+        { patron: /sidefuck|de lad/i, tag: 'sidefuck' },
+        { patron: /pie|parad|stand/i, tag: 'standfuck_follando_de_pie' },
+        { patron: /ventana/i, tag: 'follando_en_la_ventana' },
+        { patron: /aire/i, tag: 'follando_en_el_aire' },
+        { patron: /culo|ano/i, tag: 'ichika_licking_anus' },
+        { patron: /lam|lamed/i, tag: 'laminedo_pene' },
+        { patron: /cuello/i, tag: 'manos_alrededor_del_cuello' }
+    ];
+    
+    for (const accion of accionesTags) {
+        if (accion.patron.test(mensajeLower)) {
+            return accion.tag;
+        }
+    }
+    
+    return null;
+}
+
+/**
+ * Actualiza el estado de la acción en curso de forma natural
+ * @param {string|null} nuevaAccion - La acción detectada en el mensaje actual
+ */
+function actualizarEstadoAccion(nuevaAccion) {
+    if (nuevaAccion) {
+        // Nueva acción detectada: reiniciar contador
+        if (accionEnCurso !== nuevaAccion) {
+            accionEnCurso = nuevaAccion;
+            contadorTurnosAccion = 1;
+            logQuinti('DEBUG', `Nueva acción iniciada: ${nuevaAccion}`);
+        } else {
+            // Misma acción continúa
+            contadorTurnosAccion++;
+            logQuinti('DEBUG', `Acción ${nuevaAccion} continúa (turno ${contadorTurnosAccion}/${MAX_TURNOS_ACCION})`);
+        }
+    } else {
+        // No hay acción explícita en el mensaje
+        if (accionEnCurso && contadorTurnosAccion >= MAX_TURNOS_ACCION) {
+            // La acción terminó naturalmente después de MAX_TURNOS_ACCION turnos
+            logQuinti('DEBUG', `Acción ${accionEnCurso} terminó naturalmente`);
+            accionEnCurso = null;
+            contadorTurnosAccion = 0;
+        } else if (accionEnCurso) {
+            // La acción aún está en curso pero el usuario no la mencionó explícitamente
+            // Mantenemos la acción para que las imágenes sigan siendo coherentes
+            logQuinti('DEBUG', `Acción ${accionEnCurso} se mantiene implícita (turno ${contadorTurnosAccion})`);
+        }
+    }
+}
+
+/**
+ * Obtiene el tag de imagen considerando el estado de acción en curso
+ * @param {string} respuesta - La respuesta de la IA
+ * @param {string} chicaNombre - Nombre de la chica
+ * @param {string} mensajeUsuario - El mensaje original del usuario (opcional)
+ * @returns {string} - Tag de imagen seleccionado
+ */
+function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
+    const respuestaLower = respuesta.toLowerCase();
+    const infoChica = QuintiImagenesPrueba[chicaNombre];
+    if (!infoChica || !infoChica.imagenes) return 'hablando';
+    
+    const tagsDisponibles = Object.keys(infoChica.imagenes);
+    
+    // PASO 1: Si hay mensaje del usuario, detectar acción primero (PRIORIDAD MÁXIMA)
+    if (mensajeUsuario && mensajeUsuario.trim()) {
+        const tagDetectado = detectarAccionEnMensaje(mensajeUsuario);
+        if (tagDetectado && tagsDisponibles.includes(tagDetectado)) {
+            logQuinti('DEBUG', `Tag forzado por acción del usuario: ${tagDetectado} para ${chicaNombre}`);
+            return tagDetectado;
+        }
+        // Si el tag detectado no existe para esta chica, buscar uno similar
+        if (tagDetectado) {
+            // Buscar tags que contengan la misma palabra clave
+            for (const tag of tagsDisponibles) {
+                if (tag.includes(tagDetectado.split('_')[0])) {
+                    logQuinti('DEBUG', `Tag similar encontrado: ${tag} para ${chicaNombre}`);
+                    return tag;
+                }
+            }
+        }
+    }
+    
+    // PASO 2: Si no hay acción explícita del usuario, verificar si hay una acción en curso
+    if (!mensajeUsuario || !detectarAccionEnMensaje(mensajeUsuario)) {
+        if (accionEnCurso && tagsDisponibles.includes(accionEnCurso)) {
+            logQuinti('DEBUG', `Usando acción en curso: ${accionEnCurso} para ${chicaNombre}`);
+            return accionEnCurso;
+        }
+        // Si la acción en curso no existe para esta chica, buscar una similar
+        if (accionEnCurso) {
+            for (const tag of tagsDisponibles) {
+                if (tag.includes(accionEnCurso.split('_')[0])) {
+                    logQuinti('DEBUG', `Tag similar a acción en curso: ${tag} para ${chicaNombre}`);
+                    return tag;
+                }
+            }
+        }
+    }
+    
+    // PASO 3: Si no hay acción en curso, buscar en la respuesta de la IA
+    // Buscar coincidencias directas con tags
+    for (const tag of tagsDisponibles) {
+        const tagNormalizado = tag.toLowerCase().replace(/_/g, ' ');
+        if (respuestaLower.includes(tagNormalizado)) {
+            return tag;
+        }
+    }
+    
+    // Búsquedas específicas en la respuesta
+    if (respuestaLower.includes('bes') || respuestaLower.includes('kiss')) {
+        if (tagsDisponibles.includes('besando')) return 'besando';
+    }
+    if (respuestaLower.includes('chup') || respuestaLower.includes('oral')) {
+        for (const tag of tagsDisponibles) {
+            if (tag.includes('chupando')) return tag;
+        }
+    }
+    if (respuestaLower.includes('desnud') || respuestaLower.includes('sin ropa')) {
+        if (tagsDisponibles.includes('desnuda')) return 'desnuda';
+    }
+    if (respuestaLower.includes('doggy') || respuestaLower.includes('cuatro patas')) {
+        if (tagsDisponibles.includes('doggystyle')) return 'doggystyle';
+    }
+    if (respuestaLower.includes('misionero') || respuestaLower.includes('encima')) {
+        if (tagsDisponibles.includes('misionero')) return 'misionero';
+    }
+    
+    return tagsDisponibles.includes('hablando') ? 'hablando' : tagsDisponibles[0] || 'normal';
+}
+        
+        // La función obtenerURLImagen ahora se importa desde logica.js
+        // Esta definición local queda como fallback por si acaso
+
+        let lastUserMessage = null; // Para permitir reintentar después de un error
+        
+        async function sendMessage() {
+            // DETENER TODOS LOS AUDIOS ANTERIORES antes de enviar nuevo mensaje
+            pausarTodosLosAudios();
+            
+            const input = document.getElementById('userInput');
+            const sendBtn = document.getElementById('sendButton');
+            const messagesDiv = document.getElementById('chatMessages');
+            const typingIndicator = document.getElementById('typingIndicator');
+            
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Guardar el último mensaje para permitir reintentar
+            lastUserMessage = message;
+            
+            // ACTUALIZAR ESTADO DE ACCIÓN: Detectar si el usuario menciona una acción
+            const accionDetectada = detectarAccionEnMensaje(message);
+            actualizarEstadoAccion(accionDetectada);
+            
+            // Agregar mensaje del usuario al historial UI
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'message user-message';
+            userMsgDiv.textContent = message;
+            messagesDiv.appendChild(userMsgDiv);
+            
+            input.value = '';
+            input.disabled = true;
+            sendBtn.disabled = true;
+            typingIndicator.style.display = 'block';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            try {
+                // Llamar a la función conversar que usa el sistema de reintentos
+                logQuinti('INFO', 'Enviando mensaje a la IA', { mensaje: message.slice(0, 50) + '...', accionDetectada, accionEnCurso });
+                
+                const response = await conversar(message);
+                
+                typingIndicator.style.display = 'none';
+
+                // Detectar si hay múltiples respuestas de diferentes chicas
+                // El formato esperado es: [Nombre]: respuesta
+                const multipleResponsesPattern = /\[(Ichika|Nino|Miku|Yotsuba|Itsuki)\]:/gi;
+                const matches = [...response.respuesta.matchAll(multipleResponsesPattern)];
+
+                // Obtener la lista actualizada de chicas en el chat
+                const chicasEnChatSet = getChicasEnChat();
+                logQuinti('DEBUG', 'Chicas en chat', { chicas: Array.from(chicasEnChatSet), chicasRespondiendo: response.chicasRespondiendo, tieneRespuestasIndividuales: !!response.respuestasIndividuales });
+
+                // Determinar si debemos mostrar múltiples respuestas separadas
+                // IMPORTANTE: Si hay múltiples chicas en el chat, TODAS deben responder en mensajes SEPARADOS
+                const hayMultiplesChicas = chicasEnChatSet.size > 1;
+                const hayRespuestasConFormato = matches.length > 0;
+                const hayRespuestasIndividuales = response.respuestasIndividuales && response.respuestasIndividuales.length > 0;
+
+                if (hayRespuestasIndividuales) {
+                    // CASO ÓPTIMO: Tenemos respuestas individuales de cada chica desde la lógica
+                    // Mostrar CADA respuesta en un mensaje COMPLETAMENTE SEPARADO con su propia imagen
+                    for (let idx = 0; idx < response.respuestasIndividuales.length; idx++) {
+                        const respuestaIndividual = response.respuestasIndividuales[idx];
+                        const chicaNombre = respuestaIndividual.chica;
+                        const chicaRespuesta = respuestaIndividual.respuesta;
+                        
+                        if (!chicaRespuesta) continue;
+                        
+                        // Crear mensaje SEPARADO para esta chica específica
+                        const botMsgDiv = document.createElement('div');
+                        botMsgDiv.className = 'message bot-message';
+
+                        // Obtener info de la chica
+                        const infoChica = QuintiImagenesPrueba[chicaNombre];
+                        
+                        // MÉTODO TRADICIONAL: Una sola imagen al final
+                        let imagenURL = null;
+                        let audioURL = null;
+                        let tagImagen = null; // Declarar siempre para evitar errores
+                        if (infoChica) {
+                            // Seleccionar imagen basada en el mensaje del usuario (PRIORIDAD) y la respuesta
+                            tagImagen = seleccionarTagImagen(chicaRespuesta, chicaNombre, message);
+                            const resultadoImagen = obtenerURLImagen(chicaNombre, tagImagen);
+                            imagenURL = resultadoImagen.urlImagen;
+                            audioURL = resultadoImagen.urlAudio;
+                            logQuinti('DEBUG', `Imagen para ${chicaNombre}`, { tag: tagImagen, url: imagenURL, audio: audioURL, mensajeUsuario: message.substring(0, 50) });
+                        }
+
+                        // Construir contenido: PRIMERO TEXTO con nombre, luego imagen y audio al final
+                        // Formatear el texto para que la narración entre asteriscos tenga estilo diferente
+                        const chicaRespuestaFormateada = formatearTextoConAsteriscos(chicaRespuesta);
+                        let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;"><strong>${chicaNombre}:</strong> ${chicaRespuestaFormateada}</div>`;
+                        if (imagenURL) {
+                            contenidoHTML += `<img src="${imagenURL}" alt="${chicaNombre}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                        }
+                        // Agregar audio si existe - DIRECTAMENTE EN EL HTML PARA QUE AUTOPLAY FUNCIONE
+                        if (audioURL) {
+                            contenidoHTML += `<audio controls autoplay loop style="display: block; margin: 10px auto; width: 100%; max-width: 400px;"><source src="${audioURL}" type="audio/mpeg">Tu navegador no soporta el elemento de audio.</audio>`;
+                        }
+
+                        botMsgDiv.innerHTML = contenidoHTML;
+                        // Guardar el tag de imagen para poder guardarlo y rotarlo después
+                        botMsgDiv.dataset.imagenTag = tagImagen;
+                        
+                        messagesDiv.appendChild(botMsgDiv);
+                        
+                        // Scroll después de cada mensaje
+                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                        
+                        // Pequeña pausa entre mensajes de diferentes chicas para efecto visual
+                        if (idx < response.respuestasIndividuales.length - 1) {
+                            await new Promise(resolve => setTimeout(resolve, 400));
+                        }
+                    }
+                } else if (hayMultiplesChicas) {
+                    // Hay múltiples chicas en el chat - cada una debe tener su propio mensaje
+                    // Primero, obtener todas las chicas que deberían responder
+                    const chicasQueDebenResponder = Array.from(chicasEnChatSet);
+                    
+                    // Intentar extraer respuestas individuales del formato [Nombre]: respuesta
+                    const responseParts = response.respuesta.split(/\[(Ichika|Nino|Miku|Yotsuba|Itsuki)\]:/gi);
+                    const respuestasPorChica = new Map();
+                    
+                    // Procesar partes para extraer respuestas por chica
+                    for (let i = 1; i < responseParts.length; i += 2) {
+                        const chicaNombre = responseParts[i];
+                        const chicaRespuesta = responseParts[i + 1]?.trim() || '';
+                        if (chicaRespuesta && !respuestasPorChica.has(chicaNombre)) {
+                            respuestasPorChica.set(chicaNombre, chicaRespuesta);
+                        }
+                    }
+                    
+                    // Si la IA no generó respuestas separadas para todas las chicas,
+                    // necesitamos generar respuestas únicas para cada una
+                    if (respuestasPorChica.size < chicasQueDebenResponder.length) {
+                        logQuinti('WARN', 'La IA no generó respuestas separadas para todas las chicas', {
+                            chicasQueFaltan: chicasQueDebenResponder.filter(c => !respuestasPorChica.has(c)),
+                            respuestasGeneradas: Array.from(respuestasPorChica.keys())
+                        });
+                        
+                        // Para las chicas que no tienen respuesta individual, creamos una respuesta basada en el contexto
+                        // Usamos diferentes frases introductorias para cada chica para evitar repetición
+                        const frasesIntroduccion = {
+                            'Ichika': ['*sonríe coquetamente*', '*se acerca con elegancia*', '*ríe suavemente*'],
+                            'Nino': ['*cruza los brazos*', '*bufa molesta*', '*te mira fijamente*'],
+                            'Miku': ['*se sonroja tímidamente*', '*habla en voz baja*', '*juega con su cabello*'],
+                            'Yotsuba': ['*sonríe energéticamente*', '*saluda con entusiasmo*', '*hace una pose divertida*'],
+                            'Itsuki': ['*ajusta sus gafas*', '*habla seriamente*', '*mira con determinación*']
+                        };
+                        
+                        for (const chica of chicasQueDebenResponder) {
+                            if (!respuestasPorChica.has(chica)) {
+                                // Generar una respuesta única para esta chica usando su personalidad
+                                const intros = frasesIntroduccion[chica] || ['*responde*'];
+                                const introElegida = intros[Math.floor(Math.random() * intros.length)];
+                                
+                                // Crear una respuesta contextual basada en lo que dijo el usuario
+                                const contextoRespuesta = `${introElegida} ${response.respuesta.replace(/^\[.*?\]:\s*/g, '')}`;
+                                respuestasPorChica.set(chica, contextoRespuesta);
+                            }
+                        }
+                    }
+                    
+                    // Mostrar CADA respuesta en un mensaje COMPLETAMENTE SEPARADO
+                    const chicasArray = Array.from(respuestasPorChica.entries());
+                    for (let idx = 0; idx < chicasArray.length; idx++) {
+                        const [chicaNombre, chicaRespuesta] = chicasArray[idx];
+                        
+                        if (!chicaRespuesta) continue;
+                        
+                        // Crear mensaje SEPARADO para esta chica específica
+                        const botMsgDiv = document.createElement('div');
+                        botMsgDiv.className = 'message bot-message';
+
+                        // Obtener imagen de esta chica específica (SOLO usa sus propias imágenes)
+                        // IMPORTANTE: Pasar el mensaje del usuario para que la imagen sea acorde a la acción
+                        const infoChica = QuintiImagenesPrueba[chicaNombre];
+                        let imagenURL = null;
+                        let audioURL = null;
+                        let tagImagen = null; // Declarar siempre para evitar errores
+                        if (infoChica) {
+                            // Seleccionar imagen basada en el mensaje del usuario (PRIORIDAD) y la respuesta
+                            tagImagen = seleccionarTagImagen(chicaRespuesta, chicaNombre, message);
+                            const resultadoImagen = obtenerURLImagen(chicaNombre, tagImagen);
+                            imagenURL = resultadoImagen.urlImagen;
+                            audioURL = resultadoImagen.urlAudio;
+                            logQuinti('DEBUG', `Imagen para ${chicaNombre}`, { tag: tagImagen, url: imagenURL, audio: audioURL, mensajeUsuario: message.substring(0, 50) });
+                        }
+
+                        // Construir contenido: PRIMERO TEXTO con nombre, luego imagen y audio al final
+                        // Formatear el texto para que la narración entre asteriscos tenga estilo diferente
+                        const chicaRespuestaFormateada = formatearTextoConAsteriscos(chicaRespuesta);
+                        let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;"><strong>${chicaNombre}:</strong> ${chicaRespuestaFormateada}</div>`;
+                        if (imagenURL) {
+                            contenidoHTML += `<img src="${imagenURL}" alt="${chicaNombre}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                        }
+                        // Agregar audio si existe - DIRECTAMENTE EN EL HTML PARA QUE AUTOPLAY FUNCIONE
+                        if (audioURL) {
+                            contenidoHTML += `<audio controls autoplay loop style="display: block; margin: 10px auto; width: 100%; max-width: 400px;"><source src="${audioURL}" type="audio/mpeg">Tu navegador no soporta el elemento de audio.</audio>`;
+                        }
+
+                        botMsgDiv.innerHTML = contenidoHTML;
+                        messagesDiv.appendChild(botMsgDiv);
+                        
+                        // Scroll después de cada mensaje
+                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                        
+                        // Pequeña pausa entre mensajes de diferentes chicas para efecto visual
+                        if (idx < chicasArray.length - 1) {
+                            await new Promise(resolve => setTimeout(resolve, 400));
+                        }
+                    }
+                } else if (hayRespuestasConFormato && matches.length > 1) {
+                    // Caso especial: múltiples respuestas detectadas pero solo una chica en chat
+                    // Esto puede pasar si la IA genera formato [Nombre]: sin razón
+                    // Dividir y mostrar cada respuesta separada
+                    const responseParts = response.respuesta.split(/\[(Ichika|Nino|Miku|Yotsuba|Itsuki)\]:/gi);
+
+                    for (let i = 1; i < responseParts.length; i += 2) {
+                        const chicaNombre = responseParts[i];
+                        const chicaRespuesta = responseParts[i + 1]?.trim() || '';
+
+                        if (chicaRespuesta) {
+                            const botMsgDiv = document.createElement('div');
+                            botMsgDiv.className = 'message bot-message';
+
+                            // IMPORTANTE: Pasar el mensaje del usuario para que la imagen sea acorde a la acción
+                            const infoChica = QuintiImagenesPrueba[chicaNombre];
+                            let imagenURL = null;
+                            let audioURL = null;
+                            let tagImagen = null; // Declarar siempre para evitar errores
+                            if (infoChica) {
+                                tagImagen = seleccionarTagImagen(chicaRespuesta, chicaNombre, message);
+                                const resultadoImagen = obtenerURLImagen(chicaNombre, tagImagen);
+                                imagenURL = resultadoImagen.urlImagen;
+                                audioURL = resultadoImagen.urlAudio;
+                                logQuinti('DEBUG', `Imagen para ${chicaNombre}`, { tag: tagImagen, url: imagenURL, audio: audioURL, mensajeUsuario: message.substring(0, 50) });
+                            }
+
+                            // Formatear el texto para que la narración entre asteriscos tenga estilo diferente
+                            const chicaRespuestaFormateada = formatearTextoConAsteriscos(chicaRespuesta);
+                            
+                            let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;"><strong>${chicaNombre}:</strong> ${chicaRespuestaFormateada}</div>`;
+                            if (imagenURL) {
+                                contenidoHTML += `<img src="${imagenURL}" alt="${chicaNombre}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                            }
+                            // Agregar audio si existe - DIRECTAMENTE EN EL HTML PARA QUE AUTOPLAY FUNCIONE
+                            if (audioURL) {
+                                contenidoHTML += `<audio controls autoplay loop style="display: block; margin: 10px auto; width: 100%; max-width: 400px;"><source src="${audioURL}" type="audio/mpeg">Tu navegador no soporta el elemento de audio.</audio>`;
+                            }
+
+                            botMsgDiv.innerHTML = contenidoHTML;
+                            messagesDiv.appendChild(botMsgDiv);
+                            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                            
+                            if (i + 2 < responseParts.length) {
+                                await new Promise(resolve => setTimeout(resolve, 300));
+                            }
+                        }
+                    }
+                } else {
+                    // Respuesta simple de una sola chica
+                    const botMsgDiv = document.createElement('div');
+                    botMsgDiv.className = 'message bot-message';
+
+                    // Formatear el texto para que la narración entre asteriscos tenga estilo diferente
+                    const respuestaFormateada = formatearTextoConAsteriscos(response.respuesta);
+                    
+                    // Construir contenido: PRIMERO TEXTO, luego imagen y audio al final
+                    let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;">${respuestaFormateada}</div>`;
+                    if (response.imagen_url) {
+                        contenidoHTML += `<img src="${response.imagen_url}" alt="${response.imagen_tag}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                    }
+                    // Agregar audio si existe - DIRECTAMENTE EN EL HTML PARA QUE AUTOPLAY FUNCIONE
+                    if (response.audio_url) {
+                        contenidoHTML += `<audio controls autoplay loop style="display: block; margin: 10px auto; width: 100%; max-width: 400px;"><source src="${response.audio_url}" type="audio/mpeg">Tu navegador no soporta el elemento de audio.</audio>`;
+                    }
+
+                    botMsgDiv.innerHTML = contenidoHTML;
+                    messagesDiv.appendChild(botMsgDiv);
+                }
+
+                logQuinti('INFO', 'Mensaje respondido exitosamente', { 
+                    longitudRespuesta: response.respuesta.length,
+                    tieneImagen: !!response.imagen_url,
+                    modelo: response.modelo,
+                    chicasRespondiendo: response.chicasRespondiendo,
+                    chicasEnChat: response.chicasEnChat
+                });
+                
+            } catch (error) {
+                typingIndicator.style.display = 'none';
+                
+                // Log detallado del error
+                logErrorAPI('sendMessage', error, { mensaje: message });
+                
+                const errorMsgDiv = document.createElement('div');
+                errorMsgDiv.className = 'message bot-message';
+                errorMsgDiv.style.backgroundColor = '#ffebee';
+                errorMsgDiv.style.borderLeft = '4px solid #f44336';
+                errorMsgDiv.style.color = '#c62828';
+                
+                // Mostrar error detallado con formato específico
+                const errorMessage = formatearErrorUsuario(error);
+                errorMsgDiv.innerHTML = `
+                    <div style="margin-bottom: 10px; font-weight: bold;">${errorMessage.replace(/\n/g, '<br>')}</div>
+                    <button onclick="retryLastMessage()" style="background-color: #f44336; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 10px;">
+                        🔄 Reintentar
+                    </button>
+                `;
+                messagesDiv.appendChild(errorMsgDiv);
+                
+                console.error('[CHAT ERROR]', error);
+            }
+            
+            input.disabled = false;
+            sendBtn.disabled = false;
+            input.focus();
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        // Función para reintentar el último mensaje después de un error
+        async function retryLastMessage() {
+            if (!lastUserMessage) {
+                alert('No hay ningún mensaje para reintentar');
+                return;
+            }
+            
+            const input = document.getElementById('userInput');
+            input.value = lastUserMessage;
+            
+            // Eliminar el mensaje de error anterior
+            const messagesDiv = document.getElementById('chatMessages');
+            const errorMessages = messagesDiv.querySelectorAll('.message.bot-message[style*="background-color: #ffebee"]');
+            errorMessages.forEach(msg => msg.remove());
+            
+            // Reenviar el mensaje
+            await sendMessage();
+        }
+        
+        // Variable global para almacenar el nombre del usuario
+        let nombreUsuario = '';
+        
+        // Función para guardar el nombre del usuario y mostrar el selector
+        function guardarNombre() {
+            const input = document.getElementById('nombreUsuarioInput');
+            const nombre = input.value.trim();
+            
+            if (!nombre) {
+                alert('Por favor, escribe tu nombre para comenzar 💕');
+                return;
+            }
+            
+            nombreUsuario = nombre;
+            localStorage.setItem('quintiNombreUsuario', nombre);
+            
+            // Mostrar el nombre en el selector de chicas
+            document.getElementById('nombreUsuarioDisplay').textContent = nombre;
+            
+            // Ocultar pantalla de nombre, mostrar selector de chicas
+            document.getElementById('nombreContainer').style.display = 'none';
+            document.getElementById('selectorContainer').style.display = 'block';
+            
+            // Inicializar el selector de chicas
+            inicializarSelector();
+        }
+        
+        // Cargar nombre guardado si existe - PERO SIEMPRE MOSTRAR PANTALLA DE NOMBRE
+        function cargarNombreGuardado() {
+            // Limpiar nombre guardado para que siempre pida el nombre al entrar
+            localStorage.removeItem('quintiNombreUsuario');
+            // Mostrar siempre la pantalla de ingreso de nombre
+            document.getElementById('nombreContainer').style.display = 'block';
+            document.getElementById('selectorContainer').style.display = 'none';
+            document.getElementById('chatContainer').classList.remove('active');
+        }
+        
+        // Las funciones se exponen en DOMContentLoaded más abajo
+        
+        // Funciones de Historias Paralelas
+        async function abrirHistoriasParalelas() {
+            const modal = document.getElementById('modalHistorias');
+            const historiasLista = document.getElementById('historiasLista');
+            
+            // Importar dinámicamente el módulo de historias paralelas
+            const { getHistoriasActivas, getSystemPromptHistoria } = await import('./historiasParalelas.js');
+            
+            const historias = getHistoriasActivas();
+            
+            if (historias.length === 0) {
+                historiasLista.innerHTML = '<p style="text-align: center; color: #666;">No hay historias paralelas disponibles por ahora.</p>';
+            } else {
+                historiasLista.innerHTML = '';
+                historias.forEach(historia => {
+                    const card = document.createElement('div');
+                    card.className = 'historia-card';
+                    card.onclick = () => iniciarHistoriaParalela(historia.id);
+                    
+                    card.innerHTML = `
+                        <img src="${historia.imagenSelector}" alt="${historia.nombre}" class="imagen-historia">
+                        <h3>${historia.nombre}</h3>
+                        <p>${historia.descripcion}</p>
+                    `;
+                    
+                    historiasLista.appendChild(card);
+                });
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
+        function cerrarHistoriasParalelas() {
+            document.getElementById('modalHistorias').style.display = 'none';
+        }
+        
+        async function iniciarHistoriaParalela(historiaId) {
+            const { getHistoriaParalela, getSystemPromptHistoria, getMensajeBienvenidaHistoria, getImagenSelectorHistoria } = await import('./historiasParalelas.js');
+            const historia = getHistoriaParalela(historiaId);
+            
+            if (!historia) {
+                alert('Historia no encontrada: ' + historiaId);
+                return;
+            }
+            
+            // Cerrar modal
+            cerrarHistoriasParalelas();
+            
+            // Ocultar selector, mostrar chat
+            document.getElementById('selectorContainer').style.display = 'none';
+            document.getElementById('chatContainer').classList.add('active');
+            
+            // Configurar chat para historia paralela
+            const infoHistoria = historia;
+            document.getElementById('chicaNombreHeader').textContent = historia.nombre;
+            document.getElementById('chicaNombreInfo').textContent = historia.nombre;
+            document.getElementById('chicaDescripcion').textContent = historia.descripcion;
+            document.getElementById('chicaImagenPerfil').src = historia.imagenSelector;
+            
+            // Limpiar mensajes y agregar saludo personalizado
+            const messagesDiv = document.getElementById('chatMessages');
+            historialMensajesUI = [];
+            
+            // Actualizar nombres ANTES de limpiar mensajes (para evitar error de null)
+            // Verificar que los elementos existan antes de modificarlos
+            const nombreSaludoEl = document.getElementById('chicaNombreSaludo');
+            const nombreEscribiendoEl = document.getElementById('chicaNombreEscribiendo');
+            
+            if (nombreSaludoEl) {
+                nombreSaludoEl.textContent = historia.nombre.split(' ')[0];
+            }
+            if (nombreEscribiendoEl) {
+                nombreEscribiendoEl.textContent = historia.nombre.split(' ')[0];
+            }
+            
+            // Obtener y mostrar el mensaje de bienvenida personalizado de la historia
+            const mensajeBienvenida = getMensajeBienvenidaHistoria(historiaId);
+            if (mensajeBienvenida) {
+                logQuinti('INFO', `Mensaje de bienvenida de historia cargado: ${historiaId}`);
+                // Mostrar el mensaje de bienvenida como primer mensaje del bot
+                messagesDiv.innerHTML = '';
+                historialMensajesUI = [];
+                
+                // Crear el mensaje de bienvenida manualmente
+                const botMsgDiv = document.createElement('div');
+                botMsgDiv.className = 'message bot-message';
+                
+                let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;">${mensajeBienvenida}</div>`;
+                if (historia.imagenSelector) {
+                    contenidoHTML += `<img src="${historia.imagenSelector}" alt="${historia.nombre}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                }
+                
+                botMsgDiv.innerHTML = contenidoHTML;
+                messagesDiv.appendChild(botMsgDiv);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            } else {
+                // Mensaje por defecto si no hay mensaje de bienvenida personalizado
+                messagesDiv.innerHTML = `
+                    <div class="message bot-message">
+                        ¡Bienvenido a ${historia.nombre}! 🎮 ${historia.descripcion}
+                    </div>
+                `;
+            }
+            
+            // IMPORTANTE: Configurar la lógica para usar el system prompt ADICIONAL de la historia
+            // Este se COMBINARA con el system prompt normal de logica.js
+            const systemPromptHistoria = getSystemPromptHistoria(historiaId);
+            if (systemPromptHistoria) {
+                logQuinti('INFO', `System prompt ADICIONAL de historia cargado: ${historiaId}`, { promptLength: systemPromptHistoria.length });
+                // Guardar el system prompt en una variable global para que logica.js pueda usarlo
+                window.systemPromptHistoriaActual = systemPromptHistoria;
+                window.historiaParalelaActiva = historiaId;
+                
+                // También guardar la imagen selector para mostrar imágenes correctamente
+                const imagenSelector = getImagenSelectorHistoria(historiaId);
+                if (imagenSelector) {
+                    window.imagenSelectorHistoria = imagenSelector;
+                    logQuinti('INFO', `Imagen selector de historia guardada: ${historiaId}`);
+                }
+            }
+            
+            // Resetear el historial de conversación para empezar con los nuevos system prompts
+            if (window.limpiarHistorialConversacion) {
+                window.limpiarHistorialConversacion();
+            }
+            
+            logQuinti('INFO', `Iniciando historia paralela: ${historiaId}`);
+        }
+        
+        // Exponer funciones de historias paralelas globalmente
+        window.abrirHistoriasParalelas = abrirHistoriasParalelas;
+        window.cerrarHistoriasParalelas = cerrarHistoriasParalelas;
+        window.iniciarHistoriaParalela = iniciarHistoriaParalela;
+        
+        // Asegurar que las funciones estén disponibles antes de que se llamen
+        document.addEventListener('DOMContentLoaded', function() {
+            window.guardarNombre = guardarNombre;
+            window.cargarNombreGuardado = cargarNombreGuardado;
+            window.inicializarSelector = inicializarSelector;
+            window.seleccionarChicaVisual = seleccionarChicaVisual;
+            window.iniciarChat = iniciarChat;
+            window.volverAlInicio = volverAlInicio;
+            window.handleKeyPress = handleKeyPress;
+            window.sendMessage = sendMessage;
+            window.retryLastMessage = retryLastMessage;
+            window.getNombreUsuario = function() { return nombreUsuario; };
+            window.abrirHistoriasParalelas = abrirHistoriasParalelas;
+            window.cerrarHistoriasParalelas = cerrarHistoriasParalelas;
+            window.iniciarHistoriaParalela = iniciarHistoriaParalela;
+            
+            // Funciones para el sistema de guardado de chats
+            function toggleChatSavePanel() {
+                const panel = document.getElementById('chatSavePanel');
+                if (panel.style.display === 'none') {
+                    panel.style.display = 'flex';
+                    if (window.ChatSaveSystem) {
+                        ChatSaveSystem.renderSlotsPanel();
+                    }
+                } else {
+                    panel.style.display = 'none';
+                }
+            }
+            
+            // Obtener datos actuales del chat para guardar
+            window.getCurrentChatData = function() {
+                const infoChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
+                
+                // Extraer mensajes del historial UI
+                const mensajes = [];
+                const messagesDiv = document.getElementById('chatMessages');
+                if (messagesDiv) {
+                    const messageElements = messagesDiv.querySelectorAll('.message');
+                    messageElements.forEach(msgEl => {
+                        const isUser = msgEl.classList.contains('user-message');
+                        const textContent = msgEl.textContent.trim();
+                        
+                        // Extraer imagen si existe
+                        const imgEl = msgEl.querySelector('img');
+                        const imagenURL = imgEl ? imgEl.src : null;
+                        
+                        // Extraer audio si existe
+                        const audioEl = msgEl.querySelector('audio');
+                        const audioURL = audioEl ? audioEl.querySelector('source')?.src || audioEl.src : null;
+                        
+                        // Extraer tag de imagen para poder rotar después
+                        const imagenTag = msgEl.dataset.imagenTag || null;
+                        
+                        mensajes.push({
+                            role: isUser ? 'user' : 'assistant',
+                            content: textContent,
+                            imagen: imagenURL,
+                            imagenTag: imagenTag,
+                            audio: audioURL,
+                            timestamp: Date.now()
+                        });
+                    });
+                }
+                
+                return {
+                    chicaPrincipal: chicaSeleccionadaActual,
+                    chicasEnChat: getChicasEnChat ? Array.from(getChicasEnChat()) : [chicaSeleccionadaActual],
+                    mensajes: mensajes,
+                    nombreUsuario: nombreUsuario || 'Anónimo',
+                    version: '2.0' // Versión que incluye audio e imagenTag
+                };
+            };
+            
+            // Restaurar chat desde datos guardados
+            window.restoreChatFromData = function(chatData) {
+                if (!chatData || !chatData.chicaPrincipal) {
+                    alert('❌ Datos de chat inválidos');
+                    return;
+                }
+                
+                // Seleccionar la chica principal
+                chicaSeleccionadaActual = chatData.chicaPrincipal;
+                seleccionarChica(chicaSeleccionadaActual);
+                
+                // Ocultar selector, mostrar chat
+                document.getElementById('selectorContainer').style.display = 'none';
+                document.getElementById('chatContainer').classList.add('active');
+                
+                // Actualizar información de la chica en el chat
+                const infoChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
+                if (infoChica) {
+                    document.getElementById('chicaNombreHeader').textContent = infoChica.nombre;
+                    document.getElementById('chicaNombreInfo').textContent = infoChica.nombre;
+                    document.getElementById('chicaDescripcion').textContent = infoChica.descripcion;
+                    document.getElementById('chicaImagenPerfil').src = infoChica.imagenSelector;
+                    document.getElementById('chicaNombreSaludo').textContent = infoChica.nombre.split(' ')[0];
+                    document.getElementById('chicaNombreEscribiendo').textContent = infoChica.nombre.split(' ')[0];
+                }
+                
+                // Restaurar mensajes
+                const messagesDiv = document.getElementById('chatMessages');
+                if (messagesDiv && chatData.mensajes) {
+                    messagesDiv.innerHTML = '';
+                    
+                    chatData.mensajes.forEach(msg => {
+                        const msgDiv = document.createElement('div');
+                        msgDiv.className = `message ${msg.role === 'user' ? 'user-message' : 'bot-message'}`;
+                        
+                        let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;">${msg.content}</div>`;
+                        
+                        // Restaurar imagen si existe
+                        if (msg.imagen) {
+                            const chicaNombre = msg.role === 'assistant' ? (chatData.chicaPrincipal || 'Chica') : '';
+                            contenidoHTML += `<img src="${msg.imagen}" alt="${chicaNombre}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                        }
+                        
+                        // Restaurar audio si existe
+                        if (msg.audio) {
+                            contenidoHTML += `<audio controls autoplay loop style="display: block; margin: 10px auto; width: 100%; max-width: 400px;"><source src="${msg.audio}" type="audio/mpeg">Tu navegador no soporta el elemento de audio.</audio>`;
+                        }
+                        
+                        msgDiv.innerHTML = contenidoHTML;
+                        // Guardar el tag de imagen para referencia futura
+                        if (msg.imagenTag) {
+                            msgDiv.dataset.imagenTag = msg.imagenTag;
+                        }
+                        messagesDiv.appendChild(msgDiv);
+                    });
+                    
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                }
+                
+                // Cerrar panel de guardado
+                document.getElementById('chatSavePanel').style.display = 'none';
+                
+                alert(`✅ Chat restaurado exitosamente.\nMensajes cargados: ${chatData.mensajes?.length || 0}`);
+            };
+            
+            // Exponer toggleChatSavePanel globalmente
+            window.toggleChatSavePanel = toggleChatSavePanel;
+            
+            // Inicializar cuando carga la página
+            cargarNombreGuardado();
+        });
+        
+        // Cargar el script del sistema de guardado (sin type module para acceso global)
+        const saveSystemScript = document.createElement('script');
+        saveSystemScript.src = './chatSaveSystem.js';
+        document.body.appendChild(saveSystemScript);
+    </script>
+</body>
+</html>
