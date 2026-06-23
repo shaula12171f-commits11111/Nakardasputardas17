@@ -1149,7 +1149,7 @@ function seleccionarImagenAutomatica(dialogo, nombreChica) {
  * @returns {object|null} - Objeto JSON parseado o null si falla
  */
 /**
- * PARSEA RESPUESTA JSON DE LA IA CON MÚLTIPLES ESTRATEGIAS
+ * PARSEA RESPUESTA JSON DE LA IA CON MÚLTIPLES ESTRATEGIAS MEJORADAS
  * Maneja casos donde la IA devuelve texto narrativo en lugar de JSON puro
  * @param {string} raw - Respuesta cruda de la API
  * @returns {object|null} - Objeto parseado o null si falla todo
@@ -1165,7 +1165,7 @@ function parsearJSON(raw) {
     let texto = raw.trim();
 
     // ==========================================
-    // LIMPIEZA INICIAL AGRESIVA
+    // LIMPIEZA INICIAL AGRESIVA MEJORADA
     // ==========================================
     texto = texto
         .replace(/```json|```/gi, '')           // Eliminar bloques de código markdown
@@ -1175,9 +1175,24 @@ function parsearJSON(raw) {
         .trim();
 
     // ==========================================
+    // ESTRATEGIA 0: DETECCIÓN TEMPRANA DE TEXTO NARRATIVO PURO
+    // Si el texto comienza con asterisco y no tiene estructura JSON, intentar extraer
+    // ==========================================
+    if (texto.startsWith('*') && !texto.includes('{')) {
+        logQuinti('WARN', 'parsearJSON: Detectado texto narrativo puro sin JSON, intentando convertir...');
+        // Extraer todo el texto hasta el final o hasta encontrar posible JSON
+        const soloTexto = texto.replace(/\*([^*]+)\*/g, '$1').trim();
+        return {
+            respuesta: soloTexto,
+            fueReparado: true,
+            metodoReparacion: 'conversion_texto_narrativo'
+        };
+    }
+
+    // ==========================================
     // ESTRATEGIA 1: Extraer el JSON más grande posible (la más común)
     // ==========================================
-    const jsonMatch = texto.match(/\{[\s\S]*\}/);
+    const jsonMatch = texto.match(/\{[\s\S]*?\}/);
     if (jsonMatch) {
         try {
             const parsed = JSON.parse(jsonMatch[0]);
@@ -1185,6 +1200,23 @@ function parsearJSON(raw) {
             return parsed;
         } catch (e) {
             logQuinti('DEBUG', `parsearJSON: Estrategia 1 falló - ${e.message}`);
+        }
+    }
+
+    // ==========================================
+    // ESTRATEGIA 1.5: BUSCAR JSON DESPUÉS DE TEXTO NARRATIVO
+    // Maneja caso: "*Narración* {...JSON...}"
+    // ==========================================
+    const patronNarracionMasJSON = /\*[^*]*\*\s*(\{[\s\S]*\})/;
+    const matchNarracionJSON = texto.match(patronNarracionMasJSON);
+    if (matchNarracionJSON && matchNarracionJSON[1]) {
+        try {
+            const parsed = JSON.parse(matchNarracionJSON[1]);
+            parsed.texto_original = textoOriginalCompleto;
+            logQuinti('INFO', 'parsearJSON: Estrategia 1.5 exitosa (JSON después de narración)');
+            return parsed;
+        } catch (e) {
+            logQuinti('DEBUG', `parsearJSON: Estrategia 1.5 falló - ${e.message}`);
         }
     }
 
@@ -1238,6 +1270,48 @@ function parsearJSON(raw) {
         } catch (e) {
             logQuinti('DEBUG', `parsearJSON: Estrategia 4 falló - ${e.message}`);
         }
+    }
+
+    // ==========================================
+    // ESTRATEGIA 4.5: EXTRACCIÓN DE CAMPOS INDIVIDUALES CUANDO JSON ESTÁ ROTO
+    // Extrae manualmente los campos "respuesta" e "imagen_tag" usando regex
+    // ==========================================
+    logQuinti('WARN', 'parsearJSON: Intentando extracción de campos individuales...');
+    
+    // Buscar campo respuesta con múltiples patrones
+    const camposRespuesta = [
+        /["']respuesta["']\s*:\s*["']([\s\S]*?)["'](?,)/,  // "respuesta": "..."
+        /["']respuesta["']\s*:\s*["']([\s\S]*?)["']\s*[,}]/,  // "respuesta": "...", o "respuesta": "..."}
+        /respuesta\s*:\s*["']([\s\S]*?)["']/,  // respuesta: "..." (sin comillas en key)
+    ];
+    
+    let contenidoRespuesta = null;
+    for (const patron of camposRespuesta) {
+        const match = texto.match(patron);
+        if (match && match[1]) {
+            contenidoRespuesta = match[1];
+            logQuinti('INFO', `parsearJSON: Campo 'respuesta' extraído con patrón ${camposRespuesta.indexOf(patron) + 1}`);
+            break;
+        }
+    }
+    
+    // Si encontramos respuesta, buscar también imagen_tag
+    if (contenidoRespuesta) {
+        const imagenTagMatch = texto.match(/["']imagen_?tag["']\s*:\s*["']([^"']+?)["']/);
+        const imagenTag = imagenTagMatch ? imagenTagMatch[1] : null;
+        
+        const resultado = {
+            respuesta: contenidoRespuesta,
+            fueReparado: true,
+            metodoReparacion: 'extraccion_campos_individuales'
+        };
+        
+        if (imagenTag) {
+            resultado.imagen_tag = imagenTag;
+        }
+        
+        logQuinti('INFO', 'parsearJSON: Estrategia 4.5 exitosa (extracción de campos)');
+        return resultado;
     }
 
     // ==========================================
@@ -1334,13 +1408,13 @@ function parsearJSON(raw) {
         }
         
         // ==========================================
-        // ESTRATEGIA 7: EXTRACCIÓN FORZOSA DEL CONTENIDO VÁLIDO (NUEVA)
+        // ESTRATEGIA 7: EXTRACCIÓN FORZOSA DEL CONTENIDO VÁLIDO (MEJORADA)
         // Si todo falla, extraer manualmente el valor de "respuesta" aunque el JSON esté roto
         // ==========================================
         logQuinti('WARN', 'parsearJSON: Intentando extracción forzosa del contenido...');
         
-        // Buscar el patrón "respuesta":"..." o "respuesta": "..."
-        const respuestaMatch = texto.match(/["']respuesta["']\s*:\s*["']([\s\S]*?)["']/);
+        // Buscar el patrón "respuesta":"..." o "respuesta": "..." con manejo de strings multilínea
+        const respuestaMatch = texto.match(/["']respuesta["']\s*:\s*["']([\s\S]*?)(?=["'],?\s*["']\w+["']\s*:|$)/);
         if (respuestaMatch) {
             const contenidoRespuesta = respuestaMatch[1];
             logQuinti('INFO', `parsearJSON: Contenido extraído manualmente (longitud: ${contenidoRespuesta.length})`);
@@ -1362,6 +1436,21 @@ function parsearJSON(raw) {
             
             logQuinti('INFO', 'parsearJSON: Estrategia 7 exitosa (extracción forzosa)');
             return resultado;
+        }
+        
+        // ==========================================
+        // ESTRATEGIA 8: FALLBACK PARA TEXTO NARRATIVO SIN ESTRUCTURA
+        // Si el texto parece ser puramente narrativo (comienza con *), devolverlo como respuesta
+        // ==========================================
+        if (texto.startsWith('*') || texto.includes('*')) {
+            logQuinti('WARN', 'parsearJSON: Texto parece ser narración pura, usando como respuesta directa');
+            // Limpiar asteriscos de narración pero mantener el contenido
+            const textoLimpio = texto.replace(/\*([^*]*)\*/g, '$1').trim();
+            return {
+                respuesta: textoLimpio,
+                fueReparado: true,
+                metodoReparacion: 'fallback_narracion_pura'
+            };
         }
         
         // ==========================================
