@@ -243,6 +243,19 @@ lamiendo_pene:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDD
 
 
         }
+    },
+    Emilia: {
+        nombre: "Emilia",
+        descripcion: "Semielfa de Hielo - Amable, pura, determinada y noble. Cabello plateado y ojos violeta.",
+        imagenSelector: "https://i.pinimg.com/736x/4e/9a/9c/4e9a9c8f6b4e3d2a1f5c8b7e9d0a2c4f.jpg",
+        imagenes: {
+            hablando: { url: "https://i.pinimg.com/736x/4e/9a/9c/4e9a9c8f6b4e3d2a1f5c8b7e9d0a2c4f.jpg", audio: "" },
+            besando: { url: "https://i.pinimg.com/736x/8a/2b/3c/8a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d.jpg", audio: "" },
+            desnuda: { url: "https://i.pinimg.com/736x/1a/2b/3c/1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d.jpg", audio: "" },
+            ropa_elegante: { url: "https://i.pinimg.com/736x/2a/3b/4c/2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d.jpg", audio: "" },
+            abrazo: { url: "https://i.pinimg.com/736x/3a/4b/5c/3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d.jpg", audio: "" },
+            sonriendo: { url: "https://i.pinimg.com/736x/4a/5b/6c/4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d.jpg", audio: "" },
+        }
     }
 };
 
