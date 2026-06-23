@@ -6,6 +6,21 @@
     <title>QuintiAmigas - Chat</title>
     <link rel="icon" type="image/jpeg" href="https://pbs.twimg.com/media/HCrpe4jWQAAstF7?format=jpg&name=small">
     <style>
+        /* Estilos globales - UI OSCURA MEJORADA */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0ff;
+            overflow-x: hidden;
+        }
+        
         /* Selector de chicas - UI OSCURA MEJORADA */
         .selector-container {
             max-width: 1000px;
@@ -248,11 +263,16 @@
             outline: none;
             background: #1a1a2e;
             color: #e0e0ff;
+            transition: all 0.3s ease;
         }
         
         .chat-input:focus {
             border-color: #A78BFA;
             box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+        }
+        
+        .chat-input::placeholder {
+            color: #6b6b8b;
         }
         
         .send-button {
@@ -702,6 +722,26 @@
             overflow-y: auto;
             box-shadow: 0 10px 50px rgba(0, 0, 0, 0.7);
             border: 3px solid #8B5CF6;
+            color: #e0e0ff;
+        }
+        
+        /* Scrollbar personalizada para UI oscura */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0f0f1a;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #A78BFA, #8B5CF6);
         }
 
         .modal-header {

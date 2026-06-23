@@ -2395,7 +2395,7 @@ async function procesarRespuesta(datos, mensajeOriginal) {
     
     // Detectar que chicas estan respondiendo en el mensaje
     const chicasRespondiendo = [];
-    const responsePattern = /\[(Ichika|Nino|Miku|Yotsuba|Itsuki)\]:/gi;
+    const responsePattern = /\[(Ichika|Nino|Miku|Yotsuba|Itsuki|Emilia)\]:/gi;
     let match;
     while ((match = responsePattern.exec(datos.respuesta)) !== null) {
         const nombreChica = match[1];
