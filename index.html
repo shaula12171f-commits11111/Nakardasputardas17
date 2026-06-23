@@ -1029,6 +1029,22 @@
     <script type="module" src="historiasParalelas.js"></script>
     <script type="module" src="antiRepeticion.js"></script>
     <!-- Cargar tests unitarios en desarrollo (descomentar para ejecutar tests) -->
+    <script>
+        // Exponer funciones globales antes de que se carguen los módulos
+        window.guardarNombre = null;
+        window.cargarNombreGuardado = null;
+        window.inicializarSelector = null;
+        window.seleccionarChicaVisual = null;
+        window.iniciarChat = null;
+        window.volverAlInicio = null;
+        window.handleKeyPress = null;
+        window.sendMessage = null;
+        window.retryLastMessage = null;
+        window.getNombreUsuario = null;
+        window.abrirHistoriasParalelas = null;
+        window.cerrarHistoriasParalelas = null;
+        window.iniciarHistoriaParalela = null;
+    </script>
     <!-- <script type="module" src="logica.test.js"></script> -->
     <script type="module">
         // Importar funciones necesarias de logica.js e imagenes.js
@@ -1712,9 +1728,20 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             inicializarSelector();
         }
         
-        // Exponer guardarNombre globalmente inmediatamente
+        // Exponer funciones globalmente inmediatamente después de definirlas
         window.guardarNombre = guardarNombre;
-        
+        window.cargarNombreGuardado = cargarNombreGuardado;
+        window.inicializarSelector = inicializarSelector;
+        window.seleccionarChicaVisual = seleccionarChicaVisual;
+        window.iniciarChat = iniciarChat;
+        window.volverAlInicio = volverAlInicio;
+        window.handleKeyPress = handleKeyPress;
+        window.sendMessage = sendMessage;
+        window.retryLastMessage = retryLastMessage;
+        window.getNombreUsuario = function() { return nombreUsuario; };
+        window.abrirHistoriasParalelas = abrirHistoriasParalelas;
+        window.cerrarHistoriasParalelas = cerrarHistoriasParalelas;
+        window.iniciarHistoriaParalela = iniciarHistoriaParalela;
         // Cargar nombre guardado si existe - PERO SIEMPRE MOSTRAR PANTALLA DE NOMBRE
         function cargarNombreGuardado() {
             // Limpiar nombre guardado para que siempre pida el nombre al entrar

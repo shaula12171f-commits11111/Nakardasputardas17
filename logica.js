@@ -1280,7 +1280,7 @@ function parsearJSON(raw) {
     
     // Buscar campo respuesta con múltiples patrones
     const camposRespuesta = [
-        /["']respuesta["']\s*:\s*["']([\s\S]*?)["'](?,)/,  // "respuesta": "..."
+        /["']respuesta["']\s*:\s*["']([\s\S]*?)["'],?/,  // "respuesta": "..."
         /["']respuesta["']\s*:\s*["']([\s\S]*?)["']\s*[,}]/,  // "respuesta": "...", o "respuesta": "..."}
         /respuesta\s*:\s*["']([\s\S]*?)["']/,  // respuesta: "..." (sin comillas en key)
     ];
