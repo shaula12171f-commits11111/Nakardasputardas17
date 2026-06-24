@@ -82,7 +82,9 @@ reverse_cowgirl: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDD
              selfie_lenceria:  { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD20/main/imagenes/img_1773687448917.jpg", audio: "" },
               mattin_press_anal:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD59/main/imagenes/img_1780230461992.jpg", audio: "" },
              mattin_press_anal_rapido:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD59/main/imagenes/img_1780230460073.jpg", audio: "" },
-                  ichika_bebiendo_el_senmen_del_condon:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778615779747.png", audio: "" },
+                   desnuda_en_cama:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986583664.png", audio: "" },
+                 
+            ichika_bebiendo_el_senmen_del_condon:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778615779747.png", audio: "" },
             
             
             
@@ -139,6 +141,7 @@ anal: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDD
  me_corro_en_su_boca_de_nino: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854164065.jpg", audio: "" },
 manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630311500_1.png", audio: "" },
 lamiendo_pene:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778618613406.jpg", audio: "" },
+             desnuda_en_cama:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986586569.png", audio: "" },
         }
     },
     Miku: {
@@ -172,6 +175,7 @@ ropa_idol: { url: "https://pbs.twimg.com/media/HFobfuKWMAAiAke?format=jpg&name=l
 manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630334116_1.png", audio: "" },
 
         lamiendo_pene:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778619219396.png", audio: "" },
+             desnuda_en_cama:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986589452.png", audio: "" },
         }
     },
     Yotsuba: {
@@ -209,6 +213,7 @@ manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow1217
 
 lamiendo_pene:  { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD4/main/imagenes/img_1773182742634.jpg", audio: "" },
 
+          desnuda_en_cama:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986592145.png", audio: "" },   
         }
     },
     Itsuki: {
@@ -240,6 +245,7 @@ lamiendo_pene:  { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDD
  me_corro_en_su_boca_de_itsuki: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772997286390.jpg", audio: "" },
 manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630346039_1.png", audio: "" },
 lamiendo_pene:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778620269955.png", audio: "" },
+             desnuda_en_cama:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986594827.png", audio: "" },
 
 
         }
