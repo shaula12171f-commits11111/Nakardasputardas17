@@ -1163,6 +1163,10 @@ function parsearJSON(raw) {
     // Guardar el texto original completo antes de cualquier limpieza
     const textoOriginalCompleto = raw;
     let texto = raw.trim();
+    
+    // Log inicial para ver qué estamos recibiendo
+    logQuinti('DEBUG', `parsearJSON: Iniciando proceso con ${texto.length} caracteres`);
+    logQuinti('DEBUG', `parsearJSON: Primeros 300 chars del raw: ${raw.substring(0, 300)}`);
 
     // ==========================================
     // LIMPIEZA INICIAL AGRESIVA MEJORADA
@@ -1173,6 +1177,8 @@ function parsearJSON(raw) {
         .replace(/^[\u200B-\u200D\uFEFF\s]+/, '') // Eliminar caracteres Unicode invisibles
         .replace(/\n\s*\n/g, '\n')              // Eliminar líneas vacías múltiples
         .trim();
+    
+    logQuinti('DEBUG', `parsearJSON: Después de limpieza inicial, longitud: ${texto.length}`);
 
     // ==========================================
     // ESTRATEGIA 0: DETECCIÓN TEMPRANA DE TEXTO NARRATIVO PURO
@@ -1192,24 +1198,31 @@ function parsearJSON(raw) {
     // ==========================================
     // ESTRATEGIA 1: Extraer el JSON más grande posible (la más común)
     // ==========================================
+    logQuinti('DEBUG', 'parsearJSON: Intentando Estrategia 1 - extraer JSON más grande');
     const jsonMatch = texto.match(/\{[\s\S]*?\}/);
     if (jsonMatch) {
+        logQuinti('DEBUG', `parsearJSON: Encontrado posible JSON (longitud: ${jsonMatch[0].length}), primeros 200 chars: ${jsonMatch[0].substring(0, 200)}`);
         try {
             const parsed = JSON.parse(jsonMatch[0]);
             parsed.texto_original = textoOriginalCompleto;
+            logQuinti('INFO', 'parsearJSON: Estrategia 1 exitosa (JSON extraído)');
             return parsed;
         } catch (e) {
             logQuinti('DEBUG', `parsearJSON: Estrategia 1 falló - ${e.message}`);
         }
+    } else {
+        logQuinti('DEBUG', 'parsearJSON: Estrategia 1 falló - No se encontró patrón JSON');
     }
 
     // ==========================================
     // ESTRATEGIA 1.5: BUSCAR JSON DESPUÉS DE TEXTO NARRATIVO
     // Maneja caso: "*Narración* {...JSON...}"
     // ==========================================
+    logQuinti('DEBUG', 'parsearJSON: Intentando Estrategia 1.5 - JSON después de narración');
     const patronNarracionMasJSON = /\*[^*]*\*\s*(\{[\s\S]*\})/;
     const matchNarracionJSON = texto.match(patronNarracionMasJSON);
     if (matchNarracionJSON && matchNarracionJSON[1]) {
+        logQuinti('DEBUG', `parsearJSON: Encontrado JSON después de narración: ${matchNarracionJSON[1].substring(0, 200)}`);
         try {
             const parsed = JSON.parse(matchNarracionJSON[1]);
             parsed.texto_original = textoOriginalCompleto;
@@ -1218,40 +1231,53 @@ function parsearJSON(raw) {
         } catch (e) {
             logQuinti('DEBUG', `parsearJSON: Estrategia 1.5 falló - ${e.message}`);
         }
+    } else {
+        logQuinti('DEBUG', 'parsearJSON: Estrategia 1.5 falló - No hay patrón narración+JSON');
     }
 
     // ==========================================
     // ESTRATEGIA 2: Buscar JSON después de dos puntos (caso "aquí tienes: {...}")
     // ==========================================
+    logQuinti('DEBUG', 'parsearJSON: Intentando Estrategia 2 - JSON después de dos puntos');
     const despuesDeDosPuntos = texto.split(':').pop();
     if (despuesDeDosPuntos && despuesDeDosPuntos.includes('{')) {
         const jsonMatch2 = despuesDeDosPuntos.match(/\{[\s\S]*\}/);
         if (jsonMatch2) {
+            logQuinti('DEBUG', `parsearJSON: Encontrado JSON después de dos puntos: ${jsonMatch2[0].substring(0, 200)}`);
             try {
                 const parsed = JSON.parse(jsonMatch2[0]);
                 parsed.texto_original = textoOriginalCompleto;
+                logQuinti('INFO', 'parsearJSON: Estrategia 2 exitosa (JSON después de dos puntos)');
                 return parsed;
             } catch (e) {
                 logQuinti('DEBUG', `parsearJSON: Estrategia 2 falló - ${e.message}`);
             }
         }
+    } else {
+        logQuinti('DEBUG', 'parsearJSON: Estrategia 2 falló - No hay contenido después de dos puntos con JSON');
     }
 
     // ==========================================
     // ESTRATEGIA 3: Si todo el texto parece JSON (caso raro)
     // ==========================================
+    logQuinti('DEBUG', 'parsearJSON: Intentando Estrategia 3 - parseo directo del texto completo');
     try {
         const parsed = JSON.parse(texto);
         parsed.texto_original = textoOriginalCompleto;
+        logQuinti('INFO', 'parsearJSON: Estrategia 3 exitosa (texto completo es JSON válido)');
         return parsed;
-    } catch (e) {}
+    } catch (e) {
+        logQuinti('DEBUG', `parsearJSON: Estrategia 3 falló - ${e.message}`);
+    }
 
     // ==========================================
     // ESTRATEGIA 4: Intentar extraer JSON aunque tenga texto narrativo antes/después
     // Busca patrones como {"respuesta": "..."} incluso con ruido alrededor
     // ==========================================
+    logQuinti('DEBUG', 'parsearJSON: Intentando Estrategia 4 - JSON con ruido alrededor');
     const jsonConRuido = texto.match(/\{\s*["']\w+["']\s*:[\s\S]*?\}/);
     if (jsonConRuido) {
+        logQuinti('DEBUG', `parsearJSON: Encontrado JSON con ruido, primeros 200 chars: ${jsonConRuido[0].substring(0, 200)}`);
         // Intentar limpiar el contenido interno
         let candidato = jsonConRuido[0];
         
@@ -1270,6 +1296,8 @@ function parsearJSON(raw) {
         } catch (e) {
             logQuinti('DEBUG', `parsearJSON: Estrategia 4 falló - ${e.message}`);
         }
+    } else {
+        logQuinti('DEBUG', 'parsearJSON: Estrategia 4 falló - No se encontró patrón JSON con ruido');
     }
 
     // ==========================================
@@ -1277,42 +1305,77 @@ function parsearJSON(raw) {
     // Extrae manualmente los campos "respuesta" e "imagen_tag" usando regex
     // ==========================================
     logQuinti('WARN', 'parsearJSON: Intentando extracción de campos individuales...');
+    logQuinti('DEBUG', `parsearJSON: Texto completo para análisis (primeros 1000 chars): ${texto.substring(0, 1000)}`);
+    logQuinti('DEBUG', `parsearJSON: Longitud total del texto: ${texto.length}`);
     
-    // Buscar campo respuesta con múltiples patrones
+    // Buscar campo respuesta con múltiples patrones mejorados
     const camposRespuesta = [
         /["']respuesta["']\s*:\s*["']([\s\S]*?)["'],?/,  // "respuesta": "..."
         /["']respuesta["']\s*:\s*["']([\s\S]*?)["']\s*[,}]/,  // "respuesta": "...", o "respuesta": "..."}
         /respuesta\s*:\s*["']([\s\S]*?)["']/,  // respuesta: "..." (sin comillas en key)
+        /["']respuesta["']\s*:\s*"""([\s\S]*?)"""/,  // respuesta: """...""" (triple comilla)
+        // Patrón especial para backslash antes de comilla de cierre: "contenido\"
+        /["']respuesta["']\s*:\s*["']([\s\S]*?)\\["']/,  // "respuesta": "contenido\"
     ];
     
     let contenidoRespuesta = null;
+    let patronUsado = null;
     for (const patron of camposRespuesta) {
         const match = texto.match(patron);
         if (match && match[1]) {
             contenidoRespuesta = match[1];
-            logQuinti('INFO', `parsearJSON: Campo 'respuesta' extraído con patrón ${camposRespuesta.indexOf(patron) + 1}`);
+            patronUsado = patron.toString();
+            logQuinti('INFO', `parsearJSON: Campo 'respuesta' extraído con patrón ${camposRespuesta.indexOf(patron) + 1}: ${patron.toString().substring(0, 80)}`);
+            logQuinti('DEBUG', `parsearJSON: Contenido crudo extraído (primeros 500 chars): ${contenidoRespuesta.substring(0, 500)}`);
             break;
         }
     }
     
     // Si encontramos respuesta, buscar también imagen_tag
     if (contenidoRespuesta) {
+        // Limpiar el contenido: manejar escapes, backslashes sueltos, etc.
+        logQuinti('DEBUG', `parsearJSON: Limpiando contenido extraído...`);
+        
+        // Reemplazar backslash suelto al final de líneas con salto de línea real
+        contenidoRespuesta = contenidoRespuesta
+            .replace(/\\\\n/g, '\n')           // \\n → salto de línea
+            .replace(/\\\\t/g, '\t')           // \\t → tab
+            .replace(/\\n/g, '\n')             // \n → salto de línea
+            .replace(/\\t/g, '\t')             // \t → tab
+            .replace(/\\'/g, "'")              // \' → '
+            .replace(/\\"/g, '"')              // \" → "
+            .replace(/\\\\/g, '\\')            // \\ → \
+            .replace(/\\\s*$/g, '')            // Eliminar backslash suelto al final
+            .replace(/\\\s*\n/g, '\n')         // Backslash antes de salto de línea → solo salto de línea
+            .trim();
+        
+        logQuinti('DEBUG', `parsearJSON: Contenido después de limpiar (primeros 500 chars): ${contenidoRespuesta.substring(0, 500)}`);
+        
         const imagenTagMatch = texto.match(/["']imagen_?tag["']\s*:\s*["']([^"']+?)["']/);
         const imagenTag = imagenTagMatch ? imagenTagMatch[1] : null;
+        
+        if (imagenTag) {
+            logQuinti('INFO', `parsearJSON: Campo 'imagen_tag' extraído: ${imagenTag}`);
+        } else {
+            logQuinti('DEBUG', 'parsearJSON: No se encontró campo imagen_tag');
+        }
         
         const resultado = {
             respuesta: contenidoRespuesta,
             fueReparado: true,
-            metodoReparacion: 'extraccion_campos_individuales'
+            metodoReparacion: 'extraccion_campos_individuales',
+            patronUsado: patronUsado
         };
         
         if (imagenTag) {
             resultado.imagen_tag = imagenTag;
         }
         
-        logQuinti('INFO', 'parsearJSON: Estrategia 4.5 exitosa (extracción de campos)');
+        logQuinti('INFO', `parsearJSON: Estrategia 4.5 exitosa (extracción de campos). Longitud respuesta: ${contenidoRespuesta.length}`);
         return resultado;
     }
+    
+    logQuinti('WARN', 'parsearJSON: Estrategia 4.5 falló - No se pudo extraer el campo respuesta');
 
     // ==========================================
     // ESTRATEGIA 5: Último intento - reparación agresiva
@@ -1412,12 +1475,14 @@ function parsearJSON(raw) {
         // Si todo falla, extraer manualmente el valor de "respuesta" aunque el JSON esté roto
         // ==========================================
         logQuinti('WARN', 'parsearJSON: Intentando extracción forzosa del contenido...');
+        logQuinti('DEBUG', `parsearJSON: Texto para extracción forzosa (primeros 800 chars): ${texto.substring(0, 800)}`);
         
         // Buscar el patrón "respuesta":"..." o "respuesta": "..." con manejo de strings multilínea
         const respuestaMatch = texto.match(/["']respuesta["']\s*:\s*["']([\s\S]*?)(?=["'],?\s*["']\w+["']\s*:|$)/);
         if (respuestaMatch) {
             const contenidoRespuesta = respuestaMatch[1];
             logQuinti('INFO', `parsearJSON: Contenido extraído manualmente (longitud: ${contenidoRespuesta.length})`);
+            logQuinti('DEBUG', `parsearJSON: Contenido crudo extraído: ${contenidoRespuesta.substring(0, 500)}`);
             
             // Buscar también imagen_tag si existe
             const imagenTagMatch = texto.match(/["']imagen_?tag["']\s*:\s*["']([^"']+?)["']/);
@@ -1437,21 +1502,25 @@ function parsearJSON(raw) {
             logQuinti('INFO', 'parsearJSON: Estrategia 7 exitosa (extracción forzosa)');
             return resultado;
         }
+        logQuinti('DEBUG', 'parsearJSON: Estrategia 7 falló - No se pudo extraer con patrón básico');
         
         // ==========================================
         // ESTRATEGIA 8: FALLBACK PARA TEXTO NARRATIVO SIN ESTRUCTURA
         // Si el texto parece ser puramente narrativo (comienza con *), devolverlo como respuesta
         // ==========================================
+        logQuinti('DEBUG', `parsearJSON: Intentando estrategia 8 - narración pura. Texto empieza con: ${texto.substring(0, 100)}`);
         if (texto.startsWith('*') || texto.includes('*')) {
             logQuinti('WARN', 'parsearJSON: Texto parece ser narración pura, usando como respuesta directa');
             // Limpiar asteriscos de narración pero mantener el contenido
             const textoLimpio = texto.replace(/\*([^*]*)\*/g, '$1').trim();
+            logQuinti('DEBUG', `parsearJSON: Texto limpio después de quitar asteriscos: ${textoLimpio.substring(0, 500)}`);
             return {
                 respuesta: textoLimpio,
                 fueReparado: true,
                 metodoReparacion: 'fallback_narracion_pura'
             };
         }
+        logQuinti('DEBUG', 'parsearJSON: Estrategia 8 falló - No es narración pura');
         
         // ==========================================
         // FALLBACK FINAL: Si TODO falla, devolver null
