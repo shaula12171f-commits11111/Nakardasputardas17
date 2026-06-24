@@ -1335,6 +1335,10 @@ function parsearJSON(raw) {
         // PATRONES PARA JSON TRUNCADO - capturan TODO después de "respuesta": " hasta el final
         // IMPORTANTE: Estos patrones deben ir AL FINAL porque son muy agresivos
         // Capturan desde la apertura de comilla hasta el FIN del texto (asumiendo string sin cerrar)
+        // PRIMERO: Intentar capturar solo contenido válido (excluyendo comillas sueltas al final)
+        /respuesta\s*:\s*"([\s\S]*?)(?:"\s*,?\s*"|\s*$)/i,  // respuesta: "..." captura hasta siguiente campo o EOF
+        /[\"']respuesta[\"']\s*:\s*"([\s\S]*?)(?:"\s*,?\s*"|\s*$)/i,  // "respuesta": "..." fallback
+        // ÚLTIMO RECURSO: Capturar TODO hasta EOF, luego limpiar
         /respuesta\s*:\s*"([\s\S]+)$/i,  // respuesta: "..." sin cierre - captura TODO lo que sigue hasta EOF
         /[\"']respuesta[\"']\s*:\s*"([\s\S]+)$/i,  // "respuesta": "..." sin cierre - fallback final captura hasta EOF
     ];
@@ -1380,6 +1384,8 @@ function parsearJSON(raw) {
             .replace(/\\\\/g, '\\')            // \\ → \
             .replace(/\\\s*$/g, '')            // Eliminar backslash suelto al final
             .replace(/\\\s*\n/g, '\n')         // Backslash antes de salto de línea → solo salto de línea
+            // CRÍTICO: Eliminar comillas dobles sueltas y espacios al final que causan corte
+            .replace(/"[\s\n]*$/g, '')         // Eliminar comillas y espacios/saltos al final
             .trim();
         
         logQuinti('DEBUG', `parsearJSON: Contenido después de limpiar (primeros 500 chars): ${contenidoRespuesta.substring(0, 500)}`);
@@ -2256,7 +2262,7 @@ async function intentarLlamadaAPI(mensajes, modelo, forzarJSON = false) {
                 model: modelo,
                 messages: mensajes,
                 temperature: 0.7,
-                max_tokens: 1024
+                max_tokens: 2048  // Aumentado para evitar respuestas cortadas
             };
             
             // Solo agregar response_format si se solicita explícitamente Y el modelo lo soporta
