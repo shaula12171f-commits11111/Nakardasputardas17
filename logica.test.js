@@ -167,6 +167,36 @@ test('parsearJSON: debe adjuntar texto_original al resultado', () => {
 });
 
 // ============================================================
+//  TESTS PARA CASO DE ERROR REPORTADO - TEXTO TRUNCADO
+// ============================================================
+
+test('parsearJSON: debe manejar texto narrativo puro truncado (caso error reportado)', () => {
+    // Este es el caso del error: texto que comienza con * y no tiene JSON
+    const input = `*Me acerco a ti, sintiendo la energía del momento* "fabrizio, me encanta la idea de compartir este placer con Aldo y Belinda" *beso tu mejilla y luego tus labios, dejando que la pasión fluya*`;
+    const resultado = parsearJSON(input);
+    assertNotNull(resultado, 'Debería manejar texto narrativo puro');
+    assertTrue(resultado.fueReparado === true, 'Debería marcar como reparado');
+    assertTrue(resultado.respuesta.includes('Me acerco a ti'), 'Debería conservar el texto original');
+});
+
+test('parsearJSON: debe manejar JSON truncado con string sin cerrar', () => {
+    // Caso donde el JSON está incompleto, falta cerrar comillas
+    const input = `{"respuesta": "*Me acerco* Hola, cómo estás`;
+    const resultado = parsearJSON(input);
+    assertNotNull(resultado, 'Debería intentar recuperar texto aunque JSON esté roto');
+});
+
+test('parsearJSON: debe manejar respuesta con backslash antes de comilla de cierre', () => {
+    // Caso donde hay backslash escapando la comilla de cierre
+    const input = `{"respuesta": "Texto con barra \\\" al final`;
+    const resultado = parsearJSON(input);
+    // Debería poder extraer algo mediante extracción de campos
+    if (resultado) {
+        assertTrue(resultado.respuesta !== undefined, 'Debería tener respuesta si logra parsear');
+    }
+});
+
+// ============================================================
 //  TESTS PARA formatearTextoConAsteriscos()
 // ============================================================
 
