@@ -1182,16 +1182,31 @@ function parsearJSON(raw) {
 
     // ==========================================
     // ESTRATEGIA 0: DETECCIÓN TEMPRANA DE TEXTO NARRATIVO PURO
-    // Si el texto comienza con asterisco y no tiene estructura JSON, intentar extraer
+    // Si el texto comienza con asterisco y no tiene estructura JSON, intentar convertir
+    // Esto pasa cuando la IA responde solo con narrativa sin envolver en JSON
     // ==========================================
     if (texto.startsWith('*') && !texto.includes('{')) {
         logQuinti('WARN', 'parsearJSON: Detectado texto narrativo puro sin JSON, intentando convertir...');
-        // Extraer todo el texto hasta el final o hasta encontrar posible JSON
-        const soloTexto = texto.replace(/\*([^*]+)\*/g, '$1').trim();
+        // En este caso, TODO el texto es la respuesta - no intentar procesar asteriscos
+        // Los asteriscos son parte del formato narrativo y deben conservarse
         return {
-            respuesta: soloTexto,
+            respuesta: texto,
             fueReparado: true,
             metodoReparacion: 'conversion_texto_narrativo'
+        };
+    }
+    
+    // ==========================================
+    // ESTRATEGIA 0.5: TEXTO NARRATIVO CON JSON PARCIAL O ROTOS
+    // Maneja casos donde hay narrativa seguida de JSON incompleto
+    // ==========================================
+    const patronNarrativoPuro = /^\*[\s\S]*$/;
+    if (patronNarrativoPuro.test(texto) && !texto.includes('"respuesta"')) {
+        logQuinti('WARN', 'parsearJSON: Texto puramente narrativo detectado (patrón 0.5)');
+        return {
+            respuesta: texto,
+            fueReparado: true,
+            metodoReparacion: 'texto_narrativo_puro'
         };
     }
 
@@ -1309,25 +1324,43 @@ function parsearJSON(raw) {
     logQuinti('DEBUG', `parsearJSON: Longitud total del texto: ${texto.length}`);
     
     // Buscar campo respuesta con múltiples patrones mejorados
+    // El orden importa: primero los patrones más específicos
+    // Para JSON truncado, usamos patrones que capturan hasta el final si no hay cierre
     const camposRespuesta = [
-        /["']respuesta["']\s*:\s*["']([\s\S]*?)["'],?/,  // "respuesta": "..."
-        /["']respuesta["']\s*:\s*["']([\s\S]*?)["']\s*[,}]/,  // "respuesta": "...", o "respuesta": "..."}
-        /respuesta\s*:\s*["']([\s\S]*?)["']/,  // respuesta: "..." (sin comillas en key)
-        /["']respuesta["']\s*:\s*"""([\s\S]*?)"""/,  // respuesta: """...""" (triple comilla)
-        // Patrón especial para backslash antes de comilla de cierre: "contenido\"
-        /["']respuesta["']\s*:\s*["']([\s\S]*?)\\["']/,  // "respuesta": "contenido\"
+        /[\"']respuesta[\"']\s*:\s*"""([\s\S]*?)"""/,  // respuesta: """...""" (triple comilla)
+        /[\"']respuesta[\"']\s*:\s*"((?:[^"\\]|\\.)*)"\s*[,}]/,  // "respuesta": "...", con escapes y cierre normal
+        /["']respuesta["']\s*:\s*"([^"]*(?:\\"[^"]*)*)"/,  // "respuesta": "..." con comillas escapadas intermedias
+        /[\"']respuesta[\"']\s*:\s*"([\s\S]*?)"\s*(?:,\s*"imagen|}$)/,  // "respuesta": "..." antes de imagen_tag o }
+        /respuesta\s*:\s*"((?:[^"\\]|\\.)*)"\s*[,}]/,  // respuesta: "...", (sin comillas en key)
+        // PATRONES PARA JSON TRUNCADO - capturan TODO después de "respuesta": " hasta el final
+        // IMPORTANTE: Estos patrones deben ir AL FINAL porque son muy agresivos
+        // Capturan desde la apertura de comilla hasta el FIN del texto (asumiendo string sin cerrar)
+        /respuesta\s*:\s*"([\s\S]+)$/i,  // respuesta: "..." sin cierre - captura TODO lo que sigue hasta EOF
+        /[\"']respuesta[\"']\s*:\s*"([\s\S]+)$/i,  // "respuesta": "..." sin cierre - fallback final captura hasta EOF
     ];
     
     let contenidoRespuesta = null;
     let patronUsado = null;
     for (const patron of camposRespuesta) {
         const match = texto.match(patron);
-        if (match && match[1]) {
+        if (match && match[1] && match[1].trim() !== '') {
             contenidoRespuesta = match[1];
             patronUsado = patron.toString();
             logQuinti('INFO', `parsearJSON: Campo 'respuesta' extraído con patrón ${camposRespuesta.indexOf(patron) + 1}: ${patron.toString().substring(0, 80)}`);
             logQuinti('DEBUG', `parsearJSON: Contenido crudo extraído (primeros 500 chars): ${contenidoRespuesta.substring(0, 500)}`);
             break;
+        }
+    }
+    
+    // FALLBACK EXTRA: Si ningún patrón funcionó pero hay "respuesta": en el texto
+    // Extraer manualmente todo lo que está después de "respuesta": " hasta EOF
+    if (!contenidoRespuesta && texto.toLowerCase().includes('respuesta')) {
+        logQuinti('WARN', 'parsearJSON: Fallback extra - extracción manual forzada');
+        const matchForzado = texto.match(/respuesta\s*:\s*"(.+)$/i);
+        if (matchForzado && matchForzado[1]) {
+            contenidoRespuesta = matchForzado[1];
+            patronUsado = 'fallback_extraccion_forzada';
+            logQuinti('INFO', `parsearJSON: Contenido extraído con fallback forzado, length: ${contenidoRespuesta.length}`);
         }
     }
     
