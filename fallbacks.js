@@ -38,6 +38,27 @@ const FALLBACK_ANTI_REPETICION = [
 ];
 
 /**
+ * Fallback para CHICAS SECUNDARIAS en conversaciones múltiples
+ * Se usa cuando una chica secundaria falla pero la primera respondió correctamente.
+ * Este fallback genera una respuesta coherente que reacciona a la situación actual
+ * sin repetir lo que dijo la otra chica.
+ * @param {string} nombreChica - Nombre de la chica que debe responder
+ * @param {string} contextoPrevio - Respuesta de la(s) otra(s) chica(s)
+ * @returns {string} - Respuesta de fallback contextualizada
+ */
+export function obtenerFallbackChicaSecundaria(nombreChica, contextoPrevio = '') {
+    const fallbacksContextuales = [
+        `*${nombreChica} observa la situación con atención* Vaya... *se acerca un poco* Creo que ${contextoPrevio ? 'lo que acaba de pasar es increíble' : 'esto se está poniendo interesante'}... *sonríe con complicidad* Yo también quiero ser parte de esto~`,
+        `*${nombreChica} se une a la conversación* ¡Ey! *ríe suavemente* No voy a quedarme atrás... *mira alrededor* Esto cada vez está mejor~ ¿Qué sigue?`,
+        `*${nombreChica} presta atención a todo* Hmm... *se cruza de brazos pensativa* Definitivamente esto me llama la atención... *sonríe* Cuenta conmigo también~`,
+        `*${nombreChica} observa con curiosidad* Wow... *se acerca más* Esto está buenísimo... *ríe entre dientes* Me encanta cuando las cosas se ponen así~`,
+        `*${nombreChica} participa activamente* ¡Sí! *asiente con entusiasmo* Totalmente de acuerdo... *mira con complicidad* Esto es justo lo que necesitábamos~`,
+    ];
+    
+    return fallbacksContextuales[Math.floor(Math.random() * fallbacksContextuales.length)];
+}
+
+/**
  * Obtiene un mensaje de error detallado para mostrar al usuario
  * Muestra el error técnico real con formato específico
  * @param {boolean} esDebug - Si es true, incluye detalles técnicos completos
@@ -211,6 +232,7 @@ if (typeof module !== 'undefined' && module.exports) {
         obtenerMensajeError,
         obtenerFallbackLocal,
         obtenerFallbackAntiRepeticion,
+        obtenerFallbackChicaSecundaria,
         CONFIG_REINTENTOS,
         generarPayloadFase,
         getOrdenFases,

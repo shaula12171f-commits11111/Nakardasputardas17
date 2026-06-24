@@ -26,7 +26,7 @@
 import { generarSystemPrompt, QUINT_PRUEBA_SYSTEM_MINIMO, QUINT_PRUEBA_FASE1, QUINT_PRUEBA_FASE2, QUINT_PRUEBA_FASE3, QUINT_PRUEBA_FASE4, SYSTEM_PROMPT_INICIAL } from './systemPrompt.js';
 import { PERSONALIDADES, getChicasDisponibles, existeChica, tieneImagenes } from './personalidades.js';
 import { ALDO_PERSONALIDAD, ALDO_INSTRUCCIONES_SISTEMA, getAldoPersonalidad, esAldo, aldoDebeResponder } from './aldo.js';
-import { obtenerMensajeError, generarPayloadFase, getOrdenFases, getInfoFase, obtenerFallbackLocal, obtenerFallbackAntiRepeticion } from './fallbacks.js';
+import { obtenerMensajeError, generarPayloadFase, getOrdenFases, getInfoFase, obtenerFallbackLocal, obtenerFallbackAntiRepeticion, obtenerFallbackChicaSecundaria } from './fallbacks.js';
 import { QuintiImagenesPrueba } from './imagenes.js';
 import { getImagenTagsMapping as getImagenTagsMappingHistoria } from './historiasParalelas.js';
 import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion, calcularSimilitud } from './antiRepeticion.js';
@@ -1857,12 +1857,26 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
                 // Se usa ANTES del fallback local normal para evitar que las chicas copien diálogos
                 // ========================================
                 if (!datos || !esRespuestaValida(datos)) {
-                    logQuinti('ERROR', `${nombreChica} - Todas las fases de reintento fallaron, usando fallback anti-repetición primero`);
+                    logQuinti('ERROR', `${nombreChica} - Todas las fases de reintento fallaron, usando fallback`);
                     const fallbackTag = tagsDisponibles.includes('hablando') ? 'hablando' : tagsDisponibles[0] || 'normal';
-                    datos = {
-                        respuesta: obtenerFallbackAntiRepeticion(),
-                        imagen_tag: fallbackTag
-                    };
+                    
+                    // Si es una chica secundaria (no la primera) y hay respuestas previas, usar fallback contextual
+                    if (!esPrimeraChica && respuestasPorChica.length > 0) {
+                        // Obtener contexto de la respuesta anterior para crear una respuesta coherente
+                        const respuestaAnterior = respuestasPorChica[respuestasPorChica.length - 1]?.respuesta || '';
+                        datos = {
+                            respuesta: obtenerFallbackChicaSecundaria(nombreChica, respuestaAnterior),
+                            imagen_tag: fallbackTag
+                        };
+                        logQuinti('INFO', `${nombreChica} - Usando fallback contextual para chica secundaria`);
+                    } else {
+                        // Primera chica o única chica: usar fallback anti-repetición normal
+                        datos = {
+                            respuesta: obtenerFallbackAntiRepeticion(),
+                            imagen_tag: fallbackTag
+                        };
+                        logQuinti('INFO', `${nombreChica} - Usando fallback anti-repetición`);
+                    }
                 }
             }
             
