@@ -1,1 +1,3 @@
-Nothing needs to be added to .gitignore since only JavaScript source files (.js) were modified, which are core project files that should not be ignored.
+(logica.js is a source file, so no need to add it to .gitignore)
+
+Nothing to output.
