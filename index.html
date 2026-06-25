@@ -785,6 +785,39 @@
             gap: 20px;
         }
 
+        /* Estilos para el selector de Historias/Escenarios */
+        .selector-opciones-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .opcion-btn {
+            flex: 1;
+            max-width: 200px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .opcion-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.7);
+        }
+
+        .opcion-btn.activo {
+            background: linear-gradient(135deg, #A78BFA, #C4B5FD);
+            box-shadow: 0 0 20px rgba(167, 139, 250, 0.8);
+        }
+
         .historia-card {
             background: #0f0f1a;
             border-radius: 20px;
@@ -1015,11 +1048,18 @@
     <div class="modal-historias" id="modalHistorias" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>📖 Historias Paralelas</h2>
+                <h2>📖 Historias y Escenarios</h2>
                 <button class="close-btn" onclick="cerrarHistoriasParalelas()">×</button>
             </div>
+            
+            <!-- Selector de tipo: Historias o Escenarios -->
+            <div class="selector-opciones-container" id="selectorOpcionesContainer">
+                <button class="opcion-btn activo" onclick="mostrarOpcion('historias')">📚 Historias</button>
+                <button class="opcion-btn" onclick="mostrarOpcion('escenarios')">🌍 Escenarios</button>
+            </div>
+            
             <div class="historias-lista" id="historiasLista">
-                <!-- Las historias se generan dinámicamente -->
+                <!-- Las historias/escenarios se generan dinámicamente -->
             </div>
         </div>
     </div>
@@ -1807,7 +1847,8 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
         window.getNombreUsuario = function() { return nombreUsuario; };
         window.abrirHistoriasParalelas = abrirHistoriasParalelas;
         window.cerrarHistoriasParalelas = cerrarHistoriasParalelas;
-        window.iniciarHistoriaParalela = iniciarHistoriaParalela;
+        window.iniciarHistoriaOEscenario = iniciarHistoriaOEscenario;
+        window.mostrarOpcion = mostrarOpcion;
         // Cargar nombre guardado si existe - PERO SIEMPRE MOSTRAR PANTALLA DE NOMBRE
         function cargarNombreGuardado() {
             // Limpiar nombre guardado para que siempre pida el nombre al entrar
@@ -1817,177 +1858,6 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             document.getElementById('selectorContainer').style.display = 'none';
             document.getElementById('chatContainer').classList.remove('active');
         }
-        
-        // Las funciones se exponen en DOMContentLoaded más abajo
-        
-        // Funciones de Historias Paralelas
-        async function abrirHistoriasParalelas() {
-            const modal = document.getElementById('modalHistorias');
-            const historiasLista = document.getElementById('historiasLista');
-            
-            // Importar dinámicamente el módulo de historias paralelas
-            const { getHistoriasActivas, getSystemPromptHistoria } = await import('./historiasParalelas.js');
-            
-            const historias = getHistoriasActivas();
-            
-            if (historias.length === 0) {
-                historiasLista.innerHTML = '<p style="text-align: center; color: #666;">No hay historias paralelas disponibles por ahora.</p>';
-            } else {
-                historiasLista.innerHTML = '';
-                historias.forEach(historia => {
-                    const card = document.createElement('div');
-                    card.className = 'historia-card';
-                    card.onclick = () => iniciarHistoriaParalela(historia.id);
-                    
-                    card.innerHTML = `
-                        <img src="${historia.imagenSelector}" alt="${historia.nombre}" class="imagen-historia">
-                        <h3>${historia.nombre}</h3>
-                        <p>${historia.descripcion}</p>
-                    `;
-                    
-                    historiasLista.appendChild(card);
-                });
-            }
-            
-            modal.style.display = 'flex';
-        }
-        
-        function cerrarHistoriasParalelas() {
-            document.getElementById('modalHistorias').style.display = 'none';
-        }
-        
-        async function iniciarHistoriaParalela(historiaId) {
-            const { getHistoriaParalela, getSystemPromptHistoria, getMensajeBienvenidaHistoria, getImagenSelectorHistoria } = await import('./historiasParalelas.js');
-            const historia = getHistoriaParalela(historiaId);
-            
-            if (!historia) {
-                alert('Historia no encontrada: ' + historiaId);
-                return;
-            }
-            
-            // Cerrar modal
-            cerrarHistoriasParalelas();
-            
-            // Ocultar selector, mostrar chat
-            document.getElementById('selectorContainer').style.display = 'none';
-            document.getElementById('chatContainer').classList.add('active');
-            
-            // Configurar chat para historia paralela
-            const infoHistoria = historia;
-            document.getElementById('chicaNombreHeader').textContent = historia.nombre;
-            document.getElementById('chicaNombreInfo').textContent = historia.nombre;
-            document.getElementById('chicaDescripcion').textContent = historia.descripcion;
-            document.getElementById('chicaImagenPerfil').src = historia.imagenSelector;
-            
-            // Limpiar mensajes y agregar saludo personalizado
-            const messagesDiv = document.getElementById('chatMessages');
-            historialMensajesUI = [];
-            
-            // Actualizar nombres ANTES de limpiar mensajes (para evitar error de null)
-            // Verificar que los elementos existan antes de modificarlos
-            const nombreSaludoEl = document.getElementById('chicaNombreSaludo');
-            const nombreEscribiendoEl = document.getElementById('chicaNombreEscribiendo');
-            
-            if (nombreSaludoEl) {
-                nombreSaludoEl.textContent = historia.nombre.split(' ')[0];
-            }
-            if (nombreEscribiendoEl) {
-                nombreEscribiendoEl.textContent = historia.nombre.split(' ')[0];
-            }
-            
-            // Obtener y mostrar el mensaje de bienvenida personalizado de la historia
-            const mensajeBienvenida = getMensajeBienvenidaHistoria(historiaId);
-            if (mensajeBienvenida) {
-                logQuinti('INFO', `Mensaje de bienvenida de historia cargado: ${historiaId}`);
-                // Mostrar el mensaje de bienvenida como primer mensaje del bot
-                messagesDiv.innerHTML = '';
-                historialMensajesUI = [];
-                
-                // Crear el mensaje de bienvenida manualmente
-                const botMsgDiv = document.createElement('div');
-                botMsgDiv.className = 'message bot-message';
-                
-                let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;">${mensajeBienvenida}</div>`;
-                if (historia.imagenSelector) {
-                    contenidoHTML += `<img src="${historia.imagenSelector}" alt="${historia.nombre}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
-                }
-                
-                botMsgDiv.innerHTML = contenidoHTML;
-                messagesDiv.appendChild(botMsgDiv);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            } else {
-                // Mensaje por defecto si no hay mensaje de bienvenida personalizado
-                messagesDiv.innerHTML = `
-                    <div class="message bot-message">
-                        ¡Bienvenido a ${historia.nombre}! 🎮 ${historia.descripcion}
-                    </div>
-                `;
-            }
-            
-            // IMPORTANTE: Configurar la lógica para usar el system prompt ADICIONAL de la historia
-            // Este se COMBINARA con el system prompt normal de logica.js
-            const systemPromptHistoria = getSystemPromptHistoria(historiaId);
-            if (systemPromptHistoria) {
-                logQuinti('INFO', `System prompt ADICIONAL de historia cargado: ${historiaId}`, { promptLength: systemPromptHistoria.length });
-                // Guardar el system prompt en una variable global para que logica.js pueda usarlo
-                window.systemPromptHistoriaActual = systemPromptHistoria;
-                window.historiaParalelaActiva = historiaId;
-                
-                // También guardar la imagen selector para mostrar imágenes correctamente
-                const imagenSelector = getImagenSelectorHistoria(historiaId);
-                if (imagenSelector) {
-                    window.imagenSelectorHistoria = imagenSelector;
-                    logQuinti('INFO', `Imagen selector de historia guardada: ${historiaId}`);
-                }
-            }
-            
-            // Resetear el historial de conversación para empezar con los nuevos system prompts
-            if (window.limpiarHistorialConversacion) {
-                window.limpiarHistorialConversacion();
-            }
-            
-            logQuinti('INFO', `Iniciando historia paralela: ${historiaId}`);
-        }
-        
-        // Exponer funciones de historias paralelas globalmente
-        window.abrirHistoriasParalelas = abrirHistoriasParalelas;
-        window.cerrarHistoriasParalelas = cerrarHistoriasParalelas;
-        window.iniciarHistoriaParalela = iniciarHistoriaParalela;
-        
-        // Asegurar que las funciones estén disponibles antes de que se llamen
-        document.addEventListener('DOMContentLoaded', function() {
-            window.guardarNombre = guardarNombre;
-            window.cargarNombreGuardado = cargarNombreGuardado;
-            window.inicializarSelector = inicializarSelector;
-            window.seleccionarChicaVisual = seleccionarChicaVisual;
-            window.iniciarChat = iniciarChat;
-            window.volverAlInicio = volverAlInicio;
-            window.handleKeyPress = handleKeyPress;
-            window.sendMessage = sendMessage;
-            window.retryLastMessage = retryLastMessage;
-            window.getNombreUsuario = function() { return nombreUsuario; };
-            window.abrirHistoriasParalelas = abrirHistoriasParalelas;
-            window.cerrarHistoriasParalelas = cerrarHistoriasParalelas;
-            window.iniciarHistoriaParalela = iniciarHistoriaParalela;
-            
-            // Funciones para el sistema de guardado de chats
-            function toggleChatSavePanel() {
-                const panel = document.getElementById('chatSavePanel');
-                if (panel.style.display === 'none') {
-                    panel.style.display = 'flex';
-                    if (window.ChatSaveSystem) {
-                        ChatSaveSystem.renderSlotsPanel();
-                    }
-                } else {
-                    panel.style.display = 'none';
-                }
-            }
-            
-            // Obtener datos actuales del chat para guardar
-            window.getCurrentChatData = function() {
-                const infoChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
-                
-                // Extraer mensajes del historial UI
                 const mensajes = [];
                 const messagesDiv = document.getElementById('chatMessages');
                 if (messagesDiv) {
