@@ -559,6 +559,24 @@ async function verificarAccionEnCurso(mensajeUsuario, respuestaIA, chicaNombre, 
     
     const tagsDisponibles = Object.keys(infoChica.imagenes);
     
+    // Función auxiliar para verificar si un tag coincide (incluyendo variantes numeradas)
+    function tagCoincide(tagBuscado, tagsDisponibles) {
+        // Coincidencia exacta
+        if (tagsDisponibles.includes(tagBuscado)) {
+            return tagBuscado;
+        }
+        // Buscar variantes numeradas (ej: "tag2", "tag_1")
+        const tagBase = tagBuscado.replace(/_\d+$/, '').replace(/\d+$/, '');
+        const variantes = tagsDisponibles.filter(t => {
+            const tNormalizado = t.replace(/_\d+$/, '').replace(/\d+$/, '');
+            return tNormalizado === tagBase;
+        });
+        if (variantes.length > 0) {
+            return variantes[0]; // Retornar la primera variante encontrada
+        }
+        return null;
+    }
+    
     // Primero intentar detectar localmente sin llamada a API
     // Esto es más rápido y evita llamadas innecesarias
     
@@ -566,11 +584,13 @@ async function verificarAccionEnCurso(mensajeUsuario, respuestaIA, chicaNombre, 
     const resultadoMensaje = detectarAccionEnTexto(mensajeUsuario);
     const accionEnMensaje = resultadoMensaje.tag;
     
-    if (accionEnMensaje && tagsDisponibles.includes(accionEnMensaje)) {
-        logQuinti('INFO', `[VERIFICACIÓN] Acción detectada en mensaje del usuario: ${accionEnMensaje} (puntuación: ${resultadoMensaje.puntuacion})`);
+    const accionCoincidenteMensaje = accionEnMensaje ? tagCoincide(accionEnMensaje, tagsDisponibles) : null;
+    
+    if (accionCoincidenteMensaje) {
+        logQuinti('INFO', `[VERIFICACIÓN] Acción detectada en mensaje del usuario: ${accionCoincidenteMensaje} (puntuación: ${resultadoMensaje.puntuacion})`);
         return { 
-            accion: accionEnMensaje, 
-            cambioDetectado: accionAnterior !== accionEnMensaje,
+            accion: accionCoincidenteMensaje, 
+            cambioDetectado: accionAnterior !== accionCoincidenteMensaje,
             detalle: resultadoMensaje
         };
     }
@@ -579,11 +599,13 @@ async function verificarAccionEnCurso(mensajeUsuario, respuestaIA, chicaNombre, 
     const resultadoRespuesta = detectarAccionEnTexto(respuestaIA);
     const accionEnRespuesta = resultadoRespuesta.tag;
     
-    if (accionEnRespuesta && tagsDisponibles.includes(accionEnRespuesta)) {
-        logQuinti('INFO', `[VERIFICACIÓN] Acción detectada en respuesta IA: ${accionEnRespuesta} (puntuación: ${resultadoRespuesta.puntuacion})`);
+    const accionCoincidenteRespuesta = accionEnRespuesta ? tagCoincide(accionEnRespuesta, tagsDisponibles) : null;
+    
+    if (accionCoincidenteRespuesta) {
+        logQuinti('INFO', `[VERIFICACIÓN] Acción detectada en respuesta IA: ${accionCoincidenteRespuesta} (puntuación: ${resultadoRespuesta.puntuacion})`);
         return { 
-            accion: accionEnRespuesta, 
-            cambioDetectado: accionAnterior !== accionEnRespuesta,
+            accion: accionCoincidenteRespuesta, 
+            cambioDetectado: accionAnterior !== accionCoincidenteRespuesta,
             detalle: resultadoRespuesta
         };
     }
@@ -804,6 +826,20 @@ function encontrarTagMasPertinente(tagSolicitado, tagsDisponibles, dialogoContex
     if (tagsDisponibles.includes(tagSolicitado)) {
         logQuinti('DEBUG', `Coincidencia EXACTA encontrada: ${tagSolicitado}`);
         return tagSolicitado;
+    }
+    
+    // ============================================
+    // CRITERIO 1.5: Buscar variantes numeradas del mismo tag
+    // ============================================
+    const tagBase = tagSolicitado.replace(/_\d+$/, '').replace(/\d+$/, '');
+    const variantesNumeradas = tagsDisponibles.filter(t => {
+        const tBase = t.replace(/_\d+$/, '').replace(/\d+$/, '');
+        return tBase === tagBase && t !== tagSolicitado;
+    });
+    if (variantesNumeradas.length > 0) {
+        const varianteElegida = variantesNumeradas[Math.floor(Math.random() * variantesNumeradas.length)];
+        logQuinti('DEBUG', `Variante numerada encontrada: "${tagSolicitado}" -> "${varianteElegida}"`);
+        return varianteElegida;
     }
     
     // ============================================
@@ -2751,7 +2787,28 @@ function obtenerURLImagen(nombreChica, tag, historiaId = null) {
     let urlImagen = imgObj?.url || imgObj;
     let urlAudio = imgObj?.audio || null;
     
-    // MEJORA #1: Si no encuentra el tag exacto, usar el sistema inteligente de búsqueda de tags pertinentes
+    // MEJORA: Si no encuentra el tag exacto, buscar variantes numeradas (ej: "tag2", "tag_1")
+    if (!urlImagen && tag) {
+        const tagsDisponibles = Object.keys(chicaData.imagenes);
+        const tagBase = tag.replace(/_\d+$/, '').replace(/\d+$/, ''); // Remover números al final
+        
+        // Buscar todas las variantes de este tag (base + numeradas)
+        const variantes = tagsDisponibles.filter(t => {
+            const tNormalizado = t.replace(/_\d+$/, '').replace(/\d+$/, '');
+            return tNormalizado === tagBase || t === tag;
+        });
+        
+        if (variantes.length > 0) {
+            // Seleccionar aleatoriamente una variante
+            const tagElegido = variantes[Math.floor(Math.random() * variantes.length)];
+            const imgObjVariante = chicaData.imagenes[tagElegido];
+            urlImagen = imgObjVariante?.url || imgObjVariante;
+            urlAudio = imgObjVariante?.audio || null;
+            logQuinti('INFO', `Tag "${tag}" no encontrado exacto, usando variante: "${tagElegido}" para ${nombreChica}`);
+        }
+    }
+    
+    // MEJORA #1: Si no encuentra el tag exacto ni variantes, usar el sistema inteligente de búsqueda de tags pertinentes
     if ((!urlImagen || tag.toLowerCase().trim() === 'none') && chicaData.imagenes && Object.keys(chicaData.imagenes).length > 0) {
         const tagsDisponibles = Object.keys(chicaData.imagenes);
         
