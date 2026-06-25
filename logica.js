@@ -1820,9 +1820,23 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
             
             // Preparar mensajes para esta chica (SOLO el mensaje actual del usuario)
             const mensajesPayload = [
-                { role: "system", content: systemPromptIndividual },
-                { role: "user", content: mensaje }
+                { role: "system", content: systemPromptIndividual }
             ];
+            
+            // AGREGAR RESPUESTAS PREVIAS COMO MENSAJES DE ASISTENTE PARA CONTEXTO REAL
+            // Esto permite que cada chica vea lo que las demás dijeron como parte del historial
+            if (!esPrimeraChica && respuestasPorChica.length > 0) {
+                for (const respuestaPrev of respuestasPorChica) {
+                    mensajesPayload.push({
+                        role: "assistant",
+                        name: respuestaPrev.chica.replace(/\s+/g, '_'), // API requiere nombre sin espacios
+                        content: respuestaPrev.respuesta
+                    });
+                }
+            }
+            
+            // Agregar el mensaje actual del usuario al final
+            mensajesPayload.push({ role: "user", content: mensaje });
             
             // Llamar a la API para esta chica
             let datos;
