@@ -1858,47 +1858,50 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             document.getElementById('selectorContainer').style.display = 'none';
             document.getElementById('chatContainer').classList.remove('active');
         }
-                const mensajes = [];
-                const messagesDiv = document.getElementById('chatMessages');
-                if (messagesDiv) {
-                    const messageElements = messagesDiv.querySelectorAll('.message');
-                    messageElements.forEach(msgEl => {
-                        const isUser = msgEl.classList.contains('user-message');
-                        const textContent = msgEl.textContent.trim();
-                        
-                        // Extraer imagen si existe
-                        const imgEl = msgEl.querySelector('img');
-                        const imagenURL = imgEl ? imgEl.src : null;
-                        
-                        // Extraer audio si existe
-                        const audioEl = msgEl.querySelector('audio');
-                        const audioURL = audioEl ? audioEl.querySelector('source')?.src || audioEl.src : null;
-                        
-                        // Extraer tag de imagen para poder rotar después
-                        const imagenTag = msgEl.dataset.imagenTag || null;
-                        
-                        mensajes.push({
-                            role: isUser ? 'user' : 'assistant',
-                            content: textContent,
-                            imagen: imagenURL,
-                            imagenTag: imagenTag,
-                            audio: audioURL,
-                            timestamp: Date.now()
-                        });
+        
+        // Obtener datos actuales del chat para guardar
+        window.getCurrentChatData = function() {
+            const mensajes = [];
+            const messagesDiv = document.getElementById('chatMessages');
+            if (messagesDiv) {
+                const messageElements = messagesDiv.querySelectorAll('.message');
+                messageElements.forEach(msgEl => {
+                    const isUser = msgEl.classList.contains('user-message');
+                    const textContent = msgEl.textContent.trim();
+                    
+                    // Extraer imagen si existe
+                    const imgEl = msgEl.querySelector('img');
+                    const imagenURL = imgEl ? imgEl.src : null;
+                    
+                    // Extraer audio si existe
+                    const audioEl = msgEl.querySelector('audio');
+                    const audioURL = audioEl ? audioEl.querySelector('source')?.src || audioEl.src : null;
+                    
+                    // Extraer tag de imagen para poder rotar después
+                    const imagenTag = msgEl.dataset.imagenTag || null;
+                    
+                    mensajes.push({
+                        role: isUser ? 'user' : 'assistant',
+                        content: textContent,
+                        imagen: imagenURL,
+                        imagenTag: imagenTag,
+                        audio: audioURL,
+                        timestamp: Date.now()
                     });
-                }
-                
-                return {
-                    chicaPrincipal: chicaSeleccionadaActual,
-                    chicasEnChat: getChicasEnChat ? Array.from(getChicasEnChat()) : [chicaSeleccionadaActual],
-                    mensajes: mensajes,
-                    nombreUsuario: nombreUsuario || 'Anónimo',
-                    version: '2.0' // Versión que incluye audio e imagenTag
-                };
-            };
+                });
+            }
             
-            // Restaurar chat desde datos guardados
-            window.restoreChatFromData = function(chatData) {
+            return {
+                chicaPrincipal: chicaSeleccionadaActual,
+                chicasEnChat: getChicasEnChat ? Array.from(getChicasEnChat()) : [chicaSeleccionadaActual],
+                mensajes: mensajes,
+                nombreUsuario: nombreUsuario || 'Anónimo',
+                version: '2.0' // Versión que incluye audio e imagenTag
+            };
+        }
+        
+        // Restaurar chat desde datos guardados
+        window.restoreChatFromData = function(chatData) {
                 if (!chatData || !chatData.chicaPrincipal) {
                     alert('❌ Datos de chat inválidos');
                     return;
