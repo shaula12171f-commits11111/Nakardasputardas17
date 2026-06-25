@@ -1157,7 +1157,7 @@
         import { getChicasDisponibles, seleccionarChica, conversar, logQuinti, logErrorAPI, formatearErrorUsuario, getChicasEnChat, actualizarAccionEnCurso, getAccionEnCurso, getChicaSeleccionada, getImagenSelector, formatearTextoConAsteriscos, parsearJSON, obtenerURLImagen } from './logica.js';
         import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion } from './antiRepeticion.js';
         import { QuintiImagenesPrueba } from './imagenes.js';
-        import { getHistoriasChica, getEscenariosChica, getMensajeBienvenidaHistoria, getMensajeBienvenidaEscenario, getImagenMensajeHistoria, getImagenMensajeEscenario } from './historiasEscenarios.js';
+        import { getHistoriasChica, getEscenariosChica, getMensajeBienvenidaHistoria, getMensajeBienvenidaEscenario } from './historiasEscenarios.js';
         
         let chicaSeleccionadaActual = null;
         let historialMensajesUI = []; // Historial local para la UI
@@ -1530,54 +1530,52 @@
         // Iniciar una historia específica
         function iniciarHistoria(historiaId) {
             if (!chicaSeleccionadaActual) return;
-
+            
             const mensajeBienvenida = getMensajeBienvenidaHistoria(historiaId);
-            const imagenMensaje = getImagenMensajeHistoria(historiaId);
-            iniciarChatConMensaje(mensajeBienvenida, imagenMensaje);
-
+            iniciarChatConMensaje(mensajeBienvenida);
+            
             // Cerrar modal
             const modal = document.getElementById('selectorHistoriasModal');
             if (modal) modal.remove();
         }
-
+        
         // Iniciar un escenario específico
         function iniciarEscenario(escenarioId) {
             if (!chicaSeleccionadaActual) return;
-
+            
             const mensajeBienvenida = getMensajeBienvenidaEscenario(escenarioId);
-            const imagenMensaje = getImagenMensajeEscenario(escenarioId);
-            iniciarChatConMensaje(mensajeBienvenida, imagenMensaje);
-
+            iniciarChatConMensaje(mensajeBienvenida);
+            
             // Cerrar modal
             const modal = document.getElementById('selectorHistoriasModal');
             if (modal) modal.remove();
         }
-
+        
         // Iniciar chat libre sin historia/escenario específico
         function iniciarChatLibre() {
             if (!chicaSeleccionadaActual) return;
-
+            
             const infoChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
-            const mensajeLibre = `*${infoChica.nombre.split(' ')[0]} te mira con una sonrisa amable*\\n\\n${infoChica.nombre.split(' ')[0]}: "¡Hola! ¿Qué tal? Estoy aquí para lo que necesites..." *se acerca un poco más* "¿De qué quieres hablar hoy?"`;
-
-            iniciarChatConMensaje(mensajeLibre, null);
-
+            const mensajeLibre = `*${infoChica.nombre.split(' ')[0]} te mira con una sonrisa amable*\\\\n\\\\n${infoChica.nombre.split(' ')[0]}: "¡Hola! ¿Qué tal? Estoy aquí para lo que necesites..." *se acerca un poco más* "¿De qué quieres hablar hoy?"`;
+            
+            iniciarChatConMensaje(mensajeLibre);
+            
             // Cerrar modal
             const modal = document.getElementById('selectorHistoriasModal');
             if (modal) modal.remove();
         }
-
+        
         // Función común para iniciar el chat con un mensaje específico
-        function iniciarChatConMensaje(mensajeBienvenida, imagenMensajeURL = null) {
+        function iniciarChatConMensaje(mensajeBienvenida) {
             if (!chicaSeleccionadaActual) return;
-
+            
             // Seleccionar la chica en la lógica
             seleccionarChica(chicaSeleccionadaActual);
-
+            
             // Ocultar selector, mostrar chat
             document.getElementById('selectorContainer').style.display = 'none';
             document.getElementById('chatContainer').classList.add('active');
-
+            
             // Actualizar información de la chica en el chat
             const infoChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
             document.getElementById('chicaNombreHeader').textContent = infoChica.nombre;
@@ -1586,23 +1584,20 @@
             document.getElementById('chicaImagenPerfil').src = infoChica.imagenSelector;
             document.getElementById('chicaNombreSaludo').textContent = infoChica.nombre.split(' ')[0];
             document.getElementById('chicaNombreEscribiendo').textContent = infoChica.nombre.split(' ')[0];
-
+            
             // Limpiar mensajes y agregar mensaje de bienvenida formateado
             const messagesDiv = document.getElementById('chatMessages');
             historialMensajesUI = [];
-
+            
             // Formatear el mensaje de bienvenida (convertir \\n a saltos de línea reales y asteriscos a cursiva)
             const mensajeFormateado = formatearTextoConAsteriscos(mensajeBienvenida.replace(/\\\\n/g, '\n'));
-
-            // Si hay imagen, agregarla antes del mensaje
-            let contenidoHTML = '';
-            if (imagenMensajeURL && imagenMensajeURL.trim() !== '') {
-                contenidoHTML += `<img src="${imagenMensajeURL}" alt="Imagen de la escena" style="max-width: 400px; max-height: 500px; border-radius: 12px; display: block; margin: 0 auto 15px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); border: 3px solid rgba(139, 92, 246, 0.5);">`;
-            }
-            contenidoHTML += mensajeFormateado;
-
-            messagesDiv.innerHTML = `<div class="message bot-message">${contenidoHTML}</div>`;
+            messagesDiv.innerHTML = `<div class="message bot-message">${mensajeFormateado}</div>`;
         }
+        
+        function volverAlInicio() {
+            window.location.href = '../index.html';
+        }
+        
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
                 sendMessage();
