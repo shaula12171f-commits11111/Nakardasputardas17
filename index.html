@@ -1992,14 +1992,19 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             }
         };
 
-        // Inicializar cuando carga la página
-        cargarNombreGuardado();
-
         // Cargar el script del sistema de guardado (sin type module para acceso global)
         const saveSystemScript = document.createElement('script');
         saveSystemScript.src = './chatSaveSystem.js';
         document.body.appendChild(saveSystemScript);
-    });
+        
+        // Inicializar cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                cargarNombreGuardado();
+            });
+        } else {
+            cargarNombreGuardado();
+        }
     </script>
 </body>
 </html>
