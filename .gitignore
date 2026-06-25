@@ -1,1 +1,1 @@
-(logica.js is a source file, so no changes needed to .gitignore)
+(logica.js and personalidades.js are source files, no build artifacts, dependencies, or temp files in the changes)
