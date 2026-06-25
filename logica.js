@@ -2783,28 +2783,32 @@ function obtenerURLImagen(nombreChica, tag, historiaId = null) {
     }
     
     // Intentar obtener la imagen por tag
-    const imgObj = chicaData.imagenes?.[tag];
-    let urlImagen = imgObj?.url || imgObj;
-    let urlAudio = imgObj?.audio || null;
+    let urlImagen = null;
+    let urlAudio = null;
     
-    // MEJORA: Si no encuentra el tag exacto, buscar variantes numeradas (ej: "tag2", "tag_1")
-    if (!urlImagen && tag) {
+    // MEJORA: Buscar TODAS las variantes numeradas del tag (ej: "tag", "tag2", "tag_1") y seleccionar una aleatoriamente
+    if (tag && chicaData.imagenes) {
         const tagsDisponibles = Object.keys(chicaData.imagenes);
         const tagBase = tag.replace(/_\d+$/, '').replace(/\d+$/, ''); // Remover números al final
         
         // Buscar todas las variantes de este tag (base + numeradas)
         const variantes = tagsDisponibles.filter(t => {
             const tNormalizado = t.replace(/_\d+$/, '').replace(/\d+$/, '');
-            return tNormalizado === tagBase || t === tag;
+            return tNormalizado === tagBase;
         });
         
         if (variantes.length > 0) {
-            // Seleccionar aleatoriamente una variante
+            // Seleccionar aleatoriamente una variante entre TODAS las disponibles
             const tagElegido = variantes[Math.floor(Math.random() * variantes.length)];
             const imgObjVariante = chicaData.imagenes[tagElegido];
             urlImagen = imgObjVariante?.url || imgObjVariante;
             urlAudio = imgObjVariante?.audio || null;
-            logQuinti('INFO', `Tag "${tag}" no encontrado exacto, usando variante: "${tagElegido}" para ${nombreChica}`);
+            
+            if (variantes.length > 1) {
+                logQuinti('INFO', `Tag "${tag}" tiene ${variantes.length} variantes: [${variantes.join(', ')}]. Usando: "${tagElegido}" para ${nombreChica}`);
+            } else {
+                logQuinti('DEBUG', `Usando tag exacto "${tagElegido}" para ${nombreChica}`);
+            }
         }
     }
     
