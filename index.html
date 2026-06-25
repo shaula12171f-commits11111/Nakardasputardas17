@@ -1157,6 +1157,7 @@
         import { getChicasDisponibles, seleccionarChica, conversar, logQuinti, logErrorAPI, formatearErrorUsuario, getChicasEnChat, actualizarAccionEnCurso, getAccionEnCurso, getChicaSeleccionada, getImagenSelector, formatearTextoConAsteriscos, parsearJSON, obtenerURLImagen } from './logica.js';
         import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion } from './antiRepeticion.js';
         import { QuintiImagenesPrueba } from './imagenes.js';
+        import { getHistoriasChica, getEscenariosChica, getMensajeBienvenidaHistoria, getMensajeBienvenidaEscenario } from './historiasEscenarios.js';
         
         let chicaSeleccionadaActual = null;
         let historialMensajesUI = []; // Historial local para la UI
@@ -1255,7 +1256,7 @@
             });
         }
         
-        // Seleccionar una chica visualmente
+        // Seleccionar una chica visualmente y mostrar modal de historias/escenarios
         function seleccionarChicaVisual(nombre) {
             // Remover selección previa
             document.querySelectorAll('.chica-button').forEach(btn => {
@@ -1266,12 +1267,205 @@
             event.currentTarget.classList.add('selected');
             chicaSeleccionadaActual = nombre;
             
-            // Habilitar botón de comenzar chat
-            document.getElementById('startChatBtn').disabled = false;
+            // Mostrar modal con historias y escenarios disponibles
+            mostrarSelectorHistoriasEscenarios(nombre);
         }
         
-        // Iniciar el chat con la chica seleccionada
-        function iniciarChat() {
+        // Mostrar modal con historias y escenarios de la chica
+        function mostrarSelectorHistoriasEscenarios(nombreChica) {
+            const historias = getHistoriasChica(nombreChica);
+            const escenarios = getEscenariosChica(nombreChica);
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.id = 'selectorHistoriasModal';
+            
+            let contenidoHTML = `
+                <div class="modal-content" style="max-width: 900px;">
+                    <div class="modal-header">
+                        <h2>Elige una opción para ${nombreChica}</h2>
+                        <button class="modal-close" onclick="document.getElementById('selectorHistoriasModal').remove()">×</button>
+                    </div>
+                    <div class="modal-body">
+            `;
+            
+            // Sección de Historias
+            if (historias.length > 0) {
+                contenidoHTML += `
+                    <h3 style="color: #A78BFA; margin: 20px 0 15px 0;">📖 Historias Disponibles</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
+                `;
+                
+                historias.forEach(historia => {
+                    contenidoHTML += `
+                        <div class="historia-card" style="
+                            background: linear-gradient(135deg, #2d1b4e, #1a1a2e);
+                            border: 2px solid #8B5CF6;
+                            border-radius: 15px;
+                            padding: 15px;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                        " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(139, 92, 246, 0.5)'" 
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <img src="${historia.imagenSelector}" alt="${historia.nombre}" style="
+                                width: 100%;
+                                height: 180px;
+                                object-fit: cover;
+                                border-radius: 10px;
+                                border: 2px solid #A78BFA;
+                                margin-bottom: 10px;
+                            ">
+                            <h4 style="color: #C4B5FD; margin: 10px 0 5px 0;">${historia.nombre}</h4>
+                            <p style="color: #a0a0b0; font-size: 14px; margin: 0;">${historia.descripcion}</p>
+                            <button onclick="iniciarHistoria('${historia.id}')" style="
+                                margin-top: 10px;
+                                padding: 8px 16px;
+                                background: linear-gradient(135deg, #667eea, #764ba2);
+                                color: white;
+                                border: none;
+                                border-radius: 20px;
+                                cursor: pointer;
+                                font-weight: bold;
+                                width: 100%;
+                            ">Comenzar Historia</button>
+                        </div>
+                    `;
+                });
+                
+                contenidoHTML += `</div>`;
+            }
+            
+            // Sección de Escenarios
+            if (escenarios.length > 0) {
+                contenidoHTML += `
+                    <h3 style="color: #A78BFA; margin: 20px 0 15px 0;">🏠 Escenarios Disponibles</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
+                `;
+                
+                escenarios.forEach(escenario => {
+                    contenidoHTML += `
+                        <div class="escenario-card" style="
+                            background: linear-gradient(135deg, #2d1b4e, #1a1a2e);
+                            border: 2px solid #8B5CF6;
+                            border-radius: 15px;
+                            padding: 15px;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                        " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(139, 92, 246, 0.5)'" 
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <img src="${escenario.imagenSelector}" alt="${escenario.nombre}" style="
+                                width: 100%;
+                                height: 180px;
+                                object-fit: cover;
+                                border-radius: 10px;
+                                border: 2px solid #A78BFA;
+                                margin-bottom: 10px;
+                            ">
+                            <h4 style="color: #C4B5FD; margin: 10px 0 5px 0;">${escenario.nombre}</h4>
+                            <p style="color: #a0a0b0; font-size: 14px; margin: 0;">${escenario.descripcion}</p>
+                            <button onclick="iniciarEscenario('${escenario.id}')" style="
+                                margin-top: 10px;
+                                padding: 8px 16px;
+                                background: linear-gradient(135deg, #667eea, #764ba2);
+                                color: white;
+                                border: none;
+                                border-radius: 20px;
+                                cursor: pointer;
+                                font-weight: bold;
+                                width: 100%;
+                            ">Comenzar Escenario</button>
+                        </div>
+                    `;
+                });
+                
+                contenidoHTML += `</div>`;
+            }
+            
+            // Botón para chat libre sin historia/escenario
+            contenidoHTML += `
+                <div style="margin-top: 30px; text-align: center;">
+                    <button onclick="iniciarChatLibre()" style="
+                        padding: 15px 40px;
+                        background: linear-gradient(135deg, #1a1a2e, #2d1b4e);
+                        color: #A78BFA;
+                        border: 2px solid #8B5CF6;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        font-size: 16px;
+                        font-weight: bold;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.background='linear-gradient(135deg, #2d1b4e, #1a1a2e)'; this.style.color='#C4B5FD'" 
+                       onmouseout="this.style.background='linear-gradient(135deg, #1a1a2e, #2d1b4e)'; this.style.color='#A78BFA'">
+                        💬 Chat Libre (sin historia específica)
+                    </button>
+                </div>
+            `;
+            
+            contenidoHTML += `
+                    </div>
+                </div>
+            `;
+            
+            modal.innerHTML = contenidoHTML;
+            document.body.appendChild(modal);
+            
+            // Estilos del modal
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.85);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                overflow-y: auto;
+                padding: 20px;
+            `;
+        }
+        
+        // Iniciar una historia específica
+        function iniciarHistoria(historiaId) {
+            if (!chicaSeleccionadaActual) return;
+            
+            const mensajeBienvenida = getMensajeBienvenidaHistoria(historiaId);
+            iniciarChatConMensaje(mensajeBienvenida);
+            
+            // Cerrar modal
+            const modal = document.getElementById('selectorHistoriasModal');
+            if (modal) modal.remove();
+        }
+        
+        // Iniciar un escenario específico
+        function iniciarEscenario(escenarioId) {
+            if (!chicaSeleccionadaActual) return;
+            
+            const mensajeBienvenida = getMensajeBienvenidaEscenario(escenarioId);
+            iniciarChatConMensaje(mensajeBienvenida);
+            
+            // Cerrar modal
+            const modal = document.getElementById('selectorHistoriasModal');
+            if (modal) modal.remove();
+        }
+        
+        // Iniciar chat libre sin historia/escenario específico
+        function iniciarChatLibre() {
+            if (!chicaSeleccionadaActual) return;
+            
+            const infoChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
+            const mensajeLibre = `*${infoChica.nombre.split(' ')[0]} te mira con una sonrisa amable*\\\\n\\\\n${infoChica.nombre.split(' ')[0]}: "¡Hola! ¿Qué tal? Estoy aquí para lo que necesites..." *se acerca un poco más* "¿De qué quieres hablar hoy?"`;
+            
+            iniciarChatConMensaje(mensajeLibre);
+            
+            // Cerrar modal
+            const modal = document.getElementById('selectorHistoriasModal');
+            if (modal) modal.remove();
+        }
+        
+        // Función común para iniciar el chat con un mensaje específico
+        function iniciarChatConMensaje(mensajeBienvenida) {
             if (!chicaSeleccionadaActual) return;
             
             // Seleccionar la chica en la lógica
@@ -1290,14 +1484,13 @@
             document.getElementById('chicaNombreSaludo').textContent = infoChica.nombre.split(' ')[0];
             document.getElementById('chicaNombreEscribiendo').textContent = infoChica.nombre.split(' ')[0];
             
-            // Limpiar mensajes y agregar saludo personalizado
+            // Limpiar mensajes y agregar mensaje de bienvenida formateado
             const messagesDiv = document.getElementById('chatMessages');
             historialMensajesUI = [];
-            messagesDiv.innerHTML = `
-                <div class="message bot-message">
-                    ¡Hola! Soy ${infoChica.nombre.split(' ')[0]} 🌸 ¿En qué puedo ayudarte hoy?
-                </div>
-            `;
+            
+            // Formatear el mensaje de bienvenida (convertir \\n a saltos de línea reales y asteriscos a cursiva)
+            const mensajeFormateado = formatearTextoConAsteriscos(mensajeBienvenida.replace(/\\\\n/g, '\n'));
+            messagesDiv.innerHTML = `<div class="message bot-message">${mensajeFormateado}</div>`;
         }
         
         function volverAlInicio() {
@@ -1839,7 +2032,10 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
         window.cargarNombreGuardado = cargarNombreGuardado;
         window.inicializarSelector = inicializarSelector;
         window.seleccionarChicaVisual = seleccionarChicaVisual;
-        window.iniciarChat = iniciarChat;
+        window.iniciarChat = iniciarChatConMensaje; // Ahora iniciarChat es la función que inicia con mensaje
+        window.iniciarHistoria = iniciarHistoria;
+        window.iniciarEscenario = iniciarEscenario;
+        window.iniciarChatLibre = iniciarChatLibre;
         window.volverAlInicio = volverAlInicio;
         window.handleKeyPress = handleKeyPress;
         window.sendMessage = sendMessage;
