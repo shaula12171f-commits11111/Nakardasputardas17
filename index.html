@@ -1902,75 +1902,99 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
         
         // Restaurar chat desde datos guardados
         window.restoreChatFromData = function(chatData) {
-                if (!chatData || !chatData.chicaPrincipal) {
-                    alert('❌ Datos de chat inválidos');
-                    return;
-                }
-                
-                // Seleccionar la chica principal
-                chicaSeleccionadaActual = chatData.chicaPrincipal;
-                seleccionarChica(chicaSeleccionadaActual);
-                
-                // Ocultar selector, mostrar chat
-                document.getElementById('selectorContainer').style.display = 'none';
-                document.getElementById('chatContainer').classList.add('active');
-                
-                // Actualizar información de la chica en el chat
-                const infoChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
-                if (infoChica) {
-                    document.getElementById('chicaNombreHeader').textContent = infoChica.nombre;
-                    document.getElementById('chicaNombreInfo').textContent = infoChica.nombre;
-                    document.getElementById('chicaDescripcion').textContent = infoChica.descripcion;
-                    document.getElementById('chicaImagenPerfil').src = infoChica.imagenSelector;
-                    document.getElementById('chicaNombreSaludo').textContent = infoChica.nombre.split(' ')[0];
-                    document.getElementById('chicaNombreEscribiendo').textContent = infoChica.nombre.split(' ')[0];
-                }
-                
-                // Restaurar mensajes
-                const messagesDiv = document.getElementById('chatMessages');
-                if (messagesDiv && chatData.mensajes) {
-                    messagesDiv.innerHTML = '';
-                    
-                    chatData.mensajes.forEach(msg => {
-                        const msgDiv = document.createElement('div');
-                        msgDiv.className = `message ${msg.role === 'user' ? 'user-message' : 'bot-message'}`;
-                        
-                        let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;">${msg.content}</div>`;
-                        
-                        // Restaurar imagen si existe
-                        if (msg.imagen) {
-                            const chicaNombre = msg.role === 'assistant' ? (chatData.chicaPrincipal || 'Chica') : '';
-                            contenidoHTML += `<img src="${msg.imagen}" alt="${chicaNombre}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
-                        }
-                        
-                        // Restaurar audio si existe
-                        if (msg.audio) {
-                            contenidoHTML += `<audio controls autoplay loop style="display: block; margin: 10px auto; width: 100%; max-width: 400px;"><source src="${msg.audio}" type="audio/mpeg">Tu navegador no soporta el elemento de audio.</audio>`;
-                        }
-                        
-                        msgDiv.innerHTML = contenidoHTML;
-                        // Guardar el tag de imagen para referencia futura
-                        if (msg.imagenTag) {
-                            msgDiv.dataset.imagenTag = msg.imagenTag;
-                        }
-                        messagesDiv.appendChild(msgDiv);
-                    });
-                    
-                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                }
-                
-                // Cerrar panel de guardado
-                document.getElementById('chatSavePanel').style.display = 'none';
-                
-                alert(`✅ Chat restaurado exitosamente.\nMensajes cargados: ${chatData.mensajes?.length || 0}`);
-            };
+            if (!chatData || !chatData.chicaPrincipal) {
+                alert('❌ Datos de chat inválidos');
+                return;
+            }
             
-            // Exponer toggleChatSavePanel globalmente
-            window.toggleChatSavePanel = toggleChatSavePanel;
+            // Seleccionar la chica principal
+            chicaSeleccionadaActual = chatData.chicaPrincipal;
+            seleccionarChica(chicaSeleccionadaActual);
             
-            // Inicializar cuando carga la página
-            cargarNombreGuardado();
-        });
+            // Ocultar selector, mostrar chat
+            document.getElementById('selectorContainer').style.display = 'none';
+            document.getElementById('chatContainer').classList.add('active');
+            
+            // Actualizar información de la chica en el chat
+            const infoChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
+            if (infoChica) {
+                document.getElementById('chicaNombreHeader').textContent = infoChica.nombre;
+                document.getElementById('chicaNombreInfo').textContent = infoChica.nombre;
+                document.getElementById('chicaDescripcion').textContent = infoChica.descripcion;
+                document.getElementById('chicaImagenPerfil').src = infoChica.imagenSelector;
+                document.getElementById('chicaNombreSaludo').textContent = infoChica.nombre.split(' ')[0];
+                document.getElementById('chicaNombreEscribiendo').textContent = infoChica.nombre.split(' ')[0];
+            }
+            
+            // Restaurar mensajes
+            const messagesDiv = document.getElementById('chatMessages');
+            if (messagesDiv && chatData.mensajes) {
+                messagesDiv.innerHTML = '';
+                
+                chatData.mensajes.forEach(msg => {
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = `message ${msg.role === 'user' ? 'user-message' : 'bot-message'}`;
+                    
+                    let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;">${msg.content}</div>`;
+                    
+                    // Restaurar imagen si existe
+                    if (msg.imagen) {
+                        const chicaNombre = msg.role === 'assistant' ? (chatData.chicaPrincipal || 'Chica') : '';
+                        contenidoHTML += `<img src="${msg.imagen}" alt="${chicaNombre}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                    }
+                    
+                    // Restaurar audio si existe
+                    if (msg.audio) {
+                        contenidoHTML += `<audio controls autoplay loop style="display: block; margin: 10px auto; width: 100%; max-width: 400px;"><source src="${msg.audio}" type="audio/mpeg">Tu navegador no soporta el elemento de audio.</audio>`;
+                    }
+                    
+                    msgDiv.innerHTML = contenidoHTML;
+                    // Guardar el tag de imagen para referencia futura
+                    if (msg.imagenTag) {
+                        msgDiv.dataset.imagenTag = msg.imagenTag;
+                    }
+                    messagesDiv.appendChild(msgDiv);
+                });
+                
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+            
+            // Cerrar panel de guardado
+            document.getElementById('chatSavePanel').style.display = 'none';
+            
+            alert(`✅ Chat restaurado exitosamente.\nMensajes cargados: ${chatData.mensajes?.length || 0}`);
+        };
+
+        // Función para mostrar/ocultar panel de guardado
+        function toggleChatSavePanel() {
+            const panel = document.getElementById('chatSavePanel');
+            if (panel.style.display === 'none' || panel.style.display === '') {
+                panel.style.display = 'block';
+                if (typeof ChatSaveSystem !== 'undefined') {
+                    ChatSaveSystem.renderSlotsPanel();
+                }
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
+        // Exponer funciones globalmente
+        window.toggleChatSavePanel = toggleChatSavePanel;
+        window.saveCurrentChat = function(slot) {
+            if (typeof ChatSaveSystem !== 'undefined' && typeof window.getCurrentChatData === 'function') {
+                const chatData = window.getCurrentChatData();
+                ChatSaveSystem.saveChat(slot, chatData);
+            }
+        };
+        window.loadSavedChats = function() {
+            if (typeof ChatSaveSystem !== 'undefined') {
+                ChatSaveSystem.renderSlotsPanel();
+            }
+        };
+
+        // Inicializar cuando carga la página
+        cargarNombreGuardado();
+    });
         
         // Cargar el script del sistema de guardado (sin type module para acceso global)
         const saveSystemScript = document.createElement('script');
