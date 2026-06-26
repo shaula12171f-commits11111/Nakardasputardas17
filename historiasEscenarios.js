@@ -60,7 +60,7 @@ export const HISTORIAS_POR_CHICA = {
                 nombre: "Piscina Privada",
                 descripcion: "Una tarde refrescante junto al agua",
                 imagenSelector: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD20/main/imagenes/img_1773687448917.jpg",
-                imagenBienvenida: "", // <-- ESPACIO PARA IMAGEN DEL PRIMER MENSAJE (URL DIRECTA)
+                imagenBienvenida: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD32/main/imagenes/img_1777643460689.webp", // <-- ESPACIO PARA IMAGEN DEL PRIMER MENSAJE (URL DIRECTA)
                 mensajeBienvenida: "*El agua cristalina de la piscina brilla bajo el sol. Ichika sale del agua como una diosa, gotas resbalando por su cuerpo en bikini*\\n\\nIchika: \"¡El agua está perfecta!\" *se sacude el cabello, salpicándote* \"¿Vas a quedarte ahí parado o vas a unirte a mí?\" *se sienta en el borde, invitándote con el dedo*\\n\\n*Cuando te acercas, te agarra sorpresivamente y te hace caer al agua* \"¡Sorpresa!\" *ríe a carcajadas, trepando sobre ti en el agua* \"Ahora que estás mojado...\" *se frota contra tu cuerpo* \"...tendré que secarte yo misma\"",
                 activa: true
             },
