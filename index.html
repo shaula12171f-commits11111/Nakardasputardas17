@@ -1158,7 +1158,7 @@
         import { getChicasDisponibles, seleccionarChica, conversar, logQuinti, logErrorAPI, formatearErrorUsuario, getChicasEnChat, actualizarAccionEnCurso, getAccionEnCurso, getChicaSeleccionada, getImagenSelector, formatearTextoConAsteriscos, parsearJSON, obtenerURLImagen } from './logica.js';
         import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion } from './antiRepeticion.js';
         import { QuintiImagenesPrueba } from './imagenes.js';
-        import { getHistoriasChica, getEscenariosChica, getMensajeBienvenidaHistoria, getMensajeBienvenidaEscenario, getImagenBienvenidaHistoria, getImagenBienvenidaEscenario } from './historiasEscenarios.js';
+        import { getHistoriasChica, getEscenariosChica, getMensajeBienvenidaHistoria, getMensajeBienvenidaEscenario, getImagenBienvenidaHistoria, getImagenBienvenidaEscenario, getHistoriasGrupalesChica, getHistoriaGrupalById } from './historiasEscenarios.js';
         
         let chicaSeleccionadaActual = null;
         let historialMensajesUI = []; // Historial local para la UI
@@ -1318,6 +1318,21 @@
                             " onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(139, 92, 246, 0.8)'; this.style.color='#E0E0FF'" 
                                onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(139, 92, 246, 0.5)'; this.style.color='#C4B5FD'">
                                 🏠 Escenarios
+                            </button>
+                            <button onclick="mostrarSoloHistoriasGrupales('${nombreChica}')" style="
+                                padding: 30px 50px;
+                                background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+                                color: white;
+                                border: 3px solid #A78BFA;
+                                border-radius: 20px;
+                                cursor: pointer;
+                                font-size: 20px;
+                                font-weight: bold;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5);
+                            " onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; this.style.boxShadow='0 8px 25px rgba(139, 92, 246, 0.8)'" 
+                               onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(139, 92, 246, 0.5)'">
+                                👥 Historias Grupales
                             </button>
                         </div>
                         <div style="margin-top: 30px;">
@@ -1526,6 +1541,131 @@
             `;
             
             modal.querySelector('.modal-content').outerHTML = contenidoHTML;
+        }
+        
+        // Mostrar solo historias grupales de la chica
+        function mostrarSoloHistoriasGrupales(nombreChica) {
+            const historiasGrupales = getHistoriasGrupalesChica(nombreChica);
+            
+            const modal = document.getElementById('selectorHistoriasModal');
+            
+            let contenidoHTML = `
+                <div class="modal-content" style="max-width: 900px;">
+                    <div class="modal-header">
+                        <h2>👥 Historias Grupales de ${nombreChica}</h2>
+                        <button class="modal-close" onclick="document.getElementById('selectorHistoriasModal').remove()">×</button>
+                    </div>
+                    <div class="modal-body">
+            `;
+            
+            if (historiasGrupales.length > 0) {
+                contenidoHTML += `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
+                `;
+                
+                historiasGrupales.forEach(historia => {
+                    contenidoHTML += `
+                        <div class="historia-grupal-card" style="
+                            background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+                            border: 2px solid #A78BFA;
+                            border-radius: 15px;
+                            padding: 15px;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                        " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(139, 92, 246, 0.5)'" 
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <img src="${historia.imagenSelector}" alt="${historia.nombre}" style="
+                                width: 100%;
+                                height: 180px;
+                                object-fit: cover;
+                                border-radius: 10px;
+                                border: 2px solid #C4B5FD;
+                                margin-bottom: 10px;
+                            ">
+                            <h4 style="color: #E0E0FF; margin: 10px 0 5px 0;">${historia.nombre}</h4>
+                            <p style="color: #d0d0ff; font-size: 14px; margin: 0;">${historia.descripcion}</p>
+                            <p style="color: #A78BFA; font-size: 12px; margin: 5px 0;">Participan: ${historia.chicas.join(', ')}</p>
+                            <button onclick="iniciarHistoriaGrupal('${historia.id}')" style="
+                                margin-top: 10px;
+                                padding: 8px 16px;
+                                background: linear-gradient(135deg, #667eea, #764ba2);
+                                color: white;
+                                border: none;
+                                border-radius: 20px;
+                                cursor: pointer;
+                                font-weight: bold;
+                                width: 100%;
+                            ">Comenzar Historia Grupal</button>
+                        </div>
+                    `;
+                });
+                
+                contenidoHTML += `</div>`;
+            } else {
+                contenidoHTML += `<p style="text-align: center; color: #a0a0b0; padding: 40px;">No hay historias grupales disponibles para ${nombreChica}</p>`;
+            }
+            
+            contenidoHTML += `
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button onclick="mostrarSelectorHistoriasEscenarios('${nombreChica}')" style="
+                            padding: 12px 30px;
+                            background: transparent;
+                            color: #A78BFA;
+                            border: 2px solid #8B5CF6;
+                            border-radius: 20px;
+                            cursor: pointer;
+                            font-size: 16px;
+                            font-weight: bold;
+                            transition: all 0.3s ease;
+                        " onmouseover="this.style.background='rgba(139, 92, 246, 0.2)'" onmouseout="this.style.background='transparent'">
+                            ← Volver
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.querySelector('.modal-content').outerHTML = contenidoHTML;
+        }
+        
+        // Iniciar una historia grupal específica
+        function iniciarHistoriaGrupal(historiaId) {
+            if (!chicaSeleccionadaActual) return;
+            
+            const historia = getHistoriaGrupalById(historiaId);
+            if (!historia) return;
+            
+            const mensajeBienvenida = historia.mensajeBienvenida || "";
+            const imagenBienvenida = historia.imagenBienvenida || null;
+            
+            // Cerrar modal
+            const modal = document.getElementById('selectorHistoriasModal');
+            if (modal) modal.remove();
+            
+            // Ocultar selector y mostrar chat
+            document.querySelector('.selector-container').style.display = 'none';
+            document.getElementById('chatContainer').classList.add('active');
+            
+            // Actualizar UI del chat con datos de la chica seleccionada
+            document.getElementById('chatTitle').textContent = `Chat con ${chicaSeleccionadaActual}`;
+            document.getElementById('chicaNombreInfo').textContent = chicaSeleccionadaActual;
+            document.getElementById('chicaImagenInfo').src = getImagenSelector(chicaSeleccionadaActual);
+            document.getElementById('chicaDescripcionInfo').textContent = `Historia Grupal: ${historia.nombre}`;
+            
+            // Limpiar historial
+            historialMensajesUI = [];
+            document.getElementById('chatMessages').innerHTML = '';
+            
+            // Mostrar mensaje de bienvenida con imagen si existe
+            if (imagenBienvenida) {
+                agregarMensajeAI(`![Imagen de bienvenida](${imagenBienvenida})\n\n${mensajeBienvenida}`);
+            } else {
+                agregarMensajeAI(mensajeBienvenida);
+            }
+            
+            // Guardar en memoria que estamos en una historia grupal
+            window.historiaGrupalActiva = historiaId;
+            window.esHistoriaGrupal = true;
         }
         
         // Iniciar una historia específica
