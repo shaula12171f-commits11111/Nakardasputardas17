@@ -1155,7 +1155,7 @@
     <!-- <script type="module" src="logica.test.js"></script> -->
     <script type="module">
         // Importar funciones necesarias de logica.js e imagenes.js
-        import { getChicasDisponibles, seleccionarChica, conversar, logQuinti, logErrorAPI, formatearErrorUsuario, getChicasEnChat, actualizarAccionEnCurso, getAccionEnCurso, getChicaSeleccionada, getImagenSelector, formatearTextoConAsteriscos, parsearJSON, obtenerURLImagen } from './logica.js';
+        import { getChicasDisponibles, seleccionarChica, conversar, logQuinti, logErrorAPI, formatearErrorUsuario, getChicasEnChat, agregarChicaAlChat, limpiarChicasEnChat, actualizarAccionEnCurso, getAccionEnCurso, getChicaSeleccionada, getImagenSelector, formatearTextoConAsteriscos, parsearJSON, obtenerURLImagen } from './logica.js';
         import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion } from './antiRepeticion.js';
         import { QuintiImagenesPrueba } from './imagenes.js';
         import { getHistoriasChica, getEscenariosChica, getMensajeBienvenidaHistoria, getMensajeBienvenidaEscenario, getImagenBienvenidaHistoria, getImagenBienvenidaEscenario, getHistoriasGrupalesChica, getHistoriaGrupalById } from './historiasEscenarios.js';
@@ -1646,15 +1646,25 @@
             document.querySelector('.selector-container').style.display = 'none';
             document.getElementById('chatContainer').classList.add('active');
             
-            // Actualizar UI del chat con datos de la chica seleccionada
-            document.getElementById('chatTitle').textContent = `Chat con ${chicaSeleccionadaActual}`;
-            document.getElementById('chicaNombreInfo').textContent = chicaSeleccionadaActual;
-            document.getElementById('chicaImagenInfo').src = getImagenSelector(chicaSeleccionadaActual);
+            // Configurar el chat para historia grupal con múltiples chicas
+            const chicasParticipantes = historia.chicas || [chicaSeleccionadaActual];
+            
+            // Actualizar UI del chat - mostrar que es una historia grupal
+            const tituloGrupal = chicasParticipantes.join(' & ');
+            document.getElementById('chatTitle').textContent = `Chat con ${tituloGrupal}`;
+            document.getElementById('chicaNombreInfo').textContent = tituloGrupal;
+            document.getElementById('chicaImagenInfo').src = historia.imagenSelector;
             document.getElementById('chicaDescripcionInfo').textContent = `Historia Grupal: ${historia.nombre}`;
             
             // Limpiar historial
             historialMensajesUI = [];
             document.getElementById('chatMessages').innerHTML = '';
+            
+            // IMPORTANTE: Configurar las chicas en el chat para que respondan todas
+            seleccionarChica(chicasParticipantes[0]); // Seleccionar la primera chica como principal
+            for (let i = 1; i < chicasParticipantes.length; i++) {
+                agregarChicaAlChat(chicasParticipantes[i]); // Agregar las demás al conjunto
+            }
             
             // Mostrar mensaje de bienvenida con imagen si existe
             if (imagenBienvenida) {
@@ -1666,6 +1676,7 @@
             // Guardar en memoria que estamos en una historia grupal
             window.historiaGrupalActiva = historiaId;
             window.esHistoriaGrupal = true;
+            window.chicasHistoriaGrupal = chicasParticipantes;
         }
         
         // Iniciar una historia específica
