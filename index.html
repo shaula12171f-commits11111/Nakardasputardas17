@@ -2298,10 +2298,9 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
         window.sendMessage = sendMessage;
         window.retryLastMessage = retryLastMessage;
         window.getNombreUsuario = function() { return nombreUsuario; };
-        window.abrirHistoriasParalelas = abrirHistoriasParalelas;
-        window.cerrarHistoriasParalelas = cerrarHistoriasParalelas;
-        window.iniciarHistoriaOEscenario = iniciarHistoriaOEscenario;
-        window.mostrarOpcion = mostrarOpcion;
+        // Funciones para el modal de historias paralelas (ya no se usan)
+        window.abrirHistoriasParalelas = function() { console.log('Función no implementada'); };
+        window.cerrarHistoriasParalelas = function() { document.getElementById('modalHistorias').style.display = 'none'; };
         // Cargar nombre guardado si existe - PERO SIEMPRE MOSTRAR PANTALLA DE NOMBRE
         function cargarNombreGuardado() {
             // Limpiar nombre guardado para que siempre pida el nombre al entrar
