@@ -191,6 +191,47 @@ export const HISTORIAS_POR_CHICA = {
     }
 };
 
+// Historias grupales - pueden involucrar múltiples chicas
+// Cada historia tiene un array 'chicas' que define qué chicas participan
+export const HISTORIAS_GRUPALES = [
+    {
+        id: "nino_ichika_culos",
+        nombre: "Nino e Ichika enseñan sus culos",
+        descripcion: "Una historia grupal picante con Nino e Ichika",
+        chicas: ["Nino", "Ichika"], // Lista de chicas que participan en esta historia
+        imagenSelector: "https://files.catbox.moe/z7v155.jpg",
+        imagenBienvenida: "https://files.catbox.moe/z7v155.jpg",
+        mensajeBienvenida: "*Nino e Ichika aparecen juntas en una habitación, ambas con expresiones traviesas*\\n\\nNino: \"¿Qué miras, idiota?\" *se sonroja ligeramente pero mantiene una sonrisa coqueta* \"Ichika y yo pensamos que sería divertido mostrarte algo especial...\"\\n\\n*Ichika ríe alegremente, acercándose a ti* \"¡Así es! Nos pusimos de acuerdo para darte una sorpresa que nunca olvidarás\" *gira mostrando su trasero* \"¿Te gusta lo que ves?\"\\n\\n*Nino se une a ella, ambas posando provocativamente* \"No te emociones demasiado...\" *dice Nino con voz temblorosa* \"...esto es solo el comienzo\"",
+        activa: true
+    }
+];
+
+/**
+ * Obtiene todas las historias grupales activas que incluyen a una chica específica
+ * @param {string} nombreChica - Nombre de la chica
+ * @returns {Array} - Array de historias grupales activas que incluyen a la chica
+ */
+export function getHistoriasGrupalesChica(nombreChica) {
+    return HISTORIAS_GRUPALES.filter(h => h.activa && h.chicas.includes(nombreChica));
+}
+
+/**
+ * Obtiene todas las historias grupales activas
+ * @returns {Array} - Array de historias grupales activas
+ */
+export function getHistoriasGrupales() {
+    return HISTORIAS_GRUPALES.filter(h => h.activa);
+}
+
+/**
+ * Obtiene una historia grupal específica por ID
+ * @param {string} historiaId - ID de la historia grupal
+ * @returns {object|null} - Datos de la historia grupal o null
+ */
+export function getHistoriaGrupalById(historiaId) {
+    return HISTORIAS_GRUPALES.find(h => h.id === historiaId) || null;
+}
+
 /**
  * Obtiene todas las historias activas para una chica
  * @param {string} nombreChica - Nombre de la chica
@@ -283,8 +324,12 @@ export function getImagenBienvenidaEscenario(escenarioId) {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         HISTORIAS_POR_CHICA,
+        HISTORIAS_GRUPALES,
         getHistoriasChica,
         getEscenariosChica,
+        getHistoriasGrupalesChica,
+        getHistoriasGrupales,
+        getHistoriaGrupalById,
         getHistoriaById,
         getEscenarioById,
         getMensajeBienvenidaHistoria,
