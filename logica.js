@@ -2874,6 +2874,15 @@ function getChicasEnChat() {
 }
 
 /**
+ * Agrega una chica al conjunto de chicas en el chat
+ * @param {string} nombreChica - Nombre de la chica a agregar
+ */
+function agregarChicaAlChat(nombreChica) {
+    chicasEnChat.add(nombreChica);
+    logQuinti('INFO', `Chica agregada al chat: ${nombreChica}`);
+}
+
+/**
  * Limpia el conjunto de chicas en el chat (para cuando se cambia de chica o se reinicia)
  */
 function limpiarChicasEnChat() {
@@ -2977,6 +2986,7 @@ export {
     getImagenSelector,
     getChicasDisponibles,
     getChicasEnChat,
+    agregarChicaAlChat,
     limpiarChicasEnChat,
     getHistorial,
     limpiarHistorial,
@@ -3024,6 +3034,7 @@ if (typeof window !== 'undefined') {
     window.seleccionarImagenAutomatica = seleccionarImagenAutomatica;
     window.obtenerTagsImagen = obtenerTagsImagen;
     window.getChicasEnChat = getChicasEnChat;
+    window.agregarChicaAlChat = agregarChicaAlChat;
     window.limpiarChicasEnChat = limpiarChicasEnChat;
     window.actualizarAccionEnCurso = actualizarAccionEnCurso;
     window.getAccionEnCurso = getAccionEnCurso;
