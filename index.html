@@ -1783,16 +1783,33 @@
  * @param {string} mensajeUsuario - El mensaje original del usuario
  * @returns {string|null} - Tag de imagen detectado o null si no hay acción clara
  */
-function detectarAccionEnMensaje(mensajeUsuario) {
+function detectarAccionEnMensaje(mensajeUsuario, nombreChica = null) {
     const mensajeLower = mensajeUsuario.toLowerCase();
     
+    // Si se proporciona un nombre de chica específica, buscar solo la parte del mensaje que la menciona
+    let mensajeParaAnalizar = mensajeLower;
+    if (nombreChica) {
+        // Intentar extraer la parte del mensaje que menciona específicamente a esta chica
+        // Patrones: "nombre me/nos/te [acción]", "que nombre [acción]"
+        const nombreLower = nombreChica.toLowerCase();
+        
+        // Buscar patrones como "nino me chupa", "ichika chupa las bolas"
+        const patronEspecifico = new RegExp(`${nombreLower}\\s+(?:me|nos|te|le)?\\s*([\\w\\s]+?)(?=\\s+y\\s+|\\s*,\\s*|\\.$|$)`, 'i');
+        const coincidencia = mensajeLower.match(patronEspecifico);
+        
+        if (coincidencia && coincidencia[1]) {
+            mensajeParaAnalizar = `${nombreLower} ${coincidencia[1]}`;
+            logQuinti('DEBUG', `Analizando mensaje específico para ${nombreChica}: "${mensajeParaAnalizar}"`);
+        }
+    }
+
     // Acciones comunes y sus tags correspondientes
     const accionesTags = [
         { patron: /bes|kiss/i, tag: 'besando' },
-        { patron: /chup|oral|mamad/i, tag: 'chupando_todo_el_pene' },
+        { patron: /bola|testicul/i, tag: 'chupando_bolas' },
         { patron: /punta/i, tag: 'chupando_solo_la_punta_del_pene' },
         { patron: /mitad/i, tag: 'chupando_solo_la_mitad_del_pene' },
-        { patron: /bola|testicul/i, tag: 'chupando_bolas' },
+        { patron: /chup|oral|mamad/i, tag: 'chupando_todo_el_pene' },
         { patron: /doggy|cuatro patas/i, tag: 'doggystyle' },
         { patron: /misioner/i, tag: 'misionero' },
         { patron: /desnud|sin ropa|quita/i, tag: 'desnuda' },
@@ -1807,13 +1824,13 @@ function detectarAccionEnMensaje(mensajeUsuario) {
         { patron: /lam|lamed/i, tag: 'laminedo_pene' },
         { patron: /cuello/i, tag: 'manos_alrededor_del_cuello' }
     ];
-    
+
     for (const accion of accionesTags) {
-        if (accion.patron.test(mensajeLower)) {
+        if (accion.patron.test(mensajeParaAnalizar)) {
             return accion.tag;
         }
     }
-    
+
     return null;
 }
 
@@ -1864,7 +1881,7 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
     
     // PASO 1: Si hay mensaje del usuario, detectar acción primero (PRIORIDAD MÁXIMA)
     if (mensajeUsuario && mensajeUsuario.trim()) {
-        const tagDetectado = detectarAccionEnMensaje(mensajeUsuario);
+        const tagDetectado = detectarAccionEnMensaje(mensajeUsuario, chicaNombre);
         if (tagDetectado && tagsDisponibles.includes(tagDetectado)) {
             logQuinti('DEBUG', `Tag forzado por acción del usuario: ${tagDetectado} para ${chicaNombre}`);
             return tagDetectado;
@@ -1882,7 +1899,7 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
     }
     
     // PASO 2: Si no hay acción explícita del usuario, verificar si hay una acción en curso
-    if (!mensajeUsuario || !detectarAccionEnMensaje(mensajeUsuario)) {
+    if (!mensajeUsuario || !detectarAccionEnMensaje(mensajeUsuario, chicaNombre)) {
         if (accionEnCurso && tagsDisponibles.includes(accionEnCurso)) {
             logQuinti('DEBUG', `Usando acción en curso: ${accionEnCurso} para ${chicaNombre}`);
             return accionEnCurso;
@@ -1950,7 +1967,7 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             lastUserMessage = message;
             
             // ACTUALIZAR ESTADO DE ACCIÓN: Detectar si el usuario menciona una acción
-            const accionDetectada = detectarAccionEnMensaje(message);
+            const accionDetectada = detectarAccionEnMensaje(message, null);
             actualizarEstadoAccion(accionDetectada);
             
             // Agregar mensaje del usuario al historial UI
