@@ -1652,10 +1652,10 @@
             
             // Actualizar UI del chat - mostrar que es una historia grupal
             const tituloGrupal = chicasParticipantes.join(' & ');
-            document.getElementById('chatTitle').textContent = `Chat con ${tituloGrupal}`;
+            document.getElementById('chicaNombreHeader').textContent = tituloGrupal;
             document.getElementById('chicaNombreInfo').textContent = tituloGrupal;
-            document.getElementById('chicaImagenInfo').src = historia.imagenSelector;
-            document.getElementById('chicaDescripcionInfo').textContent = `Historia Grupal: ${historia.nombre}`;
+            document.getElementById('chicaImagenPerfil').src = historia.imagenSelector;
+            document.getElementById('chicaDescripcion').textContent = `Historia Grupal: ${historia.nombre}`;
             
             // Limpiar historial
             historialMensajesUI = [];
@@ -2297,6 +2297,39 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
         window.inicializarSelector = inicializarSelector;
         window.seleccionarChicaVisual = seleccionarChicaVisual;
         window.iniciarChat = iniciarChatConMensaje; // Ahora iniciarChat es la función que inicia con mensaje
+        // Mostrar solo un tipo de contenido (historias, escenarios o grupales)
+        function mostrarOpcion(tipo) {
+            if (!chicaSeleccionadaActual) return;
+            
+            const selectorOpcionesContainer = document.getElementById('selectorOpcionesContainer');
+            const historiasLista = document.getElementById('historiasLista');
+            
+            // Actualizar botones activos
+            const botones = selectorOpcionesContainer.querySelectorAll('.opcion-btn');
+            botones.forEach(btn => btn.classList.remove('activo'));
+            
+            // Marcar botón seleccionado como activo
+            if (tipo === 'historias') {
+                botones[0].classList.add('activo');
+                mostrarSoloHistorias(chicaSeleccionadaActual);
+            } else if (tipo === 'escenarios') {
+                botones[1].classList.add('activo');
+                mostrarSoloEscenarios(chicaSeleccionadaActual);
+            } else if (tipo === 'grupales') {
+                botones[2].classList.add('activo');
+                mostrarSoloHistoriasGrupales(chicaSeleccionadaActual);
+            }
+        }
+        
+        // Función wrapper para iniciar historia o escenario (opcional)
+        function iniciarHistoriaOEscenario(id, tipo) {
+            if (tipo === 'historia') {
+                iniciarHistoria(id);
+            } else if (tipo === 'escenario') {
+                iniciarEscenario(id);
+            }
+        }
+        
         window.iniciarHistoria = iniciarHistoria;
         window.iniciarEscenario = iniciarEscenario;
         window.iniciarChatLibre = iniciarChatLibre;
