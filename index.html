@@ -1644,7 +1644,7 @@
             if (modal) modal.remove();
             
             // Ocultar selector y mostrar chat
-            document.querySelector('.selector-container').style.display = 'none';
+            document.getElementById('selectorContainer').style.display = 'none';
             document.getElementById('chatContainer').classList.add('active');
             
             // Configurar el chat para historia grupal con múltiples chicas
@@ -1659,7 +1659,8 @@
             
             // Limpiar historial
             historialMensajesUI = [];
-            document.getElementById('chatMessages').innerHTML = '';
+            const messagesDiv = document.getElementById('chatMessages');
+            messagesDiv.innerHTML = '';
             
             // IMPORTANTE: Configurar las chicas en el chat para que respondan todas
             seleccionarChica(chicasParticipantes[0]); // Seleccionar la primera chica como principal
@@ -1668,10 +1669,15 @@
             }
             
             // Mostrar mensaje de bienvenida con imagen si existe
-            if (imagenBienvenida) {
-                agregarMensajeAI(`![Imagen de bienvenida](${imagenBienvenida})\n\n${mensajeBienvenida}`);
-            } else {
-                agregarMensajeAI(mensajeBienvenida);
+            if (imagenBienvenida && imagenBienvenida.trim() !== '') {
+                const mensajeFormateado = formatearTextoConAsteriscos(mensajeBienvenida.replace(/\\\\n/g, '\n'));
+                let mensajeHTML = `<div class="message bot-message">${mensajeFormateado}`;
+                mensajeHTML += `<img src="${imagenBienvenida}" alt="Imagen de bienvenida" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                mensajeHTML += `</div>`;
+                messagesDiv.innerHTML = mensajeHTML;
+            } else if (mensajeBienvenida) {
+                const mensajeFormateado = formatearTextoConAsteriscos(mensajeBienvenida.replace(/\\\\n/g, '\n'));
+                messagesDiv.innerHTML = `<div class="message bot-message">${mensajeFormateado}</div>`;
             }
             
             // Guardar en memoria que estamos en una historia grupal
