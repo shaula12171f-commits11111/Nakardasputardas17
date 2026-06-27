@@ -2977,6 +2977,17 @@ function limpiarHistorial() {
     logQuinti('INFO', 'Historial limpiado');
 }
 
+/**
+ * Agrega un mensaje al historial de conversacion (para usar desde index.html)
+ * @param {string} contenido - El contenido del mensaje
+ * @param {string} role - El rol ('user' o 'assistant')
+ */
+function agregarMensajeAlHistorialConversacion(contenido, role) {
+    if (!contenido || !role) return;
+    historialConversacion.push({ role: role, content: contenido });
+    logQuinti('DEBUG', 'Mensaje agregado al historial', { role, longitud: contenido.length });
+}
+
 // Exportar funciones para uso en otros módulos (ES6 modules)
 export {
     obtenerRespuestaGroq,
@@ -2990,6 +3001,7 @@ export {
     limpiarChicasEnChat,
     getHistorial,
     limpiarHistorial,
+    agregarMensajeAlHistorialConversacion,  // NUEVA FUNCION EXPORTADA
     GROQ_KEYS,
     MODELO_PRINCIPAL,
     PERSONALIDADES,

@@ -1155,7 +1155,7 @@
     <!-- <script type="module" src="logica.test.js"></script> -->
     <script type="module">
         // Importar funciones necesarias de logica.js e imagenes.js
-        import { getChicasDisponibles, seleccionarChica, conversar, logQuinti, logErrorAPI, formatearErrorUsuario, getChicasEnChat, agregarChicaAlChat, limpiarChicasEnChat, actualizarAccionEnCurso, getAccionEnCurso, getChicaSeleccionada, getImagenSelector, formatearTextoConAsteriscos, parsearJSON, obtenerURLImagen } from './logica.js';
+        import { getChicasDisponibles, seleccionarChica, conversar, logQuinti, logErrorAPI, formatearErrorUsuario, getChicasEnChat, agregarChicaAlChat, limpiarChicasEnChat, actualizarAccionEnCurso, getAccionEnCurso, getChicaSeleccionada, getImagenSelector, formatearTextoConAsteriscos, parsearJSON, obtenerURLImagen, agregarMensajeAlHistorialConversacion } from './logica.js';
         import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion } from './antiRepeticion.js';
         import { QuintiImagenesPrueba } from './imagenes.js';
         import { getHistoriasChica, getEscenariosChica, getMensajeBienvenidaHistoria, getMensajeBienvenidaEscenario, getImagenBienvenidaHistoria, getImagenBienvenidaEscenario, getHistoriasGrupalesChica, getHistoriaGrupalById } from './historiasEscenarios.js';
@@ -1675,9 +1675,15 @@
                 mensajeHTML += `<img src="${imagenBienvenida}" alt="Imagen de bienvenida" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
                 mensajeHTML += `</div>`;
                 messagesDiv.innerHTML = mensajeHTML;
+                
+                // AGREGAR al historial de conversacion para que la IA lo use como contexto inicial
+                agregarMensajeAlHistorialConversacion(mensajeBienvenida.replace(/\\\\n/g, '\n'), 'assistant');
             } else if (mensajeBienvenida) {
                 const mensajeFormateado = formatearTextoConAsteriscos(mensajeBienvenida.replace(/\\\\n/g, '\n'));
                 messagesDiv.innerHTML = `<div class="message bot-message">${mensajeFormateado}</div>`;
+                
+                // AGREGAR al historial de conversacion para que la IA lo use como contexto inicial
+                agregarMensajeAlHistorialConversacion(mensajeBienvenida.replace(/\\\\n/g, '\n'), 'assistant');
             }
             
             // Guardar en memoria que estamos en una historia grupal
