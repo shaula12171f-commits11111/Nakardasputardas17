@@ -1767,6 +1767,12 @@
             mensajeHTML += `</div>`;
             
             messagesDiv.innerHTML = mensajeHTML;
+
+            // AGREGAR al historial de conversacion para que la IA lo use como contexto inicial
+            // Esto es crucial para que la IA recuerde lo que dijo en el mensaje de bienvenida
+            if (mensajeBienvenida) {
+                agregarMensajeAlHistorialConversacion(mensajeBienvenida.replace(/\\\\n/g, '\n'), 'assistant');
+            }
         }
         
         function volverAlInicio() {
