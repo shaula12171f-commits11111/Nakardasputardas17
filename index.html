@@ -1810,11 +1810,12 @@ function detectarAccionEnMensaje(mensajeUsuario, nombreChica = null) {
     }
 
     // Acciones comunes y sus tags correspondientes
+    // ORDEN IMPORTANTE: Las acciones más específicas deben ir primero
     const accionesTags = [
-        { patron: /bes|kiss/i, tag: 'besando' },
-        { patron: /bola|testicul/i, tag: 'chupando_bolas' },
+        { patron: /bola|testicul/i, tag: 'chupando_bolas' },  // PRIORIDAD: bolas antes que chupar general
         { patron: /punta/i, tag: 'chupando_solo_la_punta_del_pene' },
         { patron: /mitad/i, tag: 'chupando_solo_la_mitad_del_pene' },
+        { patron: /bes|kiss/i, tag: 'besando' },
         { patron: /chup|oral|mamad/i, tag: 'chupando_todo_el_pene' },
         { patron: /doggy|cuatro patas/i, tag: 'doggystyle' },
         { patron: /misioner/i, tag: 'misionero' },
