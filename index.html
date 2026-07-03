@@ -2327,6 +2327,17 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             inicializarSelector();
         }
         
+        // Función para cargar el nombre guardado desde localStorage
+        function cargarNombreDesdeLocalStorage() {
+            const nombreGuardado = localStorage.getItem('quintiNombreUsuario');
+            if (nombreGuardado) {
+                nombreUsuario = nombreGuardado;
+                console.log('Nombre cargado desde localStorage:', nombreUsuario);
+                return true;
+            }
+            return false;
+        }
+        
         // Exponer funciones globalmente inmediatamente después de definirlas
         window.guardarNombre = guardarNombre;
         window.cargarNombreGuardado = cargarNombreGuardado;
@@ -2385,8 +2396,8 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
         window.mostrarOpcion = mostrarOpcion;
         // Cargar nombre guardado si existe - PERO SIEMPRE MOSTRAR PANTALLA DE NOMBRE
         function cargarNombreGuardado() {
-            // Limpiar nombre guardado para que siempre pida el nombre al entrar
-            localStorage.removeItem('quintiNombreUsuario');
+            // Cargar el nombre desde localStorage si existe (sin eliminarlo)
+            cargarNombreDesdeLocalStorage();
             // Mostrar siempre la pantalla de ingreso de nombre
             document.getElementById('nombreContainer').style.display = 'block';
             document.getElementById('selectorContainer').style.display = 'none';
