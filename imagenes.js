@@ -143,7 +143,8 @@ anal: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDD
 manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630311500_1.png", audio: "" },
 lamiendo_pene:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778618613406.jpg", audio: "" },
              desnuda_en_cama:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986586569.png", audio: "" },
-            usuario_agarra_el_culo_a_Nino :  { url: "https://ylhjwkt.omwshmnhkzrh.hath.network:65530/h/a56a9590394dbed68de656b35eb1791a0ec24a62-238313-1216-832-jpg/keystamp=1783103400-440adbb2e3;fileindex=248581903;xres=org/nino_20.jpg", audio: "" },
+            agarrando_el_culo_a_Nino :  { url: "https://ylhjwkt.omwshmnhkzrh.hath.network:65530/h/a56a9590394dbed68de656b35eb1791a0ec24a62-238313-1216-832-jpg/keystamp=1783103400-440adbb2e3;fileindex=248581903;xres=org/nino_20.jpg", audio: "" },
+            nino_chupa_mi_pene_y_usa_sus_tetas :  { url: "https://tjvhrph.kcewwagfbmov.hath.network:29000/h/ca3a7da1e704e116e307373b11c93f8bf4a405b1-289723-1024-1024-jpg/keystamp=1783106400-2eeba6f07e;fileindex=248581967;xres=org/nino_84.jpg", audio: "" },
         }
     },
     Miku: {
