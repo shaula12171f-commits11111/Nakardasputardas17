@@ -26,6 +26,7 @@
 import { generarSystemPrompt, QUINT_PRUEBA_SYSTEM_MINIMO, QUINT_PRUEBA_FASE1, QUINT_PRUEBA_FASE2, QUINT_PRUEBA_FASE3, QUINT_PRUEBA_FASE4, SYSTEM_PROMPT_INICIAL } from './systemPrompt.js';
 import { PERSONALIDADES, getChicasDisponibles, existeChica, tieneImagenes } from './personalidades.js';
 import { ALDO_PERSONALIDAD, ALDO_INSTRUCCIONES_SISTEMA, getAldoPersonalidad, esAldo, aldoDebeResponder } from './aldo.js';
+import { PERSONAJES_MASCULINOS, IMAGENES_MASCULINOS, getPersonalidadMasculino, getPersonajesMasculinosDisponibles, existePersonajeMasculino, tieneImagenesMasculino, getImagenesMasculino, personajeMasculinoDebeResponder, getImagenSelectorMasculino } from './personajesMasculinos.js';
 import { obtenerMensajeError, generarPayloadFase, getOrdenFases, getInfoFase, obtenerFallbackLocal, obtenerFallbackAntiRepeticion, obtenerFallbackChicaSecundaria } from './fallbacks.js';
 import { QuintiImagenesPrueba } from './imagenes.js';
 import { getImagenTagsMapping as getImagenTagsMappingHistoria } from './historiasParalelas.js';
@@ -720,15 +721,25 @@ function logSeleccionImagen(chica, tag, contexto) {
 // ============================================================
 
 /**
- * Obtiene todas las tags de imagen disponibles para una chica
- * @param {string} nombreChica - Nombre de la chica
+ * Obtiene todas las tags de imagen disponibles para un personaje (chica o masculino)
+ * @param {string} nombrePersonaje - Nombre del personaje
  * @returns {string[]} - Array con los nombres de las imágenes disponibles
  */
-function obtenerTagsImagen(nombreChica) {
-    if (!QuintiImagenesPrueba || !QuintiImagenesPrueba[nombreChica]) {
+function obtenerTagsImagen(nombrePersonaje) {
+    // Primero verificar si es un personaje masculino
+    if (existePersonajeMasculino(nombrePersonaje)) {
+        const personajeData = IMAGENES_MASCULINOS[nombrePersonaje];
+        if (!personajeData || !personajeData.imagenes) {
+            return ['normal'];
+        }
+        return Object.keys(personajeData.imagenes);
+    }
+    
+    // Luego verificar si es una chica
+    if (!QuintiImagenesPrueba || !QuintiImagenesPrueba[nombrePersonaje]) {
         return ['normal'];
     }
-    const chicaData = QuintiImagenesPrueba[nombreChica];
+    const chicaData = QuintiImagenesPrueba[nombrePersonaje];
     if (!chicaData.imagenes) {
         return ['normal'];
     }
@@ -1801,10 +1812,12 @@ async function obtenerRespuestaGroq(mensaje, historialPrevio = []) {
             
             logQuinti('DEBUG', `Procesando llamada individual para: ${nombreChica} (${idx + 1}/${chicasArray.length})`);
             
-            // Obtener personalidad específica de este personaje (quintilliza o Aldo)
+            // Obtener personalidad específica de este personaje (quintilliza, Aldo o personajes masculinos)
             let personalidadChica;
             if (esAldo(nombreChica)) {
                 personalidadChica = ALDO_PERSONALIDAD;
+            } else if (existePersonajeMasculino(nombreChica)) {
+                personalidadChica = getPersonalidadMasculino(nombreChica);
             } else {
                 personalidadChica = PERSONALIDADES[nombreChica] || "Eres una chica amigable.";
             }
@@ -2095,16 +2108,19 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
     let personalidadPrincipal;
     if (esAldo(chicaSeleccionada)) {
         personalidadPrincipal = ALDO_PERSONALIDAD;
+    } else if (existePersonajeMasculino(chicaSeleccionada)) {
+        personalidadPrincipal = getPersonalidadMasculino(chicaSeleccionada);
     } else if (chicaSeleccionada) {
         personalidadPrincipal = PERSONALIDADES[chicaSeleccionada];
     } else {
         personalidadPrincipal = "Eres QuintiAmigas, una amiga virtual divertida y útil.";
     }
     
-    // Construir instrucciones de imágenes (Aldo no tiene imágenes)
-    const tagsImagen = chicaSeleccionada && !esAldo(chicaSeleccionada) ? obtenerTagsImagen(chicaSeleccionada) : ['normal'];
-    const instruccionesImagenes = esAldo(chicaSeleccionada) 
-        ? `\n\nNOTA: Eres Aldo, un personaje masculino. No tienes imágenes asociadas, solo respondes con texto.`
+    // Construir instrucciones de imágenes (Aldo y personajes masculinos tienen sus propias imágenes)
+    const tieneImagenesPropias = chicaSeleccionada && (tieneImagenesMasculino(chicaSeleccionada) || existeChica(chicaSeleccionada));
+    const tagsImagen = tieneImagenesPropias ? obtenerTagsImagen(chicaSeleccionada) : ['normal'];
+    const instruccionesImagenes = !tieneImagenesPropias 
+        ? `\n\nNOTA: Eres ${chicaSeleccionada || 'un personaje'}, no tienes imágenes asociadas, solo respondes con texto.`
         : `\n\nIMÁGENES DISPONIBLES: ${tagsImagen.join(', ')}. Debes incluir "imagen_tag" con UNA de estas opciones según lo que esté haciendo el personaje.`;
     
     // Instrucción anti-repetición mejorada
@@ -2631,7 +2647,14 @@ async function procesarRespuesta(datos, mensajeOriginal) {
  */
 async function regenerarDialogoAntiRepeticion(nombreChica, mensajeOriginal, dialogoOriginal, dialogoSimilar) {
     try {
-        const personalidadPrincipal = PERSONALIDADES[nombreChica] || "Eres una amiga virtual divertida y útil.";
+        let personalidadPrincipal;
+        if (esAldo(nombreChica)) {
+            personalidadPrincipal = ALDO_PERSONALIDAD;
+        } else if (existePersonajeMasculino(nombreChica)) {
+            personalidadPrincipal = getPersonalidadMasculino(nombreChica);
+        } else {
+            personalidadPrincipal = PERSONALIDADES[nombreChica] || "Eres una amiga virtual divertida y útil.";
+        }
         
         // Crear prompt especial anti-repeticion
         const promptAntiRepeticion = `⚠️ DETECCIÓN DE REPETICIÓN:\n\n` +
@@ -2690,7 +2713,14 @@ async function regenerarDialogoAntiRepeticion(nombreChica, mensajeOriginal, dial
  */
 async function regenerarDialogoAntiRepeticionEntreChicas(nombreChica, mensajeOriginal, dialogoOriginal, chicaSimilar) {
     try {
-        const personalidadPrincipal = PERSONALIDADES[nombreChica] || "Eres una amiga virtual divertida y útil.";
+        let personalidadPrincipal;
+        if (esAldo(nombreChica)) {
+            personalidadPrincipal = ALDO_PERSONALIDAD;
+        } else if (existePersonajeMasculino(nombreChica)) {
+            personalidadPrincipal = getPersonalidadMasculino(nombreChica);
+        } else {
+            personalidadPrincipal = PERSONALIDADES[nombreChica] || "Eres una amiga virtual divertida y útil.";
+        }
         
         // Crear prompt especial anti-repeticion entre chicas
         const promptAntiRepeticion = `⚠️ DETECCIÓN DE REPETICIÓN ENTRE CHICAS:\n\n` +
@@ -2758,9 +2788,35 @@ function obtenerURLImagen(nombreChica, tag, historiaId = null) {
         }
     }
     
-    // Aldo no tiene imágenes (personaje masculino)
+    // Aldo y personajes masculinos tienen sus propias imágenes
     if (esAldo(nombreChica)) {
         return { urlImagen: null, urlAudio: null };
+    }
+    
+    // Verificar si es un personaje masculino con imágenes
+    if (existePersonajeMasculino(nombreChica)) {
+        const personajeData = IMAGENES_MASCULINOS[nombreChica];
+        if (!personajeData) {
+            return { urlImagen: null, urlAudio: null };
+        }
+        
+        // Si hay tag específico, buscar esa imagen
+        if (tag && tag !== 'normal' && tag !== 'hablando') {
+            for (const [key, imgObj] of Object.entries(personajeData.imagenes || {})) {
+                if (key.toLowerCase().includes(tag.toLowerCase())) {
+                    const url = typeof imgObj === 'object' ? imgObj.url : imgObj;
+                    const audio = typeof imgObj === 'object' ? imgObj.audio : '';
+                    return { urlImagen: url, urlAudio: audio || null };
+                }
+            }
+        }
+        
+        // Imagen por defecto
+        const imgObj = personajeData.imagenes?.['hablando'] || {};
+        return { 
+            urlImagen: personajeData.imagenSelector || imgObj.url || imgObj || null,
+            urlAudio: null
+        };
     }
     
     // Verificar si el personaje tiene imágenes disponibles
@@ -2848,13 +2904,13 @@ function obtenerURLImagen(nombreChica, tag, historiaId = null) {
 // ============================================================
 
 /**
- * Selecciona un personaje para el chat (puede ser una quintilliza o Aldo)
+ * Selecciona un personaje para el chat (puede ser una quintilliza, Aldo o personajes masculinos)
  * @param {string} nombrePersonaje - Nombre del personaje
  * @returns {boolean} - True si se seleccionó exitosamente
  */
 function seleccionarChica(nombrePersonaje) {
-    // Verificar si es Aldo o una quintilliza
-    if (esAldo(nombrePersonaje) || PERSONALIDADES[nombrePersonaje]) {
+    // Verificar si es Aldo, un personaje masculino o una quintilliza
+    if (esAldo(nombrePersonaje) || existePersonajeMasculino(nombrePersonaje) || PERSONALIDADES[nombrePersonaje]) {
         chicaSeleccionada = nombrePersonaje;
         historialConversacion = []; // Resetear historial al cambiar de personaje
         chicasEnChat = new Set([nombrePersonaje]); // Resetear conjunto de personajes en chat
@@ -2874,16 +2930,16 @@ function getChicasEnChat() {
 }
 
 /**
- * Agrega una chica al conjunto de chicas en el chat
- * @param {string} nombreChica - Nombre de la chica a agregar
+ * Agrega un personaje al conjunto de personajes en el chat (chicas o masculinos)
+ * @param {string} nombrePersonaje - Nombre del personaje a agregar
  */
-function agregarChicaAlChat(nombreChica) {
-    chicasEnChat.add(nombreChica);
-    logQuinti('INFO', `Chica agregada al chat: ${nombreChica}`);
+function agregarChicaAlChat(nombrePersonaje) {
+    chicasEnChat.add(nombrePersonaje);
+    logQuinti('INFO', `Personaje agregado al chat: ${nombrePersonaje}`);
 }
 
 /**
- * Limpia el conjunto de chicas en el chat (para cuando se cambia de chica o se reinicia)
+ * Limpia el conjunto de personajes en el chat (para cuando se cambia de personaje o se reinicia)
  */
 function limpiarChicasEnChat() {
     if (chicaSeleccionada) {
@@ -2891,16 +2947,22 @@ function limpiarChicasEnChat() {
     } else {
         chicasEnChat = new Set();
     }
-    logQuinti('INFO', 'Chicas en chat reseteadas');
+    logQuinti('INFO', 'Personajes en chat reseteados');
 }
 
 function getChicaSeleccionada() {
     return chicaSeleccionada;
 }
 
-function getImagenSelector(nombreChica) {
-    if (QuintiImagenesPrueba && QuintiImagenesPrueba[nombreChica]) {
-        return QuintiImagenesPrueba[nombreChica].imagenSelector;
+function getImagenSelector(nombrePersonaje) {
+    // Primero verificar si es un personaje masculino
+    if (existePersonajeMasculino(nombrePersonaje)) {
+        return getImagenSelectorMasculino(nombrePersonaje);
+    }
+    
+    // Luego verificar si es una chica
+    if (QuintiImagenesPrueba && QuintiImagenesPrueba[nombrePersonaje]) {
+        return QuintiImagenesPrueba[nombrePersonaje].imagenSelector;
     }
     return null;
 }
