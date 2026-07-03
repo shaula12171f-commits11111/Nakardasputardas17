@@ -1130,11 +1130,11 @@
     </div>
 
     <!-- Cargar scripts en orden: imagenes, logica (con reintentos y logs), luego UI -->
-    <script type="module" src="imagenes.js"></script>
-    <script type="module" src="logica.js"></script>
-    <script type="module" src="parserAcciones.js"></script>
-    <script type="module" src="historiasParalelas.js"></script>
-    <script type="module" src="antiRepeticion.js"></script>
+    <script type="module" src="src/systems/imagenes.js"></script>
+    <script type="module" src="src/core/logica.js"></script>
+    <script type="module" src="src/utils/parserAcciones.js"></script>
+    <script type="module" src="src/stories/historiasParalelas.js"></script>
+    <script type="module" src="src/systems/antiRepeticion.js"></script>
     <!-- Cargar tests unitarios en desarrollo (descomentar para ejecutar tests) -->
     <script>
         // Exponer funciones globales antes de que se carguen los módulos
@@ -1155,10 +1155,10 @@
     <!-- <script type="module" src="logica.test.js"></script> -->
     <script type="module">
         // Importar funciones necesarias de logica.js e imagenes.js
-        import { getChicasDisponibles, seleccionarChica, conversar, logQuinti, logErrorAPI, formatearErrorUsuario, getChicasEnChat, agregarChicaAlChat, limpiarChicasEnChat, actualizarAccionEnCurso, getAccionEnCurso, getChicaSeleccionada, getImagenSelector, formatearTextoConAsteriscos, parsearJSON, obtenerURLImagen, agregarMensajeAlHistorialConversacion } from './logica.js';
-        import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion } from './antiRepeticion.js';
-        import { QuintiImagenesPrueba } from './imagenes.js';
-        import { getHistoriasChica, getEscenariosChica, getMensajeBienvenidaHistoria, getMensajeBienvenidaEscenario, getImagenBienvenidaHistoria, getImagenBienvenidaEscenario, getHistoriasGrupalesChica, getHistoriaGrupalById } from './historiasEscenarios.js';
+        import { getChicasDisponibles, seleccionarChica, conversar, logQuinti, logErrorAPI, formatearErrorUsuario, getChicasEnChat, agregarChicaAlChat, limpiarChicasEnChat, actualizarAccionEnCurso, getAccionEnCurso, getChicaSeleccionada, getImagenSelector, formatearTextoConAsteriscos, parsearJSON, obtenerURLImagen, agregarMensajeAlHistorialConversacion } from './src/core/logica.js';
+        import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion } from './src/systems/antiRepeticion.js';
+        import { QuintiImagenesPrueba } from './src/systems/imagenes.js';
+        import { getHistoriasChica, getEscenariosChica, getMensajeBienvenidaHistoria, getMensajeBienvenidaEscenario, getImagenBienvenidaHistoria, getImagenBienvenidaEscenario, getHistoriasGrupalesChica, getHistoriaGrupalById } from './src/stories/historiasEscenarios.js';
         
         let chicaSeleccionadaActual = null;
         let historialMensajesUI = []; // Historial local para la UI
