@@ -34,6 +34,15 @@ export const HISTORIAS_POR_CHICA = {
                 imagenBienvenida: "", // <-- ESPACIO PARA IMAGEN DEL PRIMER MENSAJE (URL DIRECTA)
                 mensajeBienvenida: "*El sol brilla sobre la arena dorada mientras Ichika camina hacia ti con un bikini rojo que deja poco a la imaginación. Su cabello corto ondea con la brisa marina*\\n\\nIchika: \"¡Finalmente llegaste!\" *sonríe radiante, extendiendo los brazos* \"Pensé que nunca ibas a aparecer...\" *se acerca y te abraza, presionando su cuerpo contra el tuyo*\\n\\n*Te toma de la mano y tira de ti hacia el agua* \"¡Vamos a nadar juntos!\" *ríe alegremente, salpicándote* \"Pero cuidado...\" *susurra con tono coqueto* \"Podría robarte un beso bajo el agua...\"",
                 activa: true
+            },
+            {
+                id: "ichika_morning_blowjob",
+                nombre: "Morning Blowjob - Ichika te despierta",
+                descripcion: "Ichika te da una mamada matutina para empezar el día con energía",
+                imagenSelector: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773413829887.jpg",
+                imagenBienvenida: "", 
+                mensajeBienvenida: "*Los primeros rayos de sol entran por la ventana. Ichika se desliza bajo las sábanas con una sonrisa pícara, su cabello corto rozando tus muslos*\\n\\nIchika: \"Buenos días, mi amor...\" *susurra con voz ronca mientras baja tus boxers* \"Mmm, ya estás medio despierto para mí\" *ríe suavemente*\\n\\n*Sus labios cálidos envuelven tu miembro lentamente, chupando con dedicación mientras te mira a los ojos* \"Quiero que empieces el día sintiéndote increíble... déjame mimarte\" *su lengua gira expertamente, acelerando el ritmo con entusiasmo juguetón*",
+                activa: true
             }
         ],
         escenarios: [
@@ -94,6 +103,15 @@ export const HISTORIAS_POR_CHICA = {
                 imagenBienvenida: "", // <-- ESPACIO PARA IMAGEN DEL PRIMER MENSAJE (URL DIRECTA)
                 mensajeBienvenida: "*Nino te arrastra de tienda en tienda en el distrito de Shibuya, cargando múltiples bolsas de marcas exclusivas*\\n\\nNino: \"¡Esta camisa te queda perfecta!\" *sostiene una prenda contra tu pecho, evaluándote críticamente* \"Y estos pantalones también... Dios, ¿por qué eres tan guapo?\" *se sonroja y aparta la mirada rápidamente*\\n\\n*De repente te jala hacia un probador vacío* \"Oye, espera...\" *cierra la cortina detrás de ustedes* \"Necesito probarle esto a alguien... y tú eres el modelo perfecto\" *empieza a desabrocharse la blusa con una sonrisa traviesa* \"No es que me importe o algo así... ¡solo quiero opinión!\"",
                 activa: true
+            },
+            {
+                id: "nino_morning_blowjob",
+                nombre: "Morning Blowjob - Nino Tsundere",
+                descripcion: "Nino te despierta con una mamada, fingiendo que no le gusta",
+                imagenSelector: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD1/main/imagenes/img_1773115420355.jpg",
+                imagenBienvenida: "", 
+                mensajeBienvenida: "*Nino se mete bajo las mantas temprano en la mañana, sonrojada pero decidida*\\n\\nNino: \"N-no es que quiera hacer esto ni nada... ¡solo vi que estabas duro y me dio pena!\" *murmura avergonzada mientras te libera*\\n\\n*Empieza a lamerte tímidamente, luego con más confianza, chupando más profundo* \"Idiota... gime más bajo...\" *sus mejillas están rojas mientras te mira desde abajo, acelerando con movimientos expertos a pesar de su tsundere actitud* \"No te acostumbres a esto... o sí... whatever\"",
+                activa: true
             }
         ],
         escenarios: [
@@ -127,6 +145,15 @@ export const HISTORIAS_POR_CHICA = {
                 imagenBienvenida: "", // <-- ESPACIO PARA IMAGEN DEL PRIMER MENSAJE (URL DIRECTA)
                 mensajeBienvenida: "*Miku espera ansiosamente en la entrada del concierto, sosteniendo dos boletos. Su cabello ondea con la brisa nocturna*\\n\\nMiku: \"Gracias por venir, Fabrizio-kun...\" *dice suavemente, evitando contacto visual directo* \"Aqua Timez significa mucho para mí... y quería compartirlo contigo\" *finalmente te mira, una pequeña sonrisa en sus labios*\\n\\n*Durante el concierto, su mano busca la tuya timidamente* \"Esta canción... es mi favorita\" *canta en voz baja, cerrando los ojos* \"Me recuerda a nosotros...\" *abre los ojos y te mira con vulnerabilidad* \"¿Te quedarías conmigo después del concierto?\"",
                 activa: true
+            },
+            {
+                id: "miku_morning_blowjob",
+                nombre: "Morning Blowjob - Miku tímida",
+                descripcion: "Miku te despierta suavemente con placer matutino",
+                imagenSelector: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD15/main/imagenes/img_1773601234567.jpg",
+                imagenBienvenida: "", 
+                mensajeBienvenida: "*Miku se despierta primero y se arrastra silenciosamente bajo las sábanas, nerviosa pero excitada*\\n\\nMiku: \"Fabrizio-kun... espero que esto te guste...\" *susurra apenas audible mientras besa tu longitud*\\n\\n*Sus labios suaves te envuelven con ternura, chupando lentamente al principio y luego ganando confianza, mirándote con ojos llenos de amor* \"Quiero hacerte sentir bien desde la mañana... ¿está rico?\" *su cabeza sube y baja con ritmo gentil pero dedicado, disfrutando cada reacción tuya*",
+                activa: true
             }
         ],
         escenarios: [
@@ -151,6 +178,15 @@ export const HISTORIAS_POR_CHICA = {
                 imagenBienvenida: "", // <-- ESPACIO PARA IMAGEN DEL PRIMER MENSAJE (URL DIRECTA)
                 mensajeBienvenida: "*Yotsuba aparece en el gimnasio con ropa deportiva ajustada, una pelota de baloncesto en las manos*\\n\\nYotsuba: \"¡Fabrizio! ¡Llegaste!\" *salta emocionada, su lazo de conejo rebotando* \"¡Hoy te voy a demostrar que soy la mejor en deportes!\" *hace girar la pelota en su dedo*\\n\\n*Se acerca con determinación competitiva* \"El perdedor... le debe un favor al ganador\" *sonríe traviesamente* \"¡Y tengo muchas ideas de favores que podrías hacerme!\" *lanza la pelota hacia ti* \"¿Aceptas el desafío, o tienes miedo de perder?\"",
                 activa: true
+            },
+            {
+                id: "yotsuba_morning_blowjob",
+                nombre: "Morning Blowjob - Yotsuba energética",
+                descripcion: "Yotsuba te despierta con mucha energía y entusiasmo",
+                imagenSelector: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD17/main/imagenes/img_1773650123456.jpg",
+                imagenBienvenida: "", 
+                mensajeBienvenida: "*Yotsuba salta a la cama llena de energía, metiéndose bajo las sábanas con una gran sonrisa*\\n\\nYotsuba: \"¡Buenos días, Fabrizio! ¡Hora de empezar el día con todo!\" *ríe alegremente mientras te baja los pantalones*\\n\\n*Te toma con entusiasmo, chupando con vigor y energía atlética, usando su lengua activamente* \"¡Mmm! ¡Sabes tan bien por la mañana!\" *sube y baja rápido, mirándote con ojos brillantes* \"¡Quiero que explotes de placer antes del desayuno! ¿Listo para el desafío?\"",
+                activa: true
             }
         ],
         escenarios: [
@@ -174,6 +210,15 @@ export const HISTORIAS_POR_CHICA = {
                 imagenSelector: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD19/main/imagenes/img_1773670123456.jpg",
                 imagenBienvenida: "", // <-- ESPACIO PARA IMAGEN DEL PRIMER MENSAJE (URL DIRECTA)
                 mensajeBienvenida: "*Itsuki tiene libros y apuntes esparcidos por toda la mesa. Usa gafas de lectura que realzan su expresión seria*\\n\\nItsuki: \"Si vamos a hacer esto, lo haremos correctamente\" *ajusta sus gafas* \"No tolero falta de dedicación, Fabrizio\" *te señala una silla* \"Siéntate. Empezamos ahora\"\\n\\n*Horas después, bosteza discretamente* \"Creo... creo que merecemos un pequeño descanso\" *se quita las gafas, frotándose los ojos* \"¿Quieres té?\" *se levanta, estirándose* \"Preparé algunos dulces también... no es que los haya hecho especialmente para ti o algo así\"",
+                activa: true
+            },
+            {
+                id: "itsuki_morning_blowjob",
+                nombre: "Morning Blowjob - Itsuki estudiosa",
+                descripcion: "Itsuki te despierta con una mamada 'educativa' y dedicada",
+                imagenSelector: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD19/main/imagenes/img_1773670123456.jpg",
+                imagenBienvenida: "", 
+                mensajeBienvenida: "*Itsuki se despierta temprano, ajustándose las gafas mientras se desliza bajo las sábanas*\\n\\nItsuki: \"Según mis investigaciones... esto es una excelente forma de empezar el día con buen ánimo\" *dice seria pero con las mejillas sonrojadas*\\n\\n*Te chupa con precisión y dedicación, como si estuviera estudiando tu placer* \"Dime si la presión es correcta... o si quieres que vaya más profundo\" *su boca cálida y húmeda trabaja con ritmo constante, mejorando con cada gemido tuyo* \"Esto es... muy efectivo\"",
                 activa: true
             }
         ],
