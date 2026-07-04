@@ -16,7 +16,7 @@ El proyecto ha sido reorganizado para mejorar la mantenibilidad y escalabilidad:
 │   │   ├── aldo.js                # Personaje Aldo
 │   │   └── personajesMasculinos.js # Personajes masculinos adicionales
 │   │
-│   ├── systems/        # Sistemas y funcionalidades del juego
+│   ├── systems/        # Sistemas y funcionalidades del chatbot
 │   │   ├── imagenes.js          # URLs y tags de imágenes
 │   │   ├── memorySystem.js      # Sistema de memorias/chats guardados
 │   │   ├── chatSaveSystem.js    # Sistema de guardado de chats
