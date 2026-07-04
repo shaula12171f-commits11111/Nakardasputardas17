@@ -3105,7 +3105,7 @@ async function conversar(mensaje) {
             });
         }
     } else if (historialConversacion.length === 0 && !chicaSeleccionada && hayHistoriaParalela) {
-        // Caso especial: historia paralela sin chica seleccionada (solo para RPG)
+        // Caso especial: historia paralela sin chica seleccionada (chatbot roleplay)
         // Obtener el nombre del usuario desde la función global
         let nombreUsuario = 'usuario';
         if (typeof window !== 'undefined' && window.getNombreUsuario) {
