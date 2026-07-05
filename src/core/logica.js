@@ -32,6 +32,7 @@ import { QuintiImagenesPrueba } from '../systems/imagenes.js';
 import { getImagenTagsMapping as getImagenTagsMappingHistoria } from '../stories/historiasParalelas.js';
 import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion, calcularSimilitud } from '../systems/antiRepeticion.js';
 import { detectarAccionEnTexto, detectarAccionEnTextoSimple } from '../utils/parserAcciones.js';
+import { detectarIntencion, obtenerFraseVariable, determinarVariacionPorDuracion, analizarNombreImagen, buscarImagenPorEntrada, memoriaContextoGlobal } from '../systems/intencionContexto.js';
 
 // ============================================================
 //  CONFIGURACIÓN DE API KEYS
@@ -370,19 +371,24 @@ function actualizarMemoriaTrabajo(mensajeUsuario, respuestaAsistente) {
     memoriaTrabajo.tiempoUltimaInteraccion = Date.now();
     memoriaTrabajo.turnosEnTemaActual++;
     
+    // Actualizar también la memoria de contexto de acciones
+    memoriaContextoGlobal.registrarAccion(accionEnCurso || 'hablando', accionEnCurso !== null);
+    
     logQuinti('DEBUG', `🔄 MEMORIA DE TRABAJO ACTUALIZADA - Turnos en tema actual: ${memoriaTrabajo.turnosEnTemaActual}`);
 }
 
 /**
  * GENERA RESUMEN NARRATIVO PERIÓDICO
  * Se llama cada TURNOS_PARA_RESUMEN turnos para condensar la conversación
+ * Ahora también resume mensajes de las chicas, no solo del usuario
  */
 function generarResumenNarrativo() {
-    // Extraer puntos clave de los últimos mensajes
+    // Extraer puntos clave de los últimos mensajes (usuario Y chica)
     const ultimosMensajes = memoriaTrabajo.ultimosMensajes.slice(-3);
     const puntosNuevos = ultimosMensajes.map(m => {
-        const resumenCorto = m.usuario.substring(0, 50) + '...';
-        return `- Usuario: ${resumenCorto}`;
+        const resumenUsuario = m.usuario.substring(0, 50) + '...';
+        const resumenChica = m.asistente ? m.asistente.substring(0, 50) + '...' : '';
+        return `- Usuario: ${resumenUsuario} | Chica: ${resumenChica}`;
     });
     
     // Actualizar el resumen general
@@ -3191,6 +3197,11 @@ export {
     generarResumenNarrativo,
     obtenerEstadoMemoriaParaPrompt,
     procesarMensajeParaMemoria,
+    // Funciones de intención y contexto
+    detectarIntencion,
+    obtenerFraseVariable,
+    determinarVariacionPorDuracion,
+    memoriaContextoGlobal,
     // Funciones anti-repeticion
     detectarRepeticion,
     detectarRepeticionEntreChicas,
@@ -3229,6 +3240,11 @@ if (typeof window !== 'undefined') {
     window.generarResumenNarrativo = generarResumenNarrativo;
     window.obtenerEstadoMemoriaParaPrompt = obtenerEstadoMemoriaParaPrompt;
     window.procesarMensajeParaMemoria = procesarMensajeParaMemoria;
+    // Funciones de intención y contexto
+    window.detectarIntencion = detectarIntencion;
+    window.obtenerFraseVariable = obtenerFraseVariable;
+    window.determinarVariacionPorDuracion = determinarVariacionPorDuracion;
+    window.memoriaContextoGlobal = memoriaContextoGlobal;
     // Función de formateo de texto
     window.formatearTextoConAsteriscos = formatearTextoConAsteriscos;
     // Funciones del parser de acciones (se importan desde parserAcciones.js)

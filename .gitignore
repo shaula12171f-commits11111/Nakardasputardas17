@@ -1,1 +1,1 @@
-Nothing needs to be added to .gitignore since only a Python source file (`dynamic_action_engine.py`) was added, and no build artifacts, dependencies, or temporary files were included in the changes.
+(src/systems/intencionContexto.js)
