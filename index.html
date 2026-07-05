@@ -1795,6 +1795,12 @@
  * @param {string} mensajeUsuario - El mensaje original del usuario
  * @returns {string|null} - Tag de imagen detectado o null si no hay acción clara
  */
+/**
+ * Detecta una acción en el mensaje del usuario para una chica específica
+ * @param {string} mensajeUsuario - Mensaje del usuario
+ * @param {string|null} nombreChica - Nombre de la chica (opcional, para filtrar acciones específicas)
+ * @returns {string|null} - Tag de la acción detectada o null
+ */
 function detectarAccionEnMensaje(mensajeUsuario, nombreChica = null) {
     const mensajeLower = mensajeUsuario.toLowerCase();
     
@@ -1812,6 +1818,13 @@ function detectarAccionEnMensaje(mensajeUsuario, nombreChica = null) {
         if (coincidencia && coincidencia[1]) {
             mensajeParaAnalizar = `${nombreLower} ${coincidencia[1]}`;
             logQuinti('DEBUG', `Analizando mensaje específico para ${nombreChica}: "${mensajeParaAnalizar}"`);
+        } else {
+            // Si no hay mención específica, verificar si el usuario menciona a esta chica en absoluto
+            if (!mensajeLower.includes(nombreLower)) {
+                // El usuario no mencionó a esta chica, retornar null para evitar forzar acciones
+                logQuinti('DEBUG', `El usuario no mencionó a ${nombreChica}, no forzar acción`);
+                return null;
+            }
         }
     }
 
@@ -1885,6 +1898,17 @@ function actualizarEstadoAccion(nuevaAccion) {
  * @param {string} mensajeUsuario - El mensaje original del usuario (opcional)
  * @returns {string} - Tag de imagen seleccionado
  */
+/**
+ * Selecciona el tag de imagen para una chica específica considerando:
+ * 1. Su propia respuesta y acciones descritas
+ * 2. El mensaje del usuario (solo como contexto secundario)
+ * 3. Su personalidad y rol en la escena
+ * IMPORTANTE: Cada chica debe tener su imagen INDIVIDUAL, no forzada por otras chicas
+ * @param {string} respuesta - La respuesta de la IA de ESTA chica
+ * @param {string} chicaNombre - Nombre de la chica
+ * @param {string} mensajeUsuario - El mensaje original del usuario (contexto secundario)
+ * @returns {string} - Tag de imagen seleccionado
+ */
 function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
     const respuestaLower = respuesta.toLowerCase();
     const infoChica = QuintiImagenesPrueba[chicaNombre];
@@ -1892,71 +1916,118 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
     
     const tagsDisponibles = Object.keys(infoChica.imagenes);
     
-    // PASO 1: Si hay mensaje del usuario, detectar acción primero (PRIORIDAD MÁXIMA)
-    if (mensajeUsuario && mensajeUsuario.trim()) {
-        const tagDetectado = detectarAccionEnMensaje(mensajeUsuario, chicaNombre);
-        if (tagDetectado && tagsDisponibles.includes(tagDetectado)) {
-            logQuinti('DEBUG', `Tag forzado por acción del usuario: ${tagDetectado} para ${chicaNombre}`);
-            return tagDetectado;
-        }
-        // Si el tag detectado no existe para esta chica, buscar uno similar
-        if (tagDetectado) {
-            // Buscar tags que contengan la misma palabra clave
-            for (const tag of tagsDisponibles) {
-                if (tag.includes(tagDetectado.split('_')[0])) {
-                    logQuinti('DEBUG', `Tag similar encontrado: ${tag} para ${chicaNombre}`);
-                    return tag;
-                }
-            }
-        }
-    }
-    
-    // PASO 2: Si no hay acción explícita del usuario, verificar si hay una acción en curso
-    if (!mensajeUsuario || !detectarAccionEnMensaje(mensajeUsuario, chicaNombre)) {
-        if (accionEnCurso && tagsDisponibles.includes(accionEnCurso)) {
-            logQuinti('DEBUG', `Usando acción en curso: ${accionEnCurso} para ${chicaNombre}`);
-            return accionEnCurso;
-        }
-        // Si la acción en curso no existe para esta chica, buscar una similar
-        if (accionEnCurso) {
-            for (const tag of tagsDisponibles) {
-                if (tag.includes(accionEnCurso.split('_')[0])) {
-                    logQuinti('DEBUG', `Tag similar a acción en curso: ${tag} para ${chicaNombre}`);
-                    return tag;
-                }
-            }
-        }
-    }
-    
-    // PASO 3: Si no hay acción en curso, buscar en la respuesta de la IA
-    // Buscar coincidencias directas con tags
+    // PASO 1: PRIORIDAD MÁXIMA - Buscar acciones en la PROPIA respuesta de la chica
+    // Esto asegura que cada chica tenga su imagen basada en lo que ELLA está haciendo
     for (const tag of tagsDisponibles) {
         const tagNormalizado = tag.toLowerCase().replace(/_/g, ' ');
         if (respuestaLower.includes(tagNormalizado)) {
+            logQuinti('DEBUG', `Tag encontrado en respuesta de ${chicaNombre}: ${tag}`);
             return tag;
         }
     }
     
-    // Búsquedas específicas en la respuesta
-    if (respuestaLower.includes('bes') || respuestaLower.includes('kiss')) {
-        if (tagsDisponibles.includes('besando')) return 'besando';
-    }
-    if (respuestaLower.includes('chup') || respuestaLower.includes('oral')) {
-        for (const tag of tagsDisponibles) {
-            if (tag.includes('chupando')) return tag;
+    // Búsquedas específicas en la respuesta de la chica (acciones implícitas)
+    if (respuestaLower.includes('bes') || respuestaLower.includes('kiss') || respuestaLower.includes('*bes')) {
+        if (tagsDisponibles.includes('besando')) {
+            logQuinti('DEBUG', `Tag 'besando' detectado en respuesta de ${chicaNombre}`);
+            return 'besando';
         }
     }
-    if (respuestaLower.includes('desnud') || respuestaLower.includes('sin ropa')) {
-        if (tagsDisponibles.includes('desnuda')) return 'desnuda';
+    if (respuestaLower.includes('chup') || respuestaLower.includes('oral') || respuestaLower.includes('*chup')) {
+        for (const tag of tagsDisponibles) {
+            if (tag.includes('chupando')) {
+                logQuinti('DEBUG', `Tag '${tag}' detectado en respuesta de ${chicaNombre}`);
+                return tag;
+            }
+        }
     }
-    if (respuestaLower.includes('doggy') || respuestaLower.includes('cuatro patas')) {
-        if (tagsDisponibles.includes('doggystyle')) return 'doggystyle';
+    if (respuestaLower.includes('desnud') || respuestaLower.includes('sin ropa') || respuestaLower.includes('*quito')) {
+        if (tagsDisponibles.includes('desnuda')) {
+            logQuinti('DEBUG', `Tag 'desnuda' detectado en respuesta de ${chicaNombre}`);
+            return 'desnuda';
+        }
     }
-    if (respuestaLower.includes('misionero') || respuestaLower.includes('encima')) {
-        if (tagsDisponibles.includes('misionero')) return 'misionero';
+    if (respuestaLower.includes('doggy') || respuestaLower.includes('cuatro patas') || respuestaLower.includes('*en cuatro')) {
+        if (tagsDisponibles.includes('doggystyle')) {
+            logQuinti('DEBUG', `Tag 'doggystyle' detectado en respuesta de ${chicaNombre}`);
+            return 'doggystyle';
+        }
+    }
+    if (respuestaLower.includes('misioner') || respuestaLower.includes('encima') || respuestaLower.includes('*acuesto')) {
+        if (tagsDisponibles.includes('misionero')) {
+            logQuinti('DEBUG', `Tag 'misionero' detectado en respuesta de ${chicaNombre}`);
+            return 'misionero';
+        }
+    }
+    if (respuestaLower.includes('culo') || respuestaLower.includes('ano') || respuestaLower.includes('*nalgue')) {
+        for (const tag of tagsDisponibles) {
+            if (tag.includes('culo') || tag.includes('ano')) {
+                return tag;
+            }
+        }
+    }
+    if (respuestaLower.includes('teta') || respuestaLower.includes('pecho') || respuestaLower.includes('*agarro')) {
+        for (const tag of tagsDisponibles) {
+            if (tag.includes('teta') || tag.includes('pecho')) {
+                return tag;
+            }
+        }
     }
     
-    return tagsDisponibles.includes('hablando') ? 'hablando' : tagsDisponibles[0] || 'normal';
+    // PASO 2: Verificar si hay una acción en curso PARA ESTA CHICA ESPECÍFICAMENTE
+    // Solo si la respuesta de esta chica indica que participa en la acción
+    const participaEnAccion = accionEnCurso && (
+        respuestaLower.includes(accionEnCurso.replace(/_/g, ' ')) ||
+        respuestaLower.includes(accionEnCurso.split('_')[0])
+    );
+    
+    if (participaEnAccion && tagsDisponibles.includes(accionEnCurso)) {
+        logQuinti('DEBUG', `${chicaNombre} participa en acción en curso: ${accionEnCurso}`);
+        return accionEnCurso;
+    }
+    // Si participa pero el tag exacto no existe, buscar uno similar
+    if (participaEnAccion) {
+        for (const tag of tagsDisponibles) {
+            if (tag.includes(accionEnCurso.split('_')[0])) {
+                logQuinti('DEBUG', `${chicaNombre} usa tag similar a acción en curso: ${tag}`);
+                return tag;
+            }
+        }
+    }
+    
+    // PASO 3: Solo como ÚLTIMO recurso, considerar el mensaje del usuario
+    // Pero SOLO si la respuesta de la chica indica que ella está participando
+    if (mensajeUsuario && mensajeUsuario.trim()) {
+        // Verificar si el usuario menciona específicamente a esta chica
+        const nombreLower = chicaNombre.toLowerCase();
+        const mencionaNombreeChica = mensajeUsuario.toLowerCase().includes(nombreLower);
+        
+        // Solo usar la acción del usuario si:
+        // 1. Menciona a esta chica específicamente
+        // 2. Y la respuesta de la chica indica que participa
+        if (mencionaNombreeChica && participaEnAccion) {
+            const tagDetectado = detectarAccionEnMensaje(mensajeUsuario, chicaNombre);
+            if (tagDetectado && tagsDisponibles.includes(tagDetectado)) {
+                logQuinti('DEBUG', `Tag forzado por acción del usuario para ${chicaNombre}: ${tagDetectado}`);
+                return tagDetectado;
+            }
+            // Si el tag detectado no existe para esta chica, buscar uno similar
+            if (tagDetectado) {
+                for (const tag of tagsDisponibles) {
+                    if (tag.includes(tagDetectado.split('_')[0])) {
+                        logQuinti('DEBUG', `Tag similar encontrado: ${tag} para ${chicaNombre}`);
+                        return tag;
+                    }
+                }
+            }
+        }
+    }
+    
+    // PASO 4: Fallback - usar 'hablando' o primera imagen disponible
+    // Esto representa a la chica reaccionando o hablando sin participar activamente
+    const fallback = tagsDisponibles.includes('hablando') ? 'hablando' : tagsDisponibles[0] || 'normal';
+    logQuinti('DEBUG', `${chicaNombre} usa fallback: ${fallback}`);
+    return fallback;
 }
         
         // La función obtenerURLImagen ahora se importa desde logica.js
