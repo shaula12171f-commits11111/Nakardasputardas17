@@ -810,6 +810,31 @@ const MemorySystem = {
         } else {
             alert('⚠️ La función de generación de memoria no está disponible');
         }
+    },
+
+    /**
+     * Obtiene los últimos mensajes del chat actual para generar memoria
+     * @returns {Array} Últimos mensajes del chat
+     */
+    getRecentMessages(limit = 20) {
+        const messagesDiv = document.getElementById('chatMessages');
+        if (!messagesDiv) return [];
+        
+        const messageElements = messagesDiv.querySelectorAll('.message');
+        const messages = [];
+        
+        for (let i = Math.max(0, messageElements.length - limit); i < messageElements.length; i++) {
+            const msgEl = messageElements[i];
+            const isUser = msgEl.classList.contains('user-message');
+            const textContent = msgEl.textContent.trim();
+            
+            messages.push({
+                role: isUser ? 'user' : 'assistant',
+                content: textContent
+            });
+        }
+        
+        return messages;
     }
 };
 
