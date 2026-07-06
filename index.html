@@ -1914,6 +1914,20 @@
             document.getElementById('selectorContainer').style.display = 'none';
             document.getElementById('chatContainer').classList.add('active');
             
+            // Resetear estado del panel de memorias al cambiar de chica
+            const memoryPanel = document.getElementById('memoryHistoryPanel');
+            if (memoryPanel) {
+                memoryPanel.style.display = 'none';
+            }
+            const memoryContent = document.getElementById('memoryHistoryContent');
+            if (memoryContent) {
+                memoryContent.classList.remove('collapsed');
+            }
+            const headerToggleBtn = document.querySelector('.chat-header .memory-history-toggle');
+            if (headerToggleBtn) {
+                headerToggleBtn.textContent = '📜 Ver Historial de Memorias';
+            }
+            
             // Actualizar información de la chica en el chat
             const infoChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
             document.getElementById('chicaNombreHeader').textContent = infoChica.nombre;
@@ -2655,7 +2669,12 @@ Responde EXCLUSIVAMENTE en formato JSON:
                 }
                 
             } catch (error) {
-                console.error('Error al generar memoria contextual:', error);
+                // No mostrar error si es por falta de token, es esperado usar el fallback
+                if (error.message !== 'No HF token configured') {
+                    console.error('Error al generar memoria contextual:', error);
+                } else {
+                    console.log('ℹ️ Usando modo básico para memoria contextual (sin IA)');
+                }
                 // Fallback: guardar información básica sin IA
                 const recentMessages = MemorySystem.getRecentMessages(5);
                 const existingMemory = MemorySystem.getContextualMemory(characterName);
@@ -2673,11 +2692,13 @@ Responde EXCLUSIVAMENTE en formato JSON:
                     MemorySystem.saveContextualMemory(characterName, basicMemory);
                     console.log(`✅ Memoria contextual básica guardada para ${characterName} (fallback)`);
                     
-                    // Actualizar UI si el panel está visible
+                    // Actualizar UI si el panel está visible O si se va a abrir pronto
                     const panel = document.getElementById('memoryHistoryPanel');
                     if (panel && panel.style.display !== 'none') {
                         MemorySystem.renderMemoryHistoryInChat();
                     }
+                    // Marcar que hay nueva memoria para refrescar al abrir
+                    window.memoryNeedsRefresh = true;
                 }
             }
         }
@@ -2927,18 +2948,26 @@ Responde EXCLUSIVAMENTE en formato JSON:
             }
             
             if (panel.style.display === 'none' || panel.style.display === '') {
+                // ABRIENDO EL PANEL - Siempre refrescar contenido
                 panel.style.display = 'block';
                 if (headerToggleBtn) headerToggleBtn.textContent = '⬆️ Contraer';
                 if (panelToggleBtn) panelToggleBtn.textContent = '⬆️ Contraer';
+                
+                // Renderizar siempre al abrir para mostrar lo más actual
                 if (typeof MemorySystem !== 'undefined') {
                     MemorySystem.renderMemoryHistoryInChat();
                 }
+                // Limpiar flag de refresh pendiente
+                window.memoryNeedsRefresh = false;
             } else {
+                // CERRANDO O COLAPSANDO EL PANEL
                 if (content && content.classList.contains('collapsed')) {
+                    // Ya está colapsado, no hacer nada
                     content.classList.remove('collapsed');
                     if (headerToggleBtn) headerToggleBtn.textContent = '⬆️ Contraer';
                     if (panelToggleBtn) panelToggleBtn.textContent = '⬆️ Contraer';
                 } else {
+                    // Colapsar contenido pero mantener panel visible
                     if (content) content.classList.add('collapsed');
                     if (headerToggleBtn) headerToggleBtn.textContent = '📜 Ver Historial';
                     if (panelToggleBtn) panelToggleBtn.textContent = '⬇️ Expandir';
