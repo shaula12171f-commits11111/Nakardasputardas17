@@ -2288,6 +2288,7 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
                         const respuestaIndividual = response.respuestasIndividuales[idx];
                         const chicaNombre = respuestaIndividual.chica;
                         const chicaRespuesta = respuestaIndividual.respuesta;
+                        const chicaImagenTag = respuestaIndividual.imagen_tag; // ✅ USAR EL TAG QUE LA IA SELECCIONÓ PARA ESTA CHICA
                         
                         if (!chicaRespuesta) continue;
                         
@@ -2303,8 +2304,26 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
                         let audioURL = null;
                         let tagImagen = null; // Declarar siempre para evitar errores
                         if (infoChica) {
-                            // Seleccionar imagen basada en el mensaje del usuario (PRIORIDAD) y la respuesta
-                            tagImagen = seleccionarTagImagen(chicaRespuesta, chicaNombre, message);
+                            // ✅ PRIORIDAD: Usar el imagen_tag que la IA ya seleccionó para ESTA chica específica
+                            // Solo recalcular si el tag es inválido, no existe para esta chica, o es 'none'
+                            const tagEsValido = chicaImagenTag && 
+                                               chicaImagenTag.toLowerCase().trim() !== 'none' && 
+                                               infoChica.imagenes && 
+                                               Object.keys(infoChica.imagenes).some(t => 
+                                                   t.toLowerCase() === chicaImagenTag.toLowerCase().trim() ||
+                                                   t.includes(chicaImagenTag.split('_')[0])
+                                               );
+                            
+                            if (tagEsValido) {
+                                // ✅ La IA ya eligió un tag válido para esta chica - USARLO DIRECTAMENTE
+                                tagImagen = chicaImagenTag.toLowerCase().trim();
+                                logQuinti('DEBUG', `Usando imagen_tag de la IA para ${chicaNombre}: ${tagImagen}`);
+                            } else {
+                                // ✅ El tag no es válido o no existe para esta chica - recalcular basado en su respuesta
+                                logQuinti('DEBUG', `Tag "${chicaImagenTag}" no válido para ${chicaNombre}, recalculando...`);
+                                tagImagen = seleccionarTagImagen(chicaRespuesta, chicaNombre, message);
+                            }
+                            
                             const resultadoImagen = obtenerURLImagen(chicaNombre, tagImagen);
                             imagenURL = resultadoImagen.urlImagen;
                             audioURL = resultadoImagen.urlAudio;
@@ -2404,12 +2423,13 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
                         let audioURL = null;
                         let tagImagen = null; // Declarar siempre para evitar errores
                         if (infoChica) {
-                            // Seleccionar imagen basada en el mensaje del usuario (PRIORIDAD) y la respuesta
-                            tagImagen = seleccionarTagImagen(chicaRespuesta, chicaNombre, message);
+                            // ✅ PRIORIDAD: Seleccionar imagen basada ÚNICAMENTE en lo que ESTA chica está haciendo en su respuesta
+                            // No usar la acción del usuario directamente - cada chica tiene su propia imagen según SU participación
+                            tagImagen = seleccionarTagImagen(chicaRespuesta, chicaNombre, ''); // ✅ Mensaje usuario vacío para evitar forzar por acción del usuario
                             const resultadoImagen = obtenerURLImagen(chicaNombre, tagImagen);
                             imagenURL = resultadoImagen.urlImagen;
                             audioURL = resultadoImagen.urlAudio;
-                            logQuinti('DEBUG', `Imagen para ${chicaNombre}`, { tag: tagImagen, url: imagenURL, audio: audioURL, mensajeUsuario: message.substring(0, 50) });
+                            logQuinti('DEBUG', `Imagen para ${chicaNombre}`, { tag: tagImagen, url: imagenURL, audio: audioURL, respuestaChica: chicaRespuesta.substring(0, 50) });
                         }
 
                         // Construir contenido: PRIMERO TEXTO con nombre, luego imagen y audio al final
@@ -2449,17 +2469,18 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
                             const botMsgDiv = document.createElement('div');
                             botMsgDiv.className = 'message bot-message';
 
-                            // IMPORTANTE: Pasar el mensaje del usuario para que la imagen sea acorde a la acción
+                            // IMPORTANTE: Seleccionar imagen basada ÚNICAMENTE en la respuesta de esta chica
                             const infoChica = QuintiImagenesPrueba[chicaNombre];
                             let imagenURL = null;
                             let audioURL = null;
                             let tagImagen = null; // Declarar siempre para evitar errores
                             if (infoChica) {
-                                tagImagen = seleccionarTagImagen(chicaRespuesta, chicaNombre, message);
+                                // ✅ PRIORIDAD: Usar solo la respuesta de la chica para seleccionar imagen
+                                tagImagen = seleccionarTagImagen(chicaRespuesta, chicaNombre, '');
                                 const resultadoImagen = obtenerURLImagen(chicaNombre, tagImagen);
                                 imagenURL = resultadoImagen.urlImagen;
                                 audioURL = resultadoImagen.urlAudio;
-                                logQuinti('DEBUG', `Imagen para ${chicaNombre}`, { tag: tagImagen, url: imagenURL, audio: audioURL, mensajeUsuario: message.substring(0, 50) });
+                                logQuinti('DEBUG', `Imagen para ${chicaNombre}`, { tag: tagImagen, url: imagenURL, audio: audioURL, respuestaChica: chicaRespuesta.substring(0, 50) });
                             }
 
                             // Formatear el texto para que la narración entre asteriscos tenga estilo diferente

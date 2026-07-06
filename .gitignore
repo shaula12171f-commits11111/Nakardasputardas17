@@ -1,1 +1,5 @@
-(src/core/logica.js, src/core/systemPrompt.js, src/systems/fallbacks.js)
+(index.html is a source file, so no need to add anything to .gitignore)
+
+```gitignore
+
+```
