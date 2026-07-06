@@ -2330,12 +2330,16 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
                             logQuinti('DEBUG', `Imagen para ${chicaNombre}`, { tag: tagImagen, url: imagenURL, audio: audioURL, mensajeUsuario: message.substring(0, 50) });
                         }
 
-                        // Construir contenido: PRIMERO TEXTO con nombre, luego imagen y audio al final
+                        // Construir contenido: PRIMERO TEXTO con nombre, luego imagen, descripcion y audio al final
                         // Formatear el texto para que la narración entre asteriscos tenga estilo diferente
                         const chicaRespuestaFormateada = formatearTextoConAsteriscos(chicaRespuesta);
                         let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;"><strong>${chicaNombre}:</strong> ${chicaRespuestaFormateada}</div>`;
                         if (imagenURL) {
                             contenidoHTML += `<img src="${imagenURL}" alt="${chicaNombre}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                            // Agregar descripción de la imagen si existe
+                            if (resultadoImagen.urlDescripcion && resultadoImagen.urlDescripcion.trim() !== '') {
+                                contenidoHTML += `<p style="color: #a0a0b0; font-size: 13px; margin: 10px auto; text-align: center; font-style: italic; max-width: 400px;">${resultadoImagen.urlDescripcion}</p>`;
+                            }
                         }
                         // Agregar audio si existe - DIRECTAMENTE EN EL HTML PARA QUE AUTOPLAY FUNCIONE
                         if (audioURL) {
@@ -2432,12 +2436,16 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
                             logQuinti('DEBUG', `Imagen para ${chicaNombre}`, { tag: tagImagen, url: imagenURL, audio: audioURL, respuestaChica: chicaRespuesta.substring(0, 50) });
                         }
 
-                        // Construir contenido: PRIMERO TEXTO con nombre, luego imagen y audio al final
+                        // Construir contenido: PRIMERO TEXTO con nombre, luego imagen, descripcion y audio al final
                         // Formatear el texto para que la narración entre asteriscos tenga estilo diferente
                         const chicaRespuestaFormateada = formatearTextoConAsteriscos(chicaRespuesta);
                         let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;"><strong>${chicaNombre}:</strong> ${chicaRespuestaFormateada}</div>`;
                         if (imagenURL) {
                             contenidoHTML += `<img src="${imagenURL}" alt="${chicaNombre}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                            // Agregar descripción de la imagen si existe
+                            if (resultadoImagen.urlDescripcion && resultadoImagen.urlDescripcion.trim() !== '') {
+                                contenidoHTML += `<p style="color: #a0a0b0; font-size: 13px; margin: 10px auto; text-align: center; font-style: italic; max-width: 400px;">${resultadoImagen.urlDescripcion}</p>`;
+                            }
                         }
                         // Agregar audio si existe - DIRECTAMENTE EN EL HTML PARA QUE AUTOPLAY FUNCIONE
                         if (audioURL) {
@@ -2489,6 +2497,10 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
                             let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;"><strong>${chicaNombre}:</strong> ${chicaRespuestaFormateada}</div>`;
                             if (imagenURL) {
                                 contenidoHTML += `<img src="${imagenURL}" alt="${chicaNombre}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                                // Agregar descripción de la imagen si existe
+                                if (resultadoImagen && resultadoImagen.urlDescripcion && resultadoImagen.urlDescripcion.trim() !== '') {
+                                    contenidoHTML += `<p style="color: #a0a0b0; font-size: 13px; margin: 10px auto; text-align: center; font-style: italic; max-width: 400px;">${resultadoImagen.urlDescripcion}</p>`;
+                                }
                             }
                             // Agregar audio si existe - DIRECTAMENTE EN EL HTML PARA QUE AUTOPLAY FUNCIONE
                             if (audioURL) {
@@ -2512,10 +2524,14 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
                     // Formatear el texto para que la narración entre asteriscos tenga estilo diferente
                     const respuestaFormateada = formatearTextoConAsteriscos(response.respuesta);
                     
-                    // Construir contenido: PRIMERO TEXTO, luego imagen y audio al final
+                    // Construir contenido: PRIMERO TEXTO, luego imagen, descripcion y audio al final
                     let contenidoHTML = `<div style="margin-bottom: 15px; line-height: 1.6;">${respuestaFormateada}</div>`;
                     if (response.imagen_url) {
                         contenidoHTML += `<img src="${response.imagen_url}" alt="${response.imagen_tag}" style="max-width: 400px; max-height: 500px; width: auto; height: auto; border-radius: 12px; display: block; margin: 15px auto 10px auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 3px solid rgba(255, 255, 255, 0.5);">`;
+                        // Agregar descripción de la imagen si existe
+                        if (response.descripcion_imagen && response.descripcion_imagen.trim() !== '') {
+                            contenidoHTML += `<p style="color: #a0a0b0; font-size: 13px; margin: 10px auto; text-align: center; font-style: italic; max-width: 400px;">${response.descripcion_imagen}</p>`;
+                        }
                     }
                     // Agregar audio si existe - DIRECTAMENTE EN EL HTML PARA QUE AUTOPLAY FUNCIONE
                     if (response.audio_url) {
