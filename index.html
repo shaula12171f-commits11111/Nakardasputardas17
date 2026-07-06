@@ -2517,6 +2517,21 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             sendBtn.disabled = false;
             input.focus();
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            // Generar memoria contextual después de enviar mensaje (cada 5 mensajes)
+            const currentCharacter = window.currentChica;
+            if (currentCharacter && chicaSeleccionadaActual) {
+                const recentMessages = MemorySystem.getRecentMessages(50);
+                const existingMemory = MemorySystem.getContextualMemory(currentCharacter.nombre);
+                const mensajesPrevios = existingMemory?.mensajesAnalizados || 0;
+                
+                // Generar memoria cada 5 mensajes nuevos
+                if ((recentMessages.length - mensajesPrevios) >= 5) {
+                    setTimeout(() => {
+                        generarMemoriaContextual(currentCharacter.nombre);
+                    }, 1000);
+                }
+            }
         }
         
         // Función para reintentar el último mensaje después de un error
@@ -2537,6 +2552,123 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             // Reenviar el mensaje
             await sendMessage();
         }
+        
+        // Generar memoria contextual automáticamente después de cada mensaje
+        async function generarMemoriaContextual(characterName) {
+            if (!characterName) return;
+            
+            try {
+                // Obtener últimos mensajes del chat
+                const recentMessages = MemorySystem.getRecentMessages(30);
+                
+                if (recentMessages.length < 4) {
+                    console.log(`⏳ Esperando más mensajes para generar memoria (${recentMessages.length}/4)`);
+                    return;
+                }
+                
+                // Obtener memoria contextual existente si la hay
+                const existingMemory = MemorySystem.getContextualMemory(characterName);
+                
+                // Construir prompt para generar resumen
+                const messagesText = recentMessages.map(m => 
+                    `${m.role === 'user' ? 'Usuario' : characterName}: ${m.content}`
+                ).join('\n');
+                
+                const systemPrompt = `Eres un asistente que genera resúmenes concisos de conversaciones.
+Analiza esta conversación y extrae:
+1. Puntos clave importantes (máximo 5)
+2. Un resumen breve (2-3 frases)
+3. Datos importantes del usuario mencionados
+
+Conversación:
+${messagesText}
+
+Responde EXCLUSIVAMENTE en formato JSON:
+{
+    "puntosClave": ["punto1", "punto2"],
+    "resumenChat": "resumen breve",
+    "datosUsuario": {"clave": "valor"}
+}`;
+
+                // Llamar a la API para generar el resumen
+                const response = await fetch('https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${window.HF_TOKEN || 'hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        inputs: `<s>[INST] ${systemPrompt} [/INST]`,
+                        parameters: {
+                            max_new_tokens: 500,
+                            temperature: 0.3,
+                            return_full_text: false
+                        }
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                let generatedText = result[0]?.generated_text || '';
+                
+                // Intentar parsear el JSON generado
+                let memoryData;
+                try {
+                    // Extraer JSON del texto generado
+                    const jsonMatch = generatedText.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        memoryData = JSON.parse(jsonMatch[0]);
+                    } else {
+                        // Fallback: crear estructura básica
+                        memoryData = {
+                            puntosClave: [`Conversación con ${characterName}`],
+                            resumenChat: generatedText.substring(0, 200),
+                            datosUsuario: {}
+                        };
+                    }
+                } catch (parseError) {
+                    console.warn('Error al parsear JSON de memoria:', parseError);
+                    memoryData = {
+                        puntosClave: [`Conversación con ${characterName}`],
+                        resumenChat: generatedText.substring(0, 200),
+                        datosUsuario: {}
+                    };
+                }
+                
+                // Guardar memoria contextual
+                MemorySystem.saveContextualMemory(characterName, {
+                    ...memoryData,
+                    mensajesAnalizados: (existingMemory?.mensajesAnalizados || 0) + recentMessages.length
+                });
+                
+                console.log(`✅ Memoria contextual actualizada para ${characterName}`);
+                
+                // Actualizar UI si el panel está visible
+                const panel = document.getElementById('memoryHistoryPanel');
+                if (panel && panel.style.display !== 'none') {
+                    MemorySystem.renderMemoryHistoryInChat();
+                }
+                
+            } catch (error) {
+                console.error('Error al generar memoria contextual:', error);
+                // Fallback: guardar información básica sin IA
+                const recentMessages = MemorySystem.getRecentMessages(10);
+                if (recentMessages.length > 0) {
+                    MemorySystem.saveContextualMemory(characterName, {
+                        puntosClave: [`Última interacción: ${new Date().toLocaleString()}`],
+                        resumenChat: `Chat reciente con ${characterName} (${recentMessages.length} mensajes)`,
+                        datosUsuario: {},
+                        mensajesAnalizados: (existingMemory?.mensajesAnalizados || 0) + recentMessages.length
+                    });
+                }
+            }
+        }
+        
+        // Hacer la función globalmente accesible
+        window.generarMemoriaContextual = generarMemoriaContextual;
         
         // Variable global para almacenar el nombre del usuario
         let nombreUsuario = '';
