@@ -2232,8 +2232,12 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             const messagesDiv = document.getElementById('chatMessages');
             const typingIndicator = document.getElementById('typingIndicator');
             
-            const message = input.value.trim();
-            if (!message) return;
+            let message = input.value.trim();
+            
+            // Si el mensaje está vacío, asumir que el usuario quiere continuar la escena/historia
+            if (!message) {
+                message = "Continúa la escena o narrando la historia.";
+            }
             
             // Guardar el último mensaje para permitir reintentar
             lastUserMessage = message;
