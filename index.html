@@ -1298,6 +1298,7 @@
     <script type="module" src="src/utils/parserAcciones.js"></script>
     <script type="module" src="src/stories/historiasParalelas.js"></script>
     <script type="module" src="src/systems/antiRepeticion.js"></script>
+    <script type="module" src="src/systems/memorySystem.js"></script>
     <!-- Cargar tests unitarios en desarrollo (descomentar para ejecutar tests) -->
     <script>
         // Exponer funciones globales antes de que se carguen los módulos
@@ -1321,6 +1322,7 @@
         import { getChicasDisponibles, seleccionarChica, conversar, logQuinti, logErrorAPI, formatearErrorUsuario, getChicasEnChat, agregarChicaAlChat, limpiarChicasEnChat, actualizarAccionEnCurso, getAccionEnCurso, getChicaSeleccionada, getImagenSelector, formatearTextoConAsteriscos, parsearJSON, obtenerURLImagen, agregarMensajeAlHistorialConversacion } from './src/core/logica.js';
         import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion } from './src/systems/antiRepeticion.js';
         import { QuintiImagenesPrueba } from './src/systems/imagenes.js';
+        import MemorySystem from './src/systems/memorySystem.js';
         import { getHistoriasChica, getEscenariosChica, getMensajeBienvenidaHistoria, getMensajeBienvenidaEscenario, getImagenBienvenidaHistoria, getImagenBienvenidaEscenario, getHistoriasGrupalesChica, getHistoriaGrupalById } from './src/stories/historiasEscenarios.js';
         
         let chicaSeleccionadaActual = null;
@@ -2645,6 +2647,7 @@ Responde EXCLUSIVAMENTE en formato JSON:
                 console.error('Error al generar memoria contextual:', error);
                 // Fallback: guardar información básica sin IA
                 const recentMessages = MemorySystem.getRecentMessages(5);
+                const existingMemory = MemorySystem.getContextualMemory(characterName);
                 if (recentMessages.length > 0) {
                     MemorySystem.saveContextualMemory(characterName, {
                         puntosClave: [`Última interacción: ${new Date().toLocaleTimeString()}`],

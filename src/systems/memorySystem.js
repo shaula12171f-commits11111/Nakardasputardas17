@@ -838,7 +838,10 @@ const MemorySystem = {
     }
 };
 
-// Hacer el sistema accesible globalmente
+// Exportar como módulo ES6
+export default MemorySystem;
+
+// Hacer el sistema accesible globalmente para compatibilidad
 window.MemorySystem = MemorySystem;
 
 // Auto-inicializar cuando el DOM esté listo
