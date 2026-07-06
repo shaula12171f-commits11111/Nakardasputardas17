@@ -2662,6 +2662,9 @@ Responde EXCLUSIVAMENTE en formato JSON:
         // Hacer la función globalmente accesible
         window.generarMemoriaContextual = generarMemoriaContextual;
         
+        // Hacer MemorySystem disponible globalmente para funciones fuera del módulo
+        window.MemorySystem = MemorySystem;
+        
         // Variable global para almacenar el nombre del usuario
         let nombreUsuario = '';
         
