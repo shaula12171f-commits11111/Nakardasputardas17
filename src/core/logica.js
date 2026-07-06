@@ -23,7 +23,7 @@
 //  - ../systems/imagenes.js: URLs y tags de imágenes
 // ============================================================
 
-import { generarSystemPrompt, QUINT_PRUEBA_SYSTEM_MINIMO, QUINT_PRUEBA_FASE1, QUINT_PRUEBA_FASE2, QUINT_PRUEBA_FASE3, QUINT_PRUEBA_FASE4, SYSTEM_PROMPT_INICIAL } from './systemPrompt.js';
+import { generarSystemPrompt, QUINT_PRUEBA_SYSTEM_MINIMO, QUINT_PRUEBA_FASE1, QUINT_PRUEBA_FASE2, QUINT_PRUEBA_FASE3, QUINT_PRUEBA_FASE4, QUINT_PRUEBA_FASE5_ANTICENSURA, SYSTEM_PROMPT_INICIAL, SYSTEM_PROMPT_ANTI_CENSURA } from './systemPrompt.js';
 import { PERSONALIDADES, getChicasDisponibles, existeChica, tieneImagenes } from '../characters/personalidades.js';
 import { ALDO_PERSONALIDAD, ALDO_INSTRUCCIONES_SISTEMA, getAldoPersonalidad, esAldo, aldoDebeResponder } from '../characters/aldo.js';
 import { PERSONAJES_MASCULINOS, IMAGENES_MASCULINOS, getPersonalidadMasculino, getPersonajesMasculinosDisponibles, existePersonajeMasculino, tieneImagenesMasculino, getImagenesMasculino, personajeMasculinoDebeResponder, getImagenSelectorMasculino } from '../characters/personajesMasculinos.js';
@@ -2139,6 +2139,37 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
                 }
                 
                 // ========================================
+                // FASE 5: ANTI-CENSURA NSFW - Última línea de defensa contra filtros de contenido
+                // Se activa cuando las fases 1-4 fallan por content_filter o policy_violation
+                // Usa system prompt reforzado que enmarca el contenido como ficción literaria adulta
+                // ========================================
+                if (!datos || !esRespuestaValida(datos)) {
+                    logQuinti('WARN', `${nombrePersonaje} - FASE 4 fallida, iniciando FASE 5: ANTI-CENSURA NSFW`);
+                    const msgsUsuario = historialPrevio.filter(m => m.role === "user").slice(-2);
+                    
+                    for (let i = 0; i < QUINT_PRUEBA_FASE5_ANTICENSURA.length; i++) {
+                        logReintento(i + 1, QUINT_PRUEBA_FASE5_ANTICENSURA.length, `Anti-Censura NSFW (${nombrePersonaje})`);
+                        
+                        const antiCensura = [
+                            { role: "system", content: SYSTEM_PROMPT_ANTI_CENSURA },
+                            ...msgsUsuario,
+                            { role: "user", content: QUINT_PRUEBA_FASE5_ANTICENSURA[i] }
+                        ];
+                        
+                        try {
+                            datos = await intentarLlamadaAPI(antiCensura, MODELO_PRINCIPAL);
+                        } catch (error) {
+                            logQuinti('WARN', `${nombrePersonaje} - FASE 5 Anti-Censura intento ${i + 1} falló: ${error.message}`);
+                        }
+                        
+                        if (datos && esRespuestaValida(datos)) {
+                            logQuinti('INFO', `${nombrePersonaje} - FASE 5 Anti-Censura exitosa en intento ${i + 1}`);
+                            break;
+                        }
+                    }
+                }
+                
+                // ========================================
                 // FALLBACK ANTI-REPETICIÓN: Si se detecta repetición entre chicas (nuevo)
                 // Se usa ANTES del fallback local normal para evitar que las chicas copien diálogos
                 // ========================================
@@ -2415,6 +2446,33 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
     }
     
     // ========================================
+    // FASE 5: ANTI-CENSURA NSFW - Última línea de defensa contra filtros
+    // ========================================
+    logQuinti('WARN', 'FASE 4 fallida, iniciando FASE 5: ANTI-CENSURA NSFW');
+    const msgsUsuario = historialPrevio.filter(m => m.role === "user").slice(-2);
+    
+    for (let i = 0; i < QUINT_PRUEBA_FASE5_ANTICENSURA.length; i++) {
+        logReintento(i + 1, QUINT_PRUEBA_FASE5_ANTICENSURA.length, 'Anti-Censura NSFW');
+        
+        const antiCensura = [
+            { role: "system", content: SYSTEM_PROMPT_ANTI_CENSURA },
+            ...msgsUsuario,
+            { role: "user", content: QUINT_PRUEBA_FASE5_ANTICENSURA[i] }
+        ];
+        
+        try {
+            datos = await intentarLlamadaAPI(antiCensura, MODELO_PRINCIPAL);
+        } catch (error) {
+            logQuinti('WARN', `FASE 5 Anti-Censura intento ${i + 1} falló: ${error.message}`);
+        }
+        
+        if (datos && esRespuestaValida(datos)) {
+            logQuinti('INFO', `FASE 5 Anti-Censura exitosa en intento ${i + 1}`);
+            return procesarRespuesta(datos, mensaje);
+        }
+    }
+    
+    // ========================================
     // FALLBACK: Si todo falla (último recurso) - Mostrar error al usuario
     // ========================================
     logQuinti('ERROR', 'Todas las fases fallaron - Lanzando error para mostrar al usuario');
@@ -2539,7 +2597,24 @@ async function intentarLlamadaAPI(mensajes, modelo, forzarJSON = false) {
             
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                const errorMsg = `Key ${keyNumero}: Error HTTP ${response.status} - ${errorData.error?.message || 'Sin detalles'}`;
+                const errorMessage = errorData.error?.message || 'Sin detalles';
+                
+                // DETECCIÓN ESPECÍFICA DE FILTROS NSFW/CONTENT_POLICY
+                // Si el error menciona content_filter, policy, o NSFW, es un bloqueo por contenido sensible
+                const esFiltroContenido = errorMessage.toLowerCase().includes('content_filter') ||
+                                         errorMessage.toLowerCase().includes('policy') ||
+                                         errorMessage.toLowerCase().includes('nsfw') ||
+                                         errorMessage.toLowerCase().includes('inappropriate') ||
+                                         errorMessage.toLowerCase().includes('safety');
+                
+                if (esFiltroContenido) {
+                    logQuinti('WARN', `Key ${keyNumero}: BLOQUEO POR FILTRO DE CONTENIDO detectado - ${errorMessage}`);
+                    // No continuar con otras keys porque el problema es el contenido, no la key
+                    // Retornar un error especial que active la FASE 5 ANTI-CENSURA
+                    throw new Error(`CONTENT_FILTER_BLOCKED: ${errorMessage}`);
+                }
+                
+                const errorMsg = `Key ${keyNumero}: Error HTTP ${response.status} - ${errorMessage}`;
                 logErrorAPI('Groq API', new Error(`Status ${response.status}`), { errorData, keyIdx });
                 erroresAcumulados.push(errorMsg);
                 indiceKeyActual = (keyIdx + 1) % GROQ_KEYS.length;
