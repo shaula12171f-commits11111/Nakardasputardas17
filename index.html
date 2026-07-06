@@ -1325,6 +1325,9 @@
         import MemorySystem from './src/systems/memorySystem.js';
         import { getHistoriasChica, getEscenariosChica, getMensajeBienvenidaHistoria, getMensajeBienvenidaEscenario, getImagenBienvenidaHistoria, getImagenBienvenidaEscenario, getHistoriasGrupalesChica, getHistoriaGrupalById } from './src/stories/historiasEscenarios.js';
         
+        // Hacer MemorySystem disponible globalmente inmediatamente después de importar
+        window.MemorySystem = MemorySystem;
+        
         let chicaSeleccionadaActual = null;
         let historialMensajesUI = []; // Historial local para la UI
         let accionEnCurso = null; // Mantiene el estado de la acción actual (ej: 'besando', 'chupando')
@@ -2581,11 +2584,19 @@ Responde EXCLUSIVAMENTE en formato JSON:
     "datosUsuario": {}
 }`;
 
+                // Verificar si hay token de Hugging Face configurado
+                const hfToken = window.HF_TOKEN || localStorage.getItem('hf_token');
+                
+                if (!hfToken || hfToken === 'hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx') {
+                    console.log('⚠️ No hay token de Hugging Face configurado, usando fallback');
+                    throw new Error('No HF token configured');
+                }
+
                 // Llamar a la API para generar el resumen
                 const response = await fetch('https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${window.HF_TOKEN || 'hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}`,
+                        'Authorization': `Bearer ${hfToken}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -2649,12 +2660,24 @@ Responde EXCLUSIVAMENTE en formato JSON:
                 const recentMessages = MemorySystem.getRecentMessages(5);
                 const existingMemory = MemorySystem.getContextualMemory(characterName);
                 if (recentMessages.length > 0) {
-                    MemorySystem.saveContextualMemory(characterName, {
-                        puntosClave: [`Última interacción: ${new Date().toLocaleTimeString()}`],
-                        resumenChat: `Chat con ${characterName}`,
+                    const basicMemory = {
+                        puntosClave: [
+                            `Última interacción: ${new Date().toLocaleTimeString()}`,
+                            `Total mensajes en chat: ${recentMessages.length}`
+                        ],
+                        resumenChat: `Chat reciente con ${characterName}`,
                         datosUsuario: {},
                         mensajesAnalizados: (existingMemory?.mensajesAnalizados || 0) + recentMessages.length
-                    });
+                    };
+                    
+                    MemorySystem.saveContextualMemory(characterName, basicMemory);
+                    console.log(`✅ Memoria contextual básica guardada para ${characterName} (fallback)`);
+                    
+                    // Actualizar UI si el panel está visible
+                    const panel = document.getElementById('memoryHistoryPanel');
+                    if (panel && panel.style.display !== 'none') {
+                        MemorySystem.renderMemoryHistoryInChat();
+                    }
                 }
             }
         }
@@ -2761,6 +2784,7 @@ Responde EXCLUSIVAMENTE en formato JSON:
         window.cerrarHistoriasParalelas = cerrarHistoriasParalelas;
         window.iniciarHistoriaOEscenario = iniciarHistoriaOEscenario;
         window.mostrarOpcion = mostrarOpcion;
+        window.toggleMemoryHistory = toggleMemoryHistory;
         // Cargar nombre guardado si existe - PERO SIEMPRE MOSTRAR PANTALLA DE NOMBRE
         function cargarNombreGuardado() {
             // Cargar el nombre desde localStorage si existe (sin eliminarlo)
