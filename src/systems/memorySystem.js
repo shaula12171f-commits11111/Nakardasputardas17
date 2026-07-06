@@ -646,6 +646,60 @@ const MemorySystem = {
         };
         
         reader.readAsText(file);
+    },
+
+    /**
+     * Renderiza el historial de memorias en el panel dentro del chat
+     */
+    renderMemoryHistoryInChat() {
+        const contentEl = document.getElementById('memoryHistoryContent');
+        if (!contentEl) {
+            console.warn('No se encontró el contenedor del historial de memorias en el chat');
+            return;
+        }
+
+        const memories = this.getAllMemories();
+
+        if (memories.length === 0) {
+            contentEl.innerHTML = `
+                <div class="no-memories-history">
+                    <p>📭 No hay chats guardados aún.</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        
+        for (const memory of memories) {
+            const fecha = new Date(memory.fechaCreacion).toLocaleString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            const mensajeCount = memory.chatData?.mensajes?.length || 0;
+            
+            html += `
+                <div class="memory-item">
+                    <div class="memory-item-header">
+                        <span class="memory-item-title">📜 ${this.escapeHtml(memory.nombre)}</span>
+                        <span class="memory-item-date">${fecha}</span>
+                    </div>
+                    <div class="memory-item-details">
+                        💬 ${mensajeCount} mensajes
+                    </div>
+                    <div class="memory-item-actions">
+                        <button class="memory-item-btn load" onclick="MemorySystem.loadChatMemory('${memory.id}')">📂 Cargar</button>
+                        <button class="memory-item-btn view" onclick="MemorySystem.viewMemory('${memory.id}')">👁️ Ver</button>
+                        <button class="memory-item-btn delete" onclick="MemorySystem.confirmDelete('${memory.id}')">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        contentEl.innerHTML = html;
     }
 };
 

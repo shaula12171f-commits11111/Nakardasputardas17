@@ -137,12 +137,29 @@
             border-radius: 15px;
             margin-bottom: 25px;
             box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            position: relative;
         }
         
         .chat-header h2 {
             font-size: 26px;
             margin: 0;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .chat-header .memory-history-toggle {
+            background: linear-gradient(135deg, #FBBF24, #F59E0B);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+        
+        .chat-header .memory-history-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.5);
         }
         
         .chica-info {
@@ -1234,6 +1251,7 @@
     <div class="chat-container" id="chatContainer">
         <div class="chat-header">
             <h2>💬 Chat con <span id="chicaNombreHeader"></span></h2>
+            <button class="memory-history-toggle" onclick="toggleMemoryHistory()" style="margin-top: 10px; font-size: 14px; padding: 8px 16px;">📜 Ver Historial de Memorias</button>
         </div>
         
         <div class="chica-info">
@@ -2744,21 +2762,25 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
         function toggleMemoryHistory() {
             const panel = document.getElementById('memoryHistoryPanel');
             const content = document.getElementById('memoryHistoryContent');
-            const toggleBtn = document.querySelector('.memory-history-toggle');
+            const headerToggleBtn = document.querySelector('.chat-header .memory-history-toggle');
+            const panelToggleBtn = document.querySelector('.memory-history-panel .memory-history-toggle');
             
             if (panel.style.display === 'none' || panel.style.display === '') {
                 panel.style.display = 'block';
-                toggleBtn.textContent = '⬆️ Contraer';
+                if (headerToggleBtn) headerToggleBtn.textContent = '⬆️ Contraer';
+                if (panelToggleBtn) panelToggleBtn.textContent = '⬆️ Contraer';
                 if (typeof MemorySystem !== 'undefined') {
                     MemorySystem.renderMemoryHistoryInChat();
                 }
             } else {
                 if (content.classList.contains('collapsed')) {
                     content.classList.remove('collapsed');
-                    toggleBtn.textContent = '⬆️ Contraer';
+                    if (headerToggleBtn) headerToggleBtn.textContent = '⬆️ Contraer';
+                    if (panelToggleBtn) panelToggleBtn.textContent = '⬆️ Contraer';
                 } else {
                     content.classList.add('collapsed');
-                    toggleBtn.textContent = '⬇️ Expandir';
+                    if (headerToggleBtn) headerToggleBtn.textContent = '📜 Ver Historial';
+                    if (panelToggleBtn) panelToggleBtn.textContent = '⬇️ Expandir';
                 }
             }
         }
