@@ -2227,6 +2227,7 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
         const resultadoImagen = obtenerURLImagen(chicaPrincipal, tagImagenPrincipal, historiaId);
         const urlImagenPrincipal = resultadoImagen.urlImagen;
         const audioPrincipal = resultadoImagen.urlAudio;
+        const descripcionPrincipal = resultadoImagen.urlDescripcion;
         
         logRespuestaExitosa(MODELO_PRINCIPAL, respuestaCombinada.length, Date.now() - tiempoInicio);
         
@@ -2235,6 +2236,7 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
             imagen_tag: tagImagenPrincipal,
             imagen_url: urlImagenPrincipal,
             audio_url: audioPrincipal,
+            descripcion_imagen: descripcionPrincipal,
             modelo: MODELO_PRINCIPAL,
             chicaPrincipal: chicaPrincipal,
             chicasRespondiendo: personajesArray,
@@ -2750,7 +2752,7 @@ async function procesarRespuesta(datos, mensajeOriginal) {
         historialConversacion = historialConversacion.slice(-MAX_HISTORIAL * 2);
     }
     
-    let tagImagen, urlImagen, urlAudio;
+    let tagImagen, urlImagen, urlAudio, urlDescripcion;
     
     // Obtener el ID de la historia paralela activa si existe
     const historiaId = window.historiaParalelaActiva || null;
@@ -2764,6 +2766,7 @@ async function procesarRespuesta(datos, mensajeOriginal) {
         const resultadoImagen = obtenerURLImagen(primeraChica.chica, tagImagen, historiaId);
         urlImagen = resultadoImagen.urlImagen;
         urlAudio = resultadoImagen.urlAudio;
+        urlDescripcion = resultadoImagen.urlDescripcion;
     } else {
         // Seleccionar imagen automaticamente para la chica principal (caso de una sola chica)
         tagImagen = datos && datos.imagen_tag && datos.imagen_tag.toLowerCase().trim() !== 'none' 
@@ -2772,6 +2775,7 @@ async function procesarRespuesta(datos, mensajeOriginal) {
         const resultadoImagen = obtenerURLImagen(chicaSeleccionada, tagImagen, historiaId);
         urlImagen = resultadoImagen.urlImagen;
         urlAudio = resultadoImagen.urlAudio;
+        urlDescripcion = resultadoImagen.urlDescripcion;
     }
     
     // Detectar que chicas estan respondiendo en el mensaje
@@ -2816,6 +2820,7 @@ async function procesarRespuesta(datos, mensajeOriginal) {
         imagen_tag: tagImagen,
         imagen_url: urlImagen,
         audio_url: urlAudio,
+        descripcion_imagen: urlDescripcion,
         modelo: MODELO_PRINCIPAL,
         chicaPrincipal: datos.chicaPrincipal || chicaSeleccionada,
         chicasRespondiendo: chicasRespondiendo,
@@ -2962,14 +2967,14 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
     if (historiaId) {
         const mappingHistoria = getImagenTagsMappingHistoria(historiaId);
         if (mappingHistoria && mappingHistoria[tag]) {
-            return { urlImagen: mappingHistoria[tag], urlAudio: null };
+            return { urlImagen: mappingHistoria[tag], urlAudio: null, urlDescripcion: null };
         }
         // Si el tag no existe en el mapping pero existe el mapping, intentar con variantes
         if (mappingHistoria) {
             // Buscar tags que contengan el nombre del tag original
             for (const [mapTag, url] of Object.entries(mappingHistoria)) {
                 if (mapTag.includes(tag) || tag.includes(mapTag.replace('nino_', ''))) {
-                    return { urlImagen: url, urlAudio: null };
+                    return { urlImagen: url, urlAudio: null, urlDescripcion: null };
                 }
             }
         }
@@ -2977,14 +2982,14 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
     
     // Aldo y personajes masculinos tienen sus propias imágenes
     if (esAldo(nombrePersonaje)) {
-        return { urlImagen: null, urlAudio: null };
+        return { urlImagen: null, urlAudio: null, urlDescripcion: null };
     }
     
     // Verificar si es un personaje masculino con imágenes
     if (existePersonajeMasculino(nombrePersonaje)) {
         const personajeData = IMAGENES_MASCULINOS[nombrePersonaje];
         if (!personajeData) {
-            return { urlImagen: null, urlAudio: null };
+            return { urlImagen: null, urlAudio: null, urlDescripcion: null };
         }
         
         // Si hay tag específico, buscar esa imagen
@@ -2993,7 +2998,8 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
                 if (key.toLowerCase().includes(tag.toLowerCase())) {
                     const url = typeof imgObj === 'object' ? imgObj.url : imgObj;
                     const audio = typeof imgObj === 'object' ? imgObj.audio : '';
-                    return { urlImagen: url, urlAudio: audio || null };
+                    const descripcion = typeof imgObj === 'object' ? imgObj.descripcion : '';
+                    return { urlImagen: url, urlAudio: audio || null, urlDescripcion: descripcion || null };
                 }
             }
         }
@@ -3002,17 +3008,18 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
         const imgObj = personajeData.imagenes?.['hablando'] || {};
         return { 
             urlImagen: personajeData.imagenSelector || imgObj.url || imgObj || null,
-            urlAudio: null
+            urlAudio: null,
+            urlDescripcion: imgObj.descripcion || null
         };
     }
     
     // Verificar si el personaje tiene imágenes disponibles
     if (!tieneImagenes(nombrePersonaje)) {
-        return { urlImagen: null, urlAudio: null };
+        return { urlImagen: null, urlAudio: null, urlDescripcion: null };
     }
     
     if (!QuintiImagenesPrueba || !QuintiImagenesPrueba[nombrePersonaje]) {
-        return { urlImagen: null, urlAudio: null };
+        return { urlImagen: null, urlAudio: null, urlDescripcion: null };
     }
     
     const chicaData = QuintiImagenesPrueba[nombrePersonaje];
@@ -3021,13 +3028,15 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
         const imgObj = chicaData.imagenes?.['hablando'] || {};
         return { 
             urlImagen: chicaData.imagenSelector || imgObj.url || imgObj || null,
-            urlAudio: imgObj.audio || null
+            urlAudio: imgObj.audio || null,
+            urlDescripcion: imgObj.descripcion || null
         };
     }
     
     // Intentar obtener la imagen por tag
     let urlImagen = null;
     let urlAudio = null;
+    let urlDescripcion = null;
     
     // MEJORA: Buscar TODAS las variantes numeradas del tag (ej: "tag", "tag2", "tag_1") y seleccionar una aleatoriamente
     if (tag && chicaData.imagenes) {
@@ -3046,6 +3055,7 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
             const imgObjVariante = chicaData.imagenes[tagElegido];
             urlImagen = imgObjVariante?.url || imgObjVariante;
             urlAudio = imgObjVariante?.audio || null;
+            urlDescripcion = imgObjVariante?.descripcion || null;
             
             if (variantes.length > 1) {
                 logQuinti('INFO', `Tag "${tag}" tiene ${variantes.length} variantes: [${variantes.join(', ')}]. Usando: "${tagElegido}" para ${nombrePersonaje}`);
@@ -3066,6 +3076,7 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
             const imgObjPertinente = chicaData.imagenes[tagPertinente];
             urlImagen = imgObjPertinente?.url || imgObjPertinente;
             urlAudio = imgObjPertinente?.audio || null;
+            urlDescripcion = imgObjPertinente?.descripcion || null;
             logQuinti('INFO', `Tag "${tag}" no encontrado, se encontró tag pertinente: "${tagPertinente}" para ${nombrePersonaje}`);
         } else {
             // FALLBACK: Si no encuentra tag pertinente, usar la PRIMERA imagen disponible
@@ -3073,6 +3084,7 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
             const primerImgObj = chicaData.imagenes[primerTag];
             urlImagen = primerImgObj?.url || primerImgObj;
             urlAudio = primerImgObj?.audio || null;
+            urlDescripcion = primerImgObj?.descripcion || null;
             logQuinti('WARN', `Tag "${tag}" no encontrado para ${nombrePersonaje}, usando primera imagen disponible: "${primerTag}"`);
         }
     }
@@ -3081,9 +3093,10 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
     if (!urlImagen) {
         urlImagen = chicaData.imagenSelector || null;
         urlAudio = null;
+        urlDescripcion = null;
     }
     
-    return { urlImagen, urlAudio };
+    return { urlImagen, urlAudio, urlDescripcion };
 }
 
 // ============================================================
