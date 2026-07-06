@@ -4,7 +4,7 @@
 //  Descripción: Sistema de reintentos multi-fase y respuestas de respaldo
 // ============================================================
 
-import { QUINT_PRUEBA_SYSTEM_MINIMO, QUINT_PRUEBA_FASE1, QUINT_PRUEBA_FASE2, QUINT_PRUEBA_FASE3, QUINT_PRUEBA_FASE4 } from '../core/systemPrompt.js';
+import { QUINT_PRUEBA_SYSTEM_MINIMO, QUINT_PRUEBA_FASE1, QUINT_PRUEBA_FASE2, QUINT_PRUEBA_FASE3, QUINT_PRUEBA_FASE4, QUINT_PRUEBA_FASE5_ANTICENSURA, SYSTEM_PROMPT_ANTI_CENSURA } from '../core/systemPrompt.js';
 
 /**
  * Mensajes de error amigables para mostrar al usuario cuando todo falla
@@ -133,12 +133,18 @@ export const CONFIG_REINTENTOS = {
         prompts: QUINT_PRUEBA_FASE4,
         systemPrompt: QUINT_PRUEBA_SYSTEM_MINIMO,
         descripcion: 'Ejemplos concretos de JSON para copiar formato'
+    },
+    FASE5_ANTICENSURA: {
+        nombre: 'Anti-Censura NSFW',
+        prompts: QUINT_PRUEBA_FASE5_ANTICENSURA,
+        systemPrompt: SYSTEM_PROMPT_ANTI_CENSURA,
+        descripcion: 'Prompt ultra-reforzado para evadir filtros de contenido NSFW/policy_violation'
     }
 };
 
 /**
  * Genera el payload de mensajes para una fase específica de reintento
- * @param {string} fase - Nombre de la fase ('FASE1', 'FASE2', 'FASE3', 'FASE4')
+ * @param {string} fase - Nombre de la fase ('FASE1', 'FASE2', 'FASE3', 'FASE4', 'FASE5_ANTICENSURA')
  * @param {Array} historialPrevio - Historial de conversación previo
  * @param {string} mensajeOriginal - Mensaje original del usuario
  * @param {string} systemPrompt - System prompt a usar
@@ -191,6 +197,16 @@ export function generarPayloadFase(fase, historialPrevio, mensajeOriginal, syste
                 { role: "user", content: promptSeleccionado }
             ];
             
+        case 'FASE5_ANTICENSURA':
+            // FASE 5: ANTI-CENSURA - System prompt reforzado + prompts específicos para evadir filtros NSFW
+            // Se usa cuando las fases anteriores fallan por content_filter o policy_violation
+            const msgsUsuario = historialPrevio.filter(m => m.role === "user").slice(-2);
+            return [
+                { role: "system", content: config.systemPrompt },
+                ...msgsUsuario,
+                { role: "user", content: promptSeleccionado }
+            ];
+            
         default:
             throw new Error(`Fase no implementada: ${fase}`);
     }
@@ -201,7 +217,7 @@ export function generarPayloadFase(fase, historialPrevio, mensajeOriginal, syste
  * @returns {string[]} - Array con los nombres de las fases en orden de ejecución
  */
 export function getOrdenFases() {
-    return ['FASE1', 'FASE2', 'FASE3', 'FASE4'];
+    return ['FASE1', 'FASE2', 'FASE3', 'FASE4', 'FASE5_ANTICENSURA'];
 }
 
 /**
