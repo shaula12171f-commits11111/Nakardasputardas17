@@ -650,6 +650,7 @@ const MemorySystem = {
 
     /**
      * Renderiza el historial de memorias en el panel dentro del chat
+     * Ahora muestra la memoria contextual específica del chat actual
      */
     renderMemoryHistoryInChat() {
         const contentEl = document.getElementById('memoryHistoryContent');
@@ -658,48 +659,157 @@ const MemorySystem = {
             return;
         }
 
-        const memories = this.getAllMemories();
-
-        if (memories.length === 0) {
+        // Obtener el personaje actual del chat
+        const currentCharacter = window.currentChica || null;
+        
+        if (!currentCharacter) {
             contentEl.innerHTML = `
                 <div class="no-memories-history">
-                    <p>📭 No hay chats guardados aún.</p>
+                    <p>📭 No hay un chat activo seleccionado.</p>
                 </div>
             `;
             return;
         }
 
-        let html = '';
+        // Obtener memoria contextual específica de este personaje/chat
+        const contextualMemory = this.getContextualMemory(currentCharacter.nombre);
         
-        for (const memory of memories) {
-            const fecha = new Date(memory.fechaCreacion).toLocaleString('es-ES', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            const mensajeCount = memory.chatData?.mensajes?.length || 0;
-            
-            html += `
-                <div class="memory-item">
-                    <div class="memory-item-header">
-                        <span class="memory-item-title">📜 ${this.escapeHtml(memory.nombre)}</span>
-                        <span class="memory-item-date">${fecha}</span>
-                    </div>
-                    <div class="memory-item-details">
-                        💬 ${mensajeCount} mensajes
-                    </div>
-                    <div class="memory-item-actions">
-                        <button class="memory-item-btn load" onclick="MemorySystem.loadChatMemory('${memory.id}')">📂 Cargar</button>
-                        <button class="memory-item-btn view" onclick="MemorySystem.viewMemory('${memory.id}')">👁️ Ver</button>
-                        <button class="memory-item-btn delete" onclick="MemorySystem.confirmDelete('${memory.id}')">🗑️ Eliminar</button>
-                    </div>
+        if (!contextualMemory) {
+            contentEl.innerHTML = `
+                <div class="no-memories-history">
+                    <p>📝 No hay memoria contextual generada para ${currentCharacter.nombre} aún.</p>
+                    <p style="font-size: 13px; color: #A78BFA; margin-top: 8px;">
+                        La memoria se genera automáticamente después de varios mensajes.
+                    </p>
                 </div>
             `;
+            return;
         }
 
+        const fecha = new Date(contextualMemory.fechaCreacion).toLocaleString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        let html = `
+            <div class="memory-contextual-card">
+                <div class="memory-contextual-header">
+                    <h4>🧠 Memoria Contextual: ${this.escapeHtml(currentCharacter.nombre)}</h4>
+                    <span class="memory-contextual-date">${fecha}</span>
+                </div>
+                
+                <div class="memory-contextual-content">
+                    <div class="memory-section">
+                        <h5>📌 Puntos Clave</h5>
+                        <ul class="memory-key-points">
+                            ${contextualMemory.puntosClave.map(punto => `<li>${this.escapeHtml(punto)}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    ${contextualMemory.resumenChat ? `
+                    <div class="memory-section">
+                        <h5>📝 Resumen del Chat</h5>
+                        <p class="memory-resumen">${this.escapeHtml(contextualMemory.resumenChat)}</p>
+                    </div>
+                    ` : ''}
+                    
+                    ${contextualMemory.datosUsuario && Object.keys(contextualMemory.datosUsuario).length > 0 ? `
+                    <div class="memory-section">
+                        <h5>👤 Datos del Usuario Recordados</h5>
+                        <div class="memory-user-data">
+                            ${Object.entries(contextualMemory.datosUsuario).map(([key, value]) => `
+                                <div class="user-data-item">
+                                    <strong>${this.escapeHtml(key)}:</strong> ${this.escapeHtml(value)}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="memory-section">
+                        <h5>💬 Mensajes Analizados</h5>
+                        <p class="memory-stats">Total: ${contextualMemory.mensajesAnalizados || 0} mensajes procesados</p>
+                    </div>
+                </div>
+                
+                <div class="memory-contextual-actions">
+                    <button class="memory-item-btn delete" onclick="MemorySystem.clearContextualMemory('${currentCharacter.nombre}')">🗑️ Limpiar Memoria</button>
+                    <button class="memory-item-btn" onclick="MemorySystem.forceGenerateContextualMemory('${currentCharacter.nombre}')">🔄 Forzar Actualización</button>
+                </div>
+            </div>
+        `;
+
         contentEl.innerHTML = html;
+    },
+
+    /**
+     * Obtiene la memoria contextual de un personaje específico
+     * @param {string} characterName - Nombre del personaje
+     * @returns {Object|null} Memoria contextual o null si no existe
+     */
+    getContextualMemory(characterName) {
+        const key = `quinti_contextual_memory_${characterName}`;
+        const stored = localStorage.getItem(key);
+        return stored ? JSON.parse(stored) : null;
+    },
+
+    /**
+     * Guarda/actualiza la memoria contextual de un personaje
+     * @param {string} characterName - Nombre del personaje
+     * @param {Object} memoryData - Datos de la memoria contextual
+     */
+    saveContextualMemory(characterName, memoryData) {
+        const key = `quinti_contextual_memory_${characterName}`;
+        const memory = {
+            character: characterName,
+            puntosClave: memoryData.puntosClave || [],
+            resumenChat: memoryData.resumenChat || '',
+            datosUsuario: memoryData.datosUsuario || {},
+            mensajesAnalizados: memoryData.mensajesAnalizados || 0,
+            fechaCreacion: Date.now(),
+            fechaActualizacion: Date.now(),
+            version: '1.0'
+        };
+        
+        try {
+            localStorage.setItem(key, JSON.stringify(memory));
+            console.log(`✅ Memoria contextual guardada para ${characterName}`);
+            return memory;
+        } catch (error) {
+            console.error('Error al guardar memoria contextual:', error);
+            return null;
+        }
+    },
+
+    /**
+     * Limpia la memoria contextual de un personaje
+     * @param {string} characterName - Nombre del personaje
+     */
+    clearContextualMemory(characterName) {
+        const confirmed = confirm(`¿Estás seguro de limpiar la memoria contextual de ${characterName}?`);
+        if (confirmed) {
+            const key = `quinti_contextual_memory_${characterName}`;
+            localStorage.removeItem(key);
+            alert(`✅ Memoria contextual de ${characterName} eliminada`);
+            this.renderMemoryHistoryInChat();
+        }
+    },
+
+    /**
+     * Fuerza la generación/actualización de memoria contextual
+     * @param {string} characterName - Nombre del personaje
+     */
+    forceGenerateContextualMemory(characterName) {
+        if (typeof window.generarMemoriaContextual === 'function') {
+            window.generarMemoriaContextual(characterName);
+            alert(`🔄 Actualizando memoria contextual de ${characterName}...`);
+            setTimeout(() => this.renderMemoryHistoryInChat(), 2000);
+        } else {
+            alert('⚠️ La función de generación de memoria no está disponible');
+        }
     }
 };
 

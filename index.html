@@ -1903,6 +1903,9 @@
             // Seleccionar la chica en la lógica
             seleccionarChica(chicaSeleccionadaActual);
             
+            // Actualizar window.currentChica para el sistema de memorias
+            window.currentChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
+            
             // Ocultar selector, mostrar chat
             document.getElementById('selectorContainer').style.display = 'none';
             document.getElementById('chatContainer').classList.add('active');
@@ -2625,6 +2628,8 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
         window.sendMessage = sendMessage;
         window.retryLastMessage = retryLastMessage;
         window.getNombreUsuario = function() { return nombreUsuario; };
+        window.getChicaActual = function() { return getChicaSeleccionada(); };
+        window.currentChica = null; // Se actualizará cuando se seleccione una chica
         window.abrirHistoriasParalelas = abrirHistoriasParalelas;
         window.cerrarHistoriasParalelas = cerrarHistoriasParalelas;
         window.iniciarHistoriaOEscenario = iniciarHistoriaOEscenario;
