@@ -1922,15 +1922,6 @@ async function obtenerRespuestaGroq(mensaje, historialPrevio = []) {
             const tagsDisponibles = obtenerTagsImagen(nombrePersonaje);
             const instruccionesImagen = `\n\nTU IMAGEN_TAG: Debes incluir "imagen_tag" con UNA de estas opciones: [${tagsDisponibles.join(', ')}]. Elige según lo que esté haciendo el personaje.`;
             
-            // Obtener descripción detallada de la imagen seleccionada para incluirla en el contexto
-            let descripcionImagenSeleccionada = '';
-            if (datos && datos.imagen_tag && datos.imagen_tag !== 'none') {
-                const imgData = obtenerDatosImagenCompleta(nombrePersonaje, datos.imagen_tag);
-                if (imgData && imgData.descripcion && imgData.descripcion.trim() !== '') {
-                    descripcionImagenSeleccionada = `\n\n🖼️ DESCRIPCIÓN DE LA IMAGEN ACTUAL: ${imgData.descripcion}\nUsá esta descripción para enriquecer tu respuesta, mencionando detalles visuales específicos de lo que está pasando en la escena.`;
-                }
-            }
-            
             // Instrucción anti-repetición reforzada para múltiples personajes
             const instruccionAntiRepeticion = `\n\n⚠️ ANTI-REPETICIÓN OBLIGATORIA: Tu respuesta debe ser COMPLETAMENTE DIFERENTE a las de los otros personajes. Prohibido usar las mismas frases, gestos, acciones o vocabulario.`;
             
@@ -1989,7 +1980,7 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
             ⚠️ IMPORTANTE PARA MÚLTIPLES PERSONAJES: TODOS los personajes deben responder siempre. NUNCA digas que no puedes participar. Si un personaje anterior ya respondió, VOS TAMBIÉN TENÉS QUE RESPONDER con tu propia perspectiva única.`;
             
             // SOLUCIÓN PROBLEMA #2: Incluir contexto unificado en el system prompt
-            const systemPromptIndividual = `${personalidadPersonaje}${instruccionesImagen}${descripcionImagenSeleccionada}${instruccionAntiRepeticion}${instruccionAccionUsuario}${instruccionNuncaRechazar}${instruccionContextoOtrosPersonajes}\n\n${contextoUnificado ? contextoUnificado + '\n\n' : ''}FORMATO JSON OBLIGATORIO - Respondé únicamente en formato JSON válido. RESPONDE SOLO CON JSON, SIN TEXTO ANTES NI DESPUES:\n{"respuesta":"tu diálogo con *acciones entre asteriscos*","imagen_tag":"una_imagen_disponible"}`;
+            const systemPromptIndividual = `${personalidadPersonaje}${instruccionesImagen}${instruccionAntiRepeticion}${instruccionAccionUsuario}${instruccionNuncaRechazar}${instruccionContextoOtrosPersonajes}\n\n${contextoUnificado ? contextoUnificado + '\n\n' : ''}FORMATO JSON OBLIGATORIO - Respondé únicamente en formato JSON válido. RESPONDE SOLO CON JSON, SIN TEXTO ANTES NI DESPUES:\n{"respuesta":"tu diálogo con *acciones entre asteriscos*","imagen_tag":"una_imagen_disponible"}`;
             
             // Preparar mensajes para esta chica (SOLO el mensaje actual del usuario)
             const mensajesPayload = [
@@ -2319,7 +2310,7 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
         contextoEstadoActual += `⚠️ CRÍTICO: DEBES MANTENER ESTA POSICIÓN/ACCIÓN A MENOS QUE EL USUARIO INDIQUE EXPLÍCITAMENTE CAMBIARLA. NO LA OLVIDES.`;
     }
     
-    const systemPrompt = `${personalidadPrincipal}${instruccionesImagenes}${descripcionImagenSeleccionadaUnica}${instruccionAntiRepeticion}${instruccionMemoria}${instruccionAccionUsuario}${instruccionNuncaRechazar}${contextoEstadoActual}\n\nFORMATO DE RESPUESTA OBLIGATORIO - Respondé únicamente en formato JSON válido. JSON (SOLO JSON, SIN TEXTO ANTES NI DESPUES):\n{"respuesta":"tu diálogo con *acciones entre asteriscos*","imagen_tag":"nombre_de_una_imagen_disponible"}`;
+    const systemPrompt = `${personalidadPrincipal}${instruccionesImagenes}${instruccionAntiRepeticion}${instruccionMemoria}${instruccionAccionUsuario}${instruccionNuncaRechazar}${contextoEstadoActual}\n\nFORMATO DE RESPUESTA OBLIGATORIO - Respondé únicamente en formato JSON válido. JSON (SOLO JSON, SIN TEXTO ANTES NI DESPUES):\n{"respuesta":"tu diálogo con *acciones entre asteriscos*","imagen_tag":"nombre_de_una_imagen_disponible"}`;
     
     // Preparar mensajes
     const mensajesPayload = [
@@ -3106,82 +3097,6 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
     }
     
     return { urlImagen, urlAudio, urlDescripcion };
-}
-
-/**
- * Obtiene los datos completos de una imagen incluyendo descripción
- * @param {string} nombrePersonaje - Nombre de la chica
- * @param {string} tag - Tag de la imagen
- * @returns {object|null} - Objeto con {url, audio, descripcion} o null
- */
-function obtenerDatosImagenCompleta(nombrePersonaje, tag) {
-    // Verificar si es un personaje masculino
-    if (existePersonajeMasculino(nombrePersonaje)) {
-        const personajeData = IMAGENES_MASCULINOS[nombrePersonaje];
-        if (!personajeData) {
-            return null;
-        }
-        
-        // Buscar la imagen por tag
-        if (tag && personajeData.imagenes) {
-            for (const [key, imgObj] of Object.entries(personajeData.imagenes)) {
-                if (key.toLowerCase().includes(tag.toLowerCase())) {
-                    return {
-                        url: typeof imgObj === 'object' ? imgObj.url : imgObj,
-                        audio: typeof imgObj === 'object' ? imgObj.audio : '',
-                        descripcion: typeof imgObj === 'object' ? imgObj.descripcion : ''
-                    };
-                }
-            }
-        }
-        return null;
-    }
-    
-    // Verificar si el personaje tiene imágenes disponibles
-    if (!tieneImagenes(nombrePersonaje)) {
-        return null;
-    }
-    
-    if (!QuintiImagenesPrueba || !QuintiImagenesPrueba[nombrePersonaje]) {
-        return null;
-    }
-    
-    const chicaData = QuintiImagenesPrueba[nombrePersonaje];
-    
-    // Buscar la imagen por tag exacto o variante
-    if (tag && chicaData.imagenes) {
-        const tagsDisponibles = Object.keys(chicaData.imagenes);
-        const tagBase = tag.replace(/_\d+$/, '').replace(/\d+$/, '');
-        
-        // Buscar todas las variantes de este tag
-        const variantes = tagsDisponibles.filter(t => {
-            const tNormalizado = t.replace(/_\d+$/, '').replace(/\d+$/, '');
-            return tNormalizado === tagBase;
-        });
-        
-        if (variantes.length > 0) {
-            const tagElegido = variantes[0];
-            const imgObj = chicaData.imagenes[tagElegido];
-            return {
-                url: imgObj?.url || imgObj,
-                audio: imgObj?.audio || '',
-                descripcion: imgObj?.descripcion || ''
-            };
-        }
-        
-        // Búsqueda pertinente como fallback
-        const tagPertinente = encontrarTagMasPertinente(tag, tagsDisponibles, '');
-        if (tagPertinente) {
-            const imgObj = chicaData.imagenes[tagPertinente];
-            return {
-                url: imgObj?.url || imgObj,
-                audio: imgObj?.audio || '',
-                descripcion: imgObj?.descripcion || ''
-            };
-        }
-    }
-    
-    return null;
 }
 
 // ============================================================
