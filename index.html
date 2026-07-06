@@ -2669,12 +2669,7 @@ Responde EXCLUSIVAMENTE en formato JSON:
                 }
                 
             } catch (error) {
-                // No mostrar error si es por falta de token, es esperado usar el fallback
-                if (error.message !== 'No HF token configured') {
-                    console.error('Error al generar memoria contextual:', error);
-                } else {
-                    console.log('ℹ️ Usando modo básico para memoria contextual (sin IA)');
-                }
+                console.error('Error al generar memoria contextual con Groq:', error);
                 // Fallback: guardar información básica sin IA
                 const recentMessages = MemorySystem.getRecentMessages(5);
                 const existingMemory = MemorySystem.getContextualMemory(characterName);
