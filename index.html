@@ -1262,17 +1262,18 @@
             </div>
         </div>
         
-        <div class="chat-messages" id="chatMessages">
-            <!-- Panel de historial de memorias dentro del chat -->
-            <div class="memory-history-panel" id="memoryHistoryPanel" style="display: none;">
-                <div class="memory-history-header">
-                    <h3>📜 Memoria del Chat Actual</h3>
-                    <button class="memory-history-toggle" onclick="toggleMemoryHistory()">⬆️ Contraer</button>
-                </div>
-                <div class="memory-history-content" id="memoryHistoryContent">
-                    <!-- Las memorias se renderizan aquí dinámicamente -->
-                </div>
+        <!-- Panel de historial de memorias FUERA del área de mensajes -->
+        <div class="memory-history-panel" id="memoryHistoryPanel" style="display: none; margin-bottom: 20px;">
+            <div class="memory-history-header">
+                <h3>📜 Memoria del Chat Actual</h3>
+                <button class="memory-history-toggle" onclick="toggleMemoryHistory()">⬆️ Contraer</button>
             </div>
+            <div class="memory-history-content" id="memoryHistoryContent">
+                <!-- Las memorias se renderizan aquí dinámicamente -->
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
             <div class="message bot-message">
                 ¡Hola! Soy <span id="chicaNombreSaludo"></span> 🌸 ¿En qué puedo ayudarte hoy?
             </div>
