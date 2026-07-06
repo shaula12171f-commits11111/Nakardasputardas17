@@ -1263,23 +1263,22 @@
         </div>
         
         <div class="chat-messages" id="chatMessages">
+            <!-- Panel de historial de memorias dentro del chat -->
+            <div class="memory-history-panel" id="memoryHistoryPanel" style="display: none;">
+                <div class="memory-history-header">
+                    <h3>📜 Memoria del Chat Actual</h3>
+                    <button class="memory-history-toggle" onclick="toggleMemoryHistory()">⬆️ Contraer</button>
+                </div>
+                <div class="memory-history-content" id="memoryHistoryContent">
+                    <!-- Las memorias se renderizan aquí dinámicamente -->
+                </div>
+            </div>
             <div class="message bot-message">
                 ¡Hola! Soy <span id="chicaNombreSaludo"></span> 🌸 ¿En qué puedo ayudarte hoy?
             </div>
             <!-- Mensaje de ejemplo con narración para demostrar el estilo -->
             <div class="message bot-message" style="margin-top: 10px; border-left: 3px solid #FBBF24;">
                 <strong>Ejemplo:</strong> <em class="narracion">*sonríe cálidamente*</em> Este texto dorado es la narración entre asteriscos. ¡Así se verá en el chat! ✨
-            </div>
-            
-            <!-- Panel de historial de memorias dentro del chat -->
-            <div class="memory-history-panel" id="memoryHistoryPanel" style="display: none;">
-                <div class="memory-history-header">
-                    <h3>📜 Historial de Memorias</h3>
-                    <button class="memory-history-toggle" onclick="toggleMemoryHistory()">⬆️ Contraer</button>
-                </div>
-                <div class="memory-history-content" id="memoryHistoryContent">
-                    <!-- Las memorias se renderizan aquí dinámicamente -->
-                </div>
             </div>
         </div>
         
@@ -2518,19 +2517,12 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             input.focus();
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
             
-            // Generar memoria contextual después de enviar mensaje (cada 5 mensajes)
+            // Generar memoria contextual después de enviar mensaje (CADA MENSAJE)
             const currentCharacter = window.currentChica;
             if (currentCharacter && chicaSeleccionadaActual) {
-                const recentMessages = MemorySystem.getRecentMessages(50);
-                const existingMemory = MemorySystem.getContextualMemory(currentCharacter.nombre);
-                const mensajesPrevios = existingMemory?.mensajesAnalizados || 0;
-                
-                // Generar memoria cada 5 mensajes nuevos
-                if ((recentMessages.length - mensajesPrevios) >= 5) {
-                    setTimeout(() => {
-                        generarMemoriaContextual(currentCharacter.nombre);
-                    }, 1000);
-                }
+                setTimeout(() => {
+                    generarMemoriaContextual(currentCharacter.nombre);
+                }, 1000);
             }
         }
         
@@ -2553,41 +2545,38 @@ function seleccionarTagImagen(respuesta, chicaNombre, mensajeUsuario = '') {
             await sendMessage();
         }
         
-        // Generar memoria contextual automáticamente después de cada mensaje
+        // Generar memoria contextual automáticamente después de cada mensaje (RESUMIDO)
         async function generarMemoriaContextual(characterName) {
             if (!characterName) return;
             
             try {
-                // Obtener últimos mensajes del chat
-                const recentMessages = MemorySystem.getRecentMessages(30);
+                // Obtener últimos mensajes del chat (solo 10 para ser más ligero)
+                const recentMessages = MemorySystem.getRecentMessages(10);
                 
-                if (recentMessages.length < 4) {
-                    console.log(`⏳ Esperando más mensajes para generar memoria (${recentMessages.length}/4)`);
+                if (recentMessages.length < 2) {
+                    console.log(`⏳ Esperando más mensajes para generar memoria (${recentMessages.length}/2)`);
                     return;
                 }
                 
                 // Obtener memoria contextual existente si la hay
                 const existingMemory = MemorySystem.getContextualMemory(characterName);
                 
-                // Construir prompt para generar resumen
+                // Construir prompt para generar resumen MÁS CONCISO
                 const messagesText = recentMessages.map(m => 
                     `${m.role === 'user' ? 'Usuario' : characterName}: ${m.content}`
                 ).join('\n');
                 
-                const systemPrompt = `Eres un asistente que genera resúmenes concisos de conversaciones.
-Analiza esta conversación y extrae:
-1. Puntos clave importantes (máximo 5)
-2. Un resumen breve (2-3 frases)
-3. Datos importantes del usuario mencionados
+                const systemPrompt = `Resume ESTA conversación en máximo 3 puntos clave y 1 frase de resumen.
+Sé MUY BREVE y conciso.
 
 Conversación:
 ${messagesText}
 
 Responde EXCLUSIVAMENTE en formato JSON:
 {
-    "puntosClave": ["punto1", "punto2"],
-    "resumenChat": "resumen breve",
-    "datosUsuario": {"clave": "valor"}
+    "puntosClave": ["punto1", "punto2", "punto3"],
+    "resumenChat": "una frase muy breve",
+    "datosUsuario": {}
 }`;
 
                 // Llamar a la API para generar el resumen
@@ -2600,8 +2589,8 @@ Responde EXCLUSIVAMENTE en formato JSON:
                     body: JSON.stringify({
                         inputs: `<s>[INST] ${systemPrompt} [/INST]`,
                         parameters: {
-                            max_new_tokens: 500,
-                            temperature: 0.3,
+                            max_new_tokens: 300,
+                            temperature: 0.2,
                             return_full_text: false
                         }
                     })
@@ -2624,16 +2613,16 @@ Responde EXCLUSIVAMENTE en formato JSON:
                     } else {
                         // Fallback: crear estructura básica
                         memoryData = {
-                            puntosClave: [`Conversación con ${characterName}`],
-                            resumenChat: generatedText.substring(0, 200),
+                            puntosClave: [`Chat con ${characterName}`],
+                            resumenChat: generatedText.substring(0, 100),
                             datosUsuario: {}
                         };
                     }
                 } catch (parseError) {
                     console.warn('Error al parsear JSON de memoria:', parseError);
                     memoryData = {
-                        puntosClave: [`Conversación con ${characterName}`],
-                        resumenChat: generatedText.substring(0, 200),
+                        puntosClave: [`Chat con ${characterName}`],
+                        resumenChat: generatedText.substring(0, 100),
                         datosUsuario: {}
                     };
                 }
@@ -2655,11 +2644,11 @@ Responde EXCLUSIVAMENTE en formato JSON:
             } catch (error) {
                 console.error('Error al generar memoria contextual:', error);
                 // Fallback: guardar información básica sin IA
-                const recentMessages = MemorySystem.getRecentMessages(10);
+                const recentMessages = MemorySystem.getRecentMessages(5);
                 if (recentMessages.length > 0) {
                     MemorySystem.saveContextualMemory(characterName, {
-                        puntosClave: [`Última interacción: ${new Date().toLocaleString()}`],
-                        resumenChat: `Chat reciente con ${characterName} (${recentMessages.length} mensajes)`,
+                        puntosClave: [`Última interacción: ${new Date().toLocaleTimeString()}`],
+                        resumenChat: `Chat con ${characterName}`,
                         datosUsuario: {},
                         mensajesAnalizados: (existingMemory?.mensajesAnalizados || 0) + recentMessages.length
                     });
@@ -2902,6 +2891,11 @@ Responde EXCLUSIVAMENTE en formato JSON:
             const headerToggleBtn = document.querySelector('.chat-header .memory-history-toggle');
             const panelToggleBtn = document.querySelector('.memory-history-panel .memory-history-toggle');
             
+            if (!panel) {
+                console.error('No se encontró el panel de historial de memorias');
+                return;
+            }
+            
             if (panel.style.display === 'none' || panel.style.display === '') {
                 panel.style.display = 'block';
                 if (headerToggleBtn) headerToggleBtn.textContent = '⬆️ Contraer';
@@ -2910,12 +2904,12 @@ Responde EXCLUSIVAMENTE en formato JSON:
                     MemorySystem.renderMemoryHistoryInChat();
                 }
             } else {
-                if (content.classList.contains('collapsed')) {
+                if (content && content.classList.contains('collapsed')) {
                     content.classList.remove('collapsed');
                     if (headerToggleBtn) headerToggleBtn.textContent = '⬆️ Contraer';
                     if (panelToggleBtn) panelToggleBtn.textContent = '⬆️ Contraer';
                 } else {
-                    content.classList.add('collapsed');
+                    if (content) content.classList.add('collapsed');
                     if (headerToggleBtn) headerToggleBtn.textContent = '📜 Ver Historial';
                     if (panelToggleBtn) panelToggleBtn.textContent = '⬇️ Expandir';
                 }
