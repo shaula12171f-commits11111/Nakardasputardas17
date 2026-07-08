@@ -1920,7 +1920,25 @@ async function obtenerRespuestaGroq(mensaje, historialPrevio = []) {
             
             // Construir instrucciones de imágenes SOLO para este personaje
             const tagsDisponibles = obtenerTagsImagen(nombrePersonaje);
-            const instruccionesImagen = `\n\nTU IMAGEN_TAG: Debes incluir "imagen_tag" con UNA de estas opciones: [${tagsDisponibles.join(', ')}]. Elige según lo que esté haciendo el personaje.`;
+            
+            // Obtener descripciones de imágenes para incluir en el prompt
+            const imagenesData = QuintiImagenesPrueba[nombrePersonaje]?.imagenes || {};
+            const descripcionesDisponibles = {};
+            for (const [tag, imgObj] of Object.entries(imagenesData)) {
+                if (imgObj && typeof imgObj === 'object' && imgObj.descripcion && imgObj.descripcion.trim() !== '') {
+                    descripcionesDisponibles[tag] = imgObj.descripcion;
+                }
+            }
+            
+            let instruccionesImagen = `\n\nTU IMAGEN_TAG: Debes incluir "imagen_tag" con UNA de estas opciones: [${tagsDisponibles.join(', ')}]. Elige según lo que esté haciendo el personaje.`;
+            
+            // Agregar instrucción especial si hay descripciones de imágenes
+            if (Object.keys(descripcionesDisponibles).length > 0) {
+                const descripcionesTexto = Object.entries(descripcionesDisponibles)
+                    .map(([tag, desc]) => `  - ${tag}: "${desc}"`)
+                    .join('\n');
+                instruccionesImagen += `\n\n📸 DESCRIPCIONES DE IMÁGENES - USAR PARA INMERSIÓN:\nCuando uses una imagen con descripción, DEBES incorporar esos detalles visuales en tu respuesta de forma natural. Esto hace la conversación más inmersiva.\n${descripcionesTexto}\n\nEJEMPLO: Si usas la imagen "selfie_lenceria" con descripción "Selfie lenceria negra celular azul tomando foto al espejo...", tu respuesta debe mencionar naturalmente: "*me saco una selfie con mi celular azul mientras me miro al espejo, mi lenceria negra se ve increíble*"`;
+            }
             
             // Instrucción anti-repetición reforzada para múltiples personajes
             const instruccionAntiRepeticion = `\n\n⚠️ ANTI-REPETICIÓN OBLIGATORIA: Tu respuesta debe ser COMPLETAMENTE DIFERENTE a las de los otros personajes. Prohibido usar las mismas frases, gestos, acciones o vocabulario.`;
@@ -2264,9 +2282,31 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
     // Construir instrucciones de imágenes (Aldo y personajes masculinos tienen sus propias imágenes)
     const tieneImagenesPropias = chicaSeleccionada && (tieneImagenesMasculino(chicaSeleccionada) || existeChica(chicaSeleccionada));
     const tagsImagen = tieneImagenesPropias ? obtenerTagsImagen(chicaSeleccionada) : ['normal'];
-    const instruccionesImagenes = !tieneImagenesPropias 
-        ? `\n\nNOTA: Eres ${chicaSeleccionada || 'un personaje'}, no tienes imágenes asociadas, solo respondes con texto.`
-        : `\n\nIMÁGENES DISPONIBLES: ${tagsImagen.join(', ')}. Debes incluir "imagen_tag" con UNA de estas opciones según lo que esté haciendo el personaje.`;
+    
+    // Obtener descripciones de imágenes para incluir en el prompt
+    let instruccionesImagenes;
+    if (!tieneImagenesPropias) {
+        instruccionesImagenes = `\n\nNOTA: Eres ${chicaSeleccionada || 'un personaje'}, no tienes imágenes asociadas, solo respondes con texto.`;
+    } else {
+        instruccionesImagenes = `\n\nIMÁGENES DISPONIBLES: ${tagsImagen.join(', ')}. Debes incluir "imagen_tag" con UNA de estas opciones según lo que esté haciendo el personaje.`;
+        
+        // Obtener las descripciones de imágenes disponibles para este personaje
+        const imagenesData = QuintiImagenesPrueba[chicaSeleccionada]?.imagenes || {};
+        const descripcionesDisponibles = {};
+        for (const [tag, imgObj] of Object.entries(imagenesData)) {
+            if (imgObj && typeof imgObj === 'object' && imgObj.descripcion && imgObj.descripcion.trim() !== '') {
+                descripcionesDisponibles[tag] = imgObj.descripcion;
+            }
+        }
+        
+        // Agregar instrucción especial si hay descripciones de imágenes
+        if (Object.keys(descripcionesDisponibles).length > 0) {
+            const descripcionesTexto = Object.entries(descripcionesDisponibles)
+                .map(([tag, desc]) => `  - ${tag}: "${desc}"`)
+                .join('\n');
+            instruccionesImagenes += `\n\n📸 DESCRIPCIONES DE IMÁGENES - USAR PARA INMERSIÓN:\nCuando uses una imagen con descripción, DEBES incorporar esos detalles visuales en tu respuesta de forma natural. Esto hace la conversación más inmersiva.\n${descripcionesTexto}\n\nEJEMPLO: Si usas la imagen "selfie_lenceria" con descripción "Selfie lenceria negra celular azul tomando foto al espejo...", tu respuesta debe mencionar naturalmente: "*me saco una selfie con mi celular azul mientras me miro al espejo, mi lenceria negra se ve increíble*"`;
+        }
+    }
     
     // Instrucción anti-repetición mejorada
     const instruccionAntiRepeticion = `\n\nREGLA CRÍTICA ANTI-REPETICIÓN: NUNCA repitas frases, diálogos, acciones o expresiones que ya hayas usado antes en esta conversación. Revisa mentalmente el historial y asegúrate de que CADA respuesta sea única y fresca. Usa vocabulario variado, expresiones diferentes, reacciones distintas. Si ya dijiste algo similar antes, busca una forma completamente nueva de expresarlo. Esto es OBLIGATORIO.`;
