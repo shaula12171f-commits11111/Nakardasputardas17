@@ -232,7 +232,7 @@ lamiendo_pene:  { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDD
      chupando_bola_izquierda: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD4/main/imagenes/img_1773183757489.jpg", audio: "", descripcion: "" },
      chupando_bola_derecha: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD4/main/imagenes/img_1773183749102.jpg", audio: "", descripcion: "" },
     doggystyle: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD15/main/imagenes/img_1773513627632.png", audio: "https://files.catbox.moe/lxl3cd.mp3", descripcion: "" },
-    misionero: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD1/main/imagenes/img_1773150200437.png", audio: "", descripcion: "" },
+    misionero: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD1/main/imagenes/img_1773150200437.png", audio: "", descripcion: "leg lock piernas alrededor de la cintura del hombre" },
     hablando: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773415154644.jpg", audio: "", descripcion: "" },
     desnuda: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD19/main/imagenes/img_1773671002365.jpg", audio: "", descripcion: "" },
      standfuck_follando_de_pie: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773691939006.jpg", audio: "", descripcion: "" },
