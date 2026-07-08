@@ -85,7 +85,7 @@ reverse_cowgirl: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDD
              mattin_press_anal_rapido:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD59/main/imagenes/img_1780230460073.jpg", audio: "", descripcion: "" },
                    desnuda_en_cama:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986583664.png", audio: "", descripcion: "" },
                  
-            ichika_bebiendo_el_senmen_del_condon:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778615779747.png", audio: "", descripcion: "" },
+            ichika_bebiendo_el_senmen_del_condon:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778615779747.png", audio: "", descripcion: "Condon color rosado" },
             
             
             
