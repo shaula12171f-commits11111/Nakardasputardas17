@@ -96,6 +96,15 @@ let memoriaHechos = {
 };
 const MAX_HECHOS_POR_CATEGORIA = 20;
 
+// RELACIÓN ACTUAL CON EL USUARIO - Se actualiza dinámicamente según la historia
+let relacionActualConUsuario = {
+    estado: 'nada',              // 'nada', 'amiga', 'novia', 'esposa', 'amante', 'ex', 'enemiga', 'desconocida'
+    chica: null,                 // Nombre de la chica con la que tiene relación
+    desdeTurno: 0,               // Turno en que comenzó esta relación
+    descripcion: '',             // Descripción detallada de la relación
+    historialCambios: []         // Historial de cambios de relación
+};
+
 // Memoria Narrativa - Resumen del hilo de conversación
 let memoriaNarrativa = {
     resumenGeneral: '',          // Resumen de toda la conversación
@@ -126,6 +135,22 @@ let memoriaEventosIntimos = {
     lugaresIntimos: [],          // Lugares donde ocurrieron eventos
     fantasiasMencionadas: [],    // Fantasías o deseos expresados
     eventosImportantes: []       // Array de eventos importantes con timestamp y descripción
+};
+
+// SISTEMA DE RELACIÓN CON EL USUARIO - Estado de relación por personaje
+// Valores posibles: 'nada', 'amiga', 'mejor_amiga', 'citando', 'novia', 'prometida', 'esposa', 'amante', 'ex'
+let relacionesUsuario = {}; // Objeto: { 'Ichika': 'novia', 'Nino': 'esposa', 'Miku': 'amiga', ... }
+
+// HISTORIAL NARRATIVO UNIFICADO - Mantiene el hilo de la historia siempre
+let historialNarrativo = {
+    eventosPrincipales: [],      // Eventos clave de la historia
+    ubicacionActual: null,       // Dónde están ahora
+    horaActual: null,            // Hora actual en la historia
+    estadoRelacional: {},        // Estado de relaciones entre personajes
+    arcoNarrativo: '',           // Arco narrativo actual (ej: "romance", "aventura", "drama")
+    tensionPendiente: [],        // Tensiones o conflictos sin resolver
+    promesasHechas: [],          // Promesas o compromisos pendientes
+    secretosCompartidos: []      // Secretos que solo ciertos personajes saben
 };
 
 // Configuración general de memoria
@@ -268,6 +293,194 @@ function actualizarEstadoAccionesExplicitas(accion, estado) {
 function resetearEstadoAccionesExplicitas() {
     for (const key of Object.keys(estadoAccionesExplicitas)) {
         estadoAccionesExplicitas[key] = false;
+    }
+}
+
+/**
+ * Actualiza la relación del usuario con un personaje específico
+ * @param {string} personaje - Nombre del personaje (ej: 'Ichika', 'Nino')
+ * @param {string} relacion - Tipo de relación ('nada', 'amiga', 'mejor_amiga', 'citando', 'novia', 'prometida', 'esposa', 'amante', 'ex')
+ */
+function actualizarRelacionUsuario(personaje, relacion) {
+    if (!personaje || !relacion) return;
+    
+    const relacionAnterior = relacionesUsuario[personaje];
+    relacionesUsuario[personaje] = relacion;
+    
+    logQuinti('INFO', `💕 RELACIÓN ACTUALIZADA: ${personaje} ahora es ${relacion} del usuario (antes: ${relacionAnterior || 'nada'})`);
+    
+    // Registrar evento importante si hay cambio significativo
+    if (relacionAnterior !== relacion) {
+        registrarEventoImportante(`Cambio de relación con ${personaje}: de ${relacionAnterior || 'nada'} a ${relacion}`);
+        
+        // Actualizar historial narrativo
+        historialNarrativo.estadoRelacional[personaje] = {
+            relacion: relacion,
+            desde: new Date().toISOString(),
+            anterior: relacionAnterior
+        };
+    }
+}
+
+/**
+ * Obtiene la relación actual del usuario con un personaje
+ * @param {string} personaje - Nombre del personaje
+ * @returns {string} Tipo de relación
+ */
+function obtenerRelacionUsuario(personaje) {
+    return relacionesUsuario[personaje] || 'nada';
+}
+
+/**
+ * Actualiza el historial narrativo con eventos importantes de la historia
+ * @param {Object} evento - Objeto con datos del evento
+ */
+function actualizarHistorialNarrativo(evento) {
+    if (!evento) return;
+    
+    // Agregar evento principal
+    if (evento.tipo === 'evento_principal') {
+        historialNarrativo.eventosPrincipales.push({
+            descripcion: evento.descripcion,
+            timestamp: new Date().toISOString(),
+            personajes: evento.personajes || [],
+            ubicacion: evento.ubicacion || null
+        });
+        
+        // Mantener solo últimos 50 eventos principales
+        if (historialNarrativo.eventosPrincipales.length > 50) {
+            historialNarrativo.eventosPrincipales.shift();
+        }
+    }
+    
+    // Actualizar ubicación
+    if (evento.ubicacion) {
+        historialNarrativo.ubicacionActual = evento.ubicacion;
+    }
+    
+    // Actualizar hora
+    if (evento.hora) {
+        historialNarrativo.horaActual = evento.hora;
+    }
+    
+    // Agregar/promesas
+    if (evento.promesa) {
+        historialNarrativo.promesasHechas.push({
+            descripcion: evento.promesa,
+            timestamp: new Date().toISOString(),
+            cumplida: false
+        });
+    }
+    
+    // Agregar tensión pendiente
+    if (evento.tension) {
+        historialNarrativo.tensionPendiente.push({
+            descripcion: evento.tension,
+            timestamp: new Date().toISOString(),
+            resuelta: false
+        });
+    }
+    
+    // Agregar secreto compartido
+    if (evento.secreto) {
+        historialNarrativo.secretosCompartidos.push({
+            descripcion: evento.secreto,
+            personajes: evento.personajes || [],
+            timestamp: new Date().toISOString()
+        });
+    }
+    
+    logQuinti('INFO', `📖 HISTORIAL NARRATIVO ACTUALIZADO: ${JSON.stringify(evento)}`);
+}
+
+/**
+ * Obtiene el contexto narrativo completo para incluir en el prompt
+ * @returns {string} Contexto narrativo formateado
+ */
+function obtenerContextoNarrativo() {
+    let contexto = '';
+    
+    // Relación con cada personaje
+    const personajesConRelacion = Object.entries(relacionesUsuario);
+    if (personajesConRelacion.length > 0) {
+        contexto += '💞 RELACIONES ACTUALES CON EL USUARIO:\\n';
+        for (const [personaje, relacion] of personajesConRelacion) {
+            if (relacion !== 'nada') {
+                contexto += `- ${personaje}: ${relacion} del usuario\\n`;
+            }
+        }
+        contexto += '\\n';
+    }
+    
+    // Ubicación y hora actual
+    if (historialNarrativo.ubicacionActual) {
+        contexto += `📍 UBICACIÓN ACTUAL: ${historialNarrativo.ubicacionActual}\\n`;
+    }
+    if (historialNarrativo.horaActual) {
+        contexto += `🕐 HORA ACTUAL: ${historialNarrativo.horaActual}\\n`;
+    }
+    
+    // Eventos principales recientes
+    if (historialNarrativo.eventosPrincipales.length > 0) {
+        const ultimosEventos = historialNarrativo.eventosPrincipales.slice(-10);
+        contexto += '📜 EVENTOS RECIENTES DE LA HISTORIA:\\n';
+        for (const evento of ultimosEventos) {
+            contexto += `- ${evento.descripcion}\\n`;
+        }
+        contexto += '\\n';
+    }
+    
+    // Promesas pendientes
+    const promesasPendientes = historialNarrativo.promesasHechas.filter(p => !p.cumplida);
+    if (promesasPendientes.length > 0) {
+        contexto += '💭 PROMESAS PENDIENTES:\\n';
+        for (const promesa of promesasPendientes) {
+            contexto += `- ${promesa.descripcion}\\n`;
+        }
+        contexto += '\\n';
+    }
+    
+    // Tensiones sin resolver
+    const tensionesActivas = historialNarrativo.tensionPendiente.filter(t => !t.resuelta);
+    if (tensionesActivas.length > 0) {
+        contexto += '⚡ TENSIONES SIN RESOLVER:\\n';
+        for (const tension of tensionesActivas) {
+            contexto += `- ${tension.descripcion}\\n`;
+        }
+        contexto += '\\n';
+    }
+    
+    return contexto;
+}
+
+/**
+ * Detecta cambios de relación en el mensaje del usuario y actualiza automáticamente
+ * @param {string} mensaje - Mensaje del usuario
+ * @param {string} personajeActual - Personaje que está respondiendo
+ */
+function detectarYActualizarRelacion(mensaje, personajeActual) {
+    if (!mensaje || !personajeActual) return;
+    
+    const mensajeLower = mensaje.toLowerCase();
+    
+    // Patrones para detectar relaciones
+    const patronesRelacion = [
+        { patron: /eres mi novia|mi novia|novia/, relacion: 'novia' },
+        { patron: /eres mi esposa|mi esposa|esposa|casada conmigo/, relacion: 'esposa' },
+        { patron: /eres mi amante|amante/, relacion: 'amante' },
+        { patron: /eres mi amiga|mi amiga|amiga/, relacion: 'amiga' },
+        { patron: /eres mi mejor amiga|mejor amiga/, relacion: 'mejor_amiga' },
+        { patron: /estamos citando|citando/, relacion: 'citando' },
+        { patron: /eres mi prometida|prometida/, relacion: 'prometida' },
+        { patron: /eres mi ex|ex novia|ex/, relacion: 'ex' },
+        { patron: /ya no somos nada|rompimos|terminamos|relacion terminada/, relacion: 'nada' }
+    ];
+    
+    for (const { patron, relacion } of patronesRelacion) {
+        if (patron.test(mensajeLower)) {
+            actualizarRelacionUsuario(personajeActual, relacion);
+            break;
+        }
     }
 }
 
@@ -416,9 +629,16 @@ function generarResumenNarrativo() {
 function obtenerEstadoMemoriaParaPrompt() {
     let estadoMemoria = '\\n\\n=== 🧠 SISTEMA DE MEMORIA ACTIVO ===\\n';
     
-    // 1. Memoria Narrativa (Resumen general)
+    // 0. RELACIÓN ACTUAL CON EL USUARIO (PRIORIDAD MÁXIMA)
+    if (relacionActualConUsuario.estado !== 'nada' && relacionActualConUsuario.chica) {
+        estadoMemoria += `💕 RELACIÓN ACTUAL: ${relacionActualConUsuario.chica} es ${relacionActualConUsuario.estado} del usuario. ${relacionActualConUsuario.descripcion}\\n`;
+        estadoMemoria += `   ⚠️ CRÍTICO: Esta relación NUNCA debe olvidarse. Mencionala naturalmente en tus respuestas.\\n`;
+    }
+    
+    // 1. Memoria Narrativa (Resumen general) - HILO PRINCIPAL DE LA HISTORIA
     if (memoriaNarrativa.resumenGeneral) {
-        estadoMemoria += `📖 RESUMEN CONVERSACIÓN: ${memoriaNarrativa.resumenGeneral}\\n`;
+        estadoMemoria += `📖 RESUMEN CONVERSACIÓN (HILO PRINCIPAL): ${memoriaNarrativa.resumenGeneral}\\n`;
+        estadoMemoria += `   ⚠️ CRÍTICO: Este es el hilo de la historia. NUNCA lo pierdas. Seguilo siempre.\\n`;
     }
     
     // 2. Memoria de Hechos (Datos importantes)
@@ -437,6 +657,9 @@ function obtenerEstadoMemoriaParaPrompt() {
     }
     if (memoriaHechos.accionesRecientes.length > 0) {
         hechosRelevantes.push(`Acciones recientes: ${memoriaHechos.accionesRecientes.slice(-5).join(', ')}`);
+    }
+    if (memoriaHechos.relaciones.length > 0) {
+        hechosRelevantes.push(`Relaciones: ${memoriaHechos.relaciones.slice(-5).join(', ')}`);
     }
     
     if (hechosRelevantes.length > 0) {
@@ -476,7 +699,200 @@ function obtenerEstadoMemoriaParaPrompt() {
 function procesarMensajeParaMemoria(mensaje) {
     const mensajeLower = mensaje.toLowerCase();
     
-    // Detectar nombres propios (palabras capitalizadas después de ciertos patrones)
+    // ========================================
+    // DETECCIÓN Y ACTUALIZACIÓN DE RELACIÓN CON EL USUARIO
+    // ========================================
+    // Patrones para detectar cambios en la relación
+    const patronesRelacionNovia = [
+        /eres mi novia/i,
+        /sos mi novia/i,
+        /mi novia/i,
+        /novia/i
+    ];
+    const patronesRelacionEsposa = [
+        /eres mi esposa/i,
+        /sos mi esposa/i,
+        /mi esposa/i,
+        /casada conmigo/i,
+        /esposo/i
+    ];
+    const patronesRelacionAmiga = [
+        /eres mi amiga/i,
+        /sos mi amiga/i,
+        /mi amiga/i,
+        /amigos/i,
+        /mejor amiga/i
+    ];
+    const patronesRelacionEx = [
+        /eres mi ex/i,
+        /ex novia/i,
+        /ex esposa/i,
+        /terminamos/i,
+        /rompimos/i,
+        /dejaste/i
+    ];
+    const patronesRelacionAmante = [
+        /eres mi amante/i,
+        /mi amante/i,
+        /amantes/i,
+        /amorío/i
+    ];
+    const patronesRelacionNada = [
+        /no somos nada/i,
+        /solo amigos/i,
+        /relación/i,
+        /terminó/i
+    ];
+    
+    // Detectar si hay un cambio de relación y actualizar
+    for (const patron of patronesRelacionNovia) {
+        const match = mensaje.match(patron);
+        if (match) {
+            // Extraer nombre de chica si está mencionado
+            const chicasPosibles = ['ichika', 'nino', 'miku', 'yotsuba', 'itsuki', 'emilia'];
+            let chicaMencionada = null;
+            for (const chica of chicasPosibles) {
+                if (mensajeLower.includes(chica)) {
+                    chicaMencionada = chica.charAt(0).toUpperCase() + chica.slice(1);
+                    break;
+                }
+            }
+            
+            if (chicaMencionada && relacionActualConUsuario.chica !== chicaMencionada) {
+                // Registrar cambio en historial
+                if (relacionActualConUsuario.chica) {
+                    relacionActualConUsuario.historialCambios.push({
+                        desde: relacionActualConUsuario.estado,
+                        hacia: 'novia',
+                        chicaAnterior: relacionActualConUsuario.chica,
+                        turno: historialConversacion.length,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+                
+                relacionActualConUsuario.estado = 'novia';
+                relacionActualConUsuario.chica = chicaMencionada;
+                relacionActualConUsuario.desdeTurno = historialConversacion.length;
+                relacionActualConUsuario.descripcion = `Relación romántica establecida. ${chicaMencionada} es la novia del usuario.`;
+                
+                registrarEventoImportante(`Cambio de relación: ${chicaMencionada} ahora es novia del usuario`);
+                agregarHechoMemoria('relaciones', `${chicaMencionada} es novia del usuario`);
+                logQuinti('INFO', `💕 CAMBIO DE RELACIÓN: ${chicaMencionada} ahora es NOVIA del usuario`);
+            } else if (!relacionActualConUsuario.chica && chicaMencionada) {
+                relacionActualConUsuario.estado = 'novia';
+                relacionActualConUsuario.chica = chicaMencionada;
+                relacionActualConUsuario.desdeTurno = historialConversacion.length;
+                relacionActualConUsuario.descripcion = `Relación romántica establecida. ${chicaMencionada} es la novia del usuario.`;
+                
+                registrarEventoImportante(`Relación iniciada: ${chicaMencionada} es novia del usuario`);
+                agregarHechoMemoria('relaciones', `${chicaMencionada} es novia del usuario`);
+                logQuinti('INFO', `💕 RELACIÓN INICIADA: ${chicaMencionada} es NOVIA del usuario`);
+            }
+            break;
+        }
+    }
+    
+    for (const patron of patronesRelacionEsposa) {
+        const match = mensaje.match(patron);
+        if (match) {
+            const chicasPosibles = ['ichika', 'nino', 'miku', 'yotsuba', 'itsuki', 'emilia'];
+            let chicaMencionada = null;
+            for (const chica of chicasPosibles) {
+                if (mensajeLower.includes(chica)) {
+                    chicaMencionada = chica.charAt(0).toUpperCase() + chica.slice(1);
+                    break;
+                }
+            }
+            
+            if (chicaMencionada) {
+                if (relacionActualConUsuario.chica && relacionActualConUsuario.chica !== chicaMencionada) {
+                    relacionActualConUsuario.historialCambios.push({
+                        desde: relacionActualConUsuario.estado,
+                        hacia: 'esposa',
+                        chicaAnterior: relacionActualConUsuario.chica,
+                        turno: historialConversacion.length,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+                
+                relacionActualConUsuario.estado = 'esposa';
+                relacionActualConUsuario.chica = chicaMencionada;
+                relacionActualConUsuario.desdeTurno = historialConversacion.length;
+                relacionActualConUsuario.descripcion = `Relación matrimonial establecida. ${chicaMencionada} es la esposa del usuario.`;
+                
+                registrarEventoImportante(`Cambio de relación: ${chicaMencionada} ahora es ESPOSA del usuario`);
+                agregarHechoMemoria('relaciones', `${chicaMencionada} es esposa del usuario`);
+                logQuinti('INFO', `💍 CAMBIO DE RELACIÓN: ${chicaMencionada} ahora es ESPOSA del usuario`);
+            }
+            break;
+        }
+    }
+    
+    for (const patron of patronesRelacionEx) {
+        const match = mensaje.match(patron);
+        if (match) {
+            // Romper relación actual
+            if (relacionActualConUsuario.chica) {
+                const chicaAnterior = relacionActualConUsuario.chica;
+                relacionActualConUsuario.historialCambios.push({
+                    desde: relacionActualConUsuario.estado,
+                    hacia: 'ex',
+                    chicaAnterior: chicaAnterior,
+                    turno: historialConversacion.length,
+                    timestamp: new Date().toISOString(),
+                    razon: 'Ruptura/terminación de relación'
+                });
+                
+                relacionActualConUsuario.estado = 'ex';
+                relacionActualConUsuario.descripcion = `Relación terminada. ${chicaAnterior} fue ${relacionActualConUsuario.historialCambios[relacionActualConUsuario.historialCambios.length - 1].desde} del usuario pero terminaron.`;
+                
+                registrarEventoImportante(`Ruptura: Relación terminada con ${chicaAnterior}`);
+                agregarHechoMemoria('relaciones', `${chicaAnterior} es EX del usuario`);
+                logQuinti('INFO', `💔 RUPTURA: Relación terminada con ${chicaAnterior}`);
+            }
+            break;
+        }
+    }
+    
+    for (const patron of patronesRelacionAmiga) {
+        const match = mensaje.match(patron);
+        if (match) {
+            const chicasPosibles = ['ichika', 'nino', 'miku', 'yotsuba', 'itsuki', 'emilia'];
+            let chicaMencionada = null;
+            for (const chica of chicasPosibles) {
+                if (mensajeLower.includes(chica)) {
+                    chicaMencionada = chica.charAt(0).toUpperCase() + chica.slice(1);
+                    break;
+                }
+            }
+            
+            if (chicaMencionada) {
+                if (relacionActualConUsuario.chica && relacionActualConUsuario.chica !== chicaMencionada) {
+                    relacionActualConUsuario.historialCambios.push({
+                        desde: relacionActualConUsuario.estado,
+                        hacia: 'amiga',
+                        chicaAnterior: relacionActualConUsuario.chica,
+                        turno: historialConversacion.length,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+                
+                relacionActualConUsuario.estado = 'amiga';
+                relacionActualConUsuario.chica = chicaMencionada;
+                relacionActualConUsuario.desdeTurno = historialConversacion.length;
+                relacionActualConUsuario.descripcion = `Relación de amistad. ${chicaMencionada} es amiga del usuario.`;
+                
+                registrarEventoImportante(`Relación: ${chicaMencionada} es AMIGA del usuario`);
+                agregarHechoMemoria('relaciones', `${chicaMencionada} es amiga del usuario`);
+                logQuinti('INFO', `🤝 RELACIÓN: ${chicaMencionada} es AMIGA del usuario`);
+            }
+            break;
+        }
+    }
+    
+    // ========================================
+    // DETECCIÓN DE NOMBRES PROPIOS
+    // ========================================
     const patronesNombre = [/me llamo (\w+)/i, /mi nombre es (\w+)/i, /soy (\w+)/i];
     for (const patron of patronesNombre) {
         const match = mensaje.match(patron);
@@ -485,7 +901,9 @@ function procesarMensajeParaMemoria(mensaje) {
         }
     }
     
-    // Detectar preferencias (me gusta, prefiero, odio, etc.)
+    // ========================================
+    // DETECCIÓN DE PREFERENCIAS
+    // ========================================
     const patronesPreferencia = [/me gusta(n)? ([^.]+)/i, /prefiero ([^.]+)/i, /odio ([^.]+)/i, /no me gusta ([^.]+)/i];
     for (const patron of patronesPreferencia) {
         const match = mensaje.match(patron);
@@ -494,7 +912,9 @@ function procesarMensajeParaMemoria(mensaje) {
         }
     }
     
-    // Detectar lugares (estoy en, vamos a, en el/la)
+    // ========================================
+    // DETECCIÓN DE LUGARES
+    // ========================================
     const patronesLugar = [/estoy en ([^.]+)/i, /vamos a ([^.]+)/i, /en el ([^.]+)/i, /en la ([^.]+)/i];
     for (const patron of patronesLugar) {
         const match = mensaje.match(patron);
@@ -503,7 +923,9 @@ function procesarMensajeParaMemoria(mensaje) {
         }
     }
     
-    // Detectar acción en curso y guardarla
+    // ========================================
+    // DETECCIÓN DE ACCIONES EN CURSO
+    // ========================================
     const accionesPosibles = ['besando', 'mamando', 'chupando', 'follando', 'tocando', 'lamiendo', 'penetrando'];
     for (const accion of accionesPosibles) {
         if (mensajeLower.includes(accion)) {
@@ -3319,6 +3741,12 @@ export {
     getEstadoAccion,
     getMemoriaEventosIntimos,
     registrarEventoImportante,
+    // Funciones de relación con el usuario y contexto narrativo
+    actualizarRelacionUsuario,
+    obtenerRelacionUsuario,
+    actualizarHistorialNarrativo,
+    obtenerContextoNarrativo,
+    detectarYActualizarRelacion,
     // Funciones de memoria mejoradas
     agregarHechoMemoria,
     actualizarMemoriaTrabajo,
@@ -3361,6 +3789,12 @@ if (typeof window !== 'undefined') {
     window.getEstadoAccion = getEstadoAccion;
     window.getMemoriaEventosIntimos = getMemoriaEventosIntimos;
     window.registrarEventoImportante = registrarEventoImportante;
+    // Funciones de relación con el usuario y contexto narrativo
+    window.actualizarRelacionUsuario = actualizarRelacionUsuario;
+    window.obtenerRelacionUsuario = obtenerRelacionUsuario;
+    window.actualizarHistorialNarrativo = actualizarHistorialNarrativo;
+    window.obtenerContextoNarrativo = obtenerContextoNarrativo;
+    window.detectarYActualizarRelacion = detectarYActualizarRelacion;
     window.limpiarHistorialConversacion = limpiarHistorial; // Para usar desde chat.html
     // Funciones de memoria mejoradas
     window.agregarHechoMemoria = agregarHechoMemoria;
