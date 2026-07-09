@@ -179,6 +179,7 @@ manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow1217
 
         lamiendo_pene:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778619219396.png", audio: "", descripcion: "" },
              desnuda_en_cama:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986589452.png", audio: "", descripcion: "" },
+              usuario_nalguea_el_culo_a_nino:  { url: "https://files.catbox.moe/d2oele.png", audio: "https://files.catbox.moe/5xmzxb.mp3", descripcion: "" },
         }
     },
     Yotsuba: {
