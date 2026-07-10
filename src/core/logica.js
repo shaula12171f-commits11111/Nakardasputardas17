@@ -64,13 +64,15 @@ let chicasEnChat = new Set(); // Conjunto de chicas que están participando en e
 // ============================================================
 
 /**
- * SISTEMA DE MEMORIA MULTICAPA
+ * SISTEMA DE MEMORIA MULTICAPA MEJORADO
  * 
  * 1. Memoria de Trabajo (Working Memory): Contexto inmediato de las últimas interacciones
  * 2. Memoria de Hechos (Fact Memory): Datos concretos y relevantes mencionados
  * 3. Memoria Narrativa (Narrative Memory): Resumen del hilo principal de conversación
  * 4. Memoria de Eventos Íntimos (Intimate Events): Contadores y eventos sexuales
  * 5. Memoria Emocional (Emotional Memory): Estado emocional y tono de la conversación
+ * 6. Memoria de Preferencias (Preference Memory): Gustos sexuales, posiciones favoritas, límites
+ * 7. Memoria Espacio-Temporal (Spatial-Temporal Memory): Ubicación, hora, clima, contexto ambiental
  */
 
 // Memoria de Trabajo - Últimas interacciones y contexto inmediato
@@ -105,15 +107,19 @@ let relacionActualConUsuario = {
     historialCambios: []         // Historial de cambios de relación
 };
 
-// Memoria Narrativa - Resumen del hilo de conversación
+// Memoria Narrativa - Resumen del hilo de conversación MEJORADA
 let memoriaNarrativa = {
     resumenGeneral: '',          // Resumen de toda la conversación
     puntosClave: [],             // Puntos clave de la historia
     arcosNarrativos: [],         // Arcos o temas principales
     ultimoResumenTurno: 0,       // Turno en que se generó el último resumen
-    turnosDesdeUltimoResumen: 0  // Turnos desde el último resumen
+    turnosDesdeUltimoResumen: 0, // Turnos desde el último resumen
+    hiloPrincipal: '',           // El hilo conductor de la historia que NUNCA debe perderse
+    eventosCriticos: [],         // Eventos que definieron la trama
+    personajesActivos: [],       // Personajes actualmente involucrados en la escena
+    objetivoActual: ''           // Qué están tratando de lograr ahora
 };
-const TURNOS_PARA_RESUMEN = 6;   // Generar resumen cada 6 turnos (más frecuente)
+const TURNOS_PARA_RESUMEN = 4;   // Generar resumen cada 4 turnos (más frecuente para no perder el hilo)
 
 // Memoria Emocional - Estado emocional de la conversación
 let memoriaEmocional = {
@@ -124,7 +130,7 @@ let memoriaEmocional = {
     momentosDestacados: []       // Momentos emocionalmente significativos
 };
 
-// Memoria de Eventos Íntimos - Contadores y eventos sexuales
+// Memoria de Eventos Íntimos - Contadores y eventos sexuales MEJORADA
 let memoriaEventosIntimos = {
     totalBesos: 0,
     totalMamadas: 0,
@@ -134,7 +140,36 @@ let memoriaEventosIntimos = {
     posicionesUsadas: [],        // Posiciones utilizadas
     lugaresIntimos: [],          // Lugares donde ocurrieron eventos
     fantasiasMencionadas: [],    // Fantasías o deseos expresados
-    eventosImportantes: []       // Array de eventos importantes con timestamp y descripción
+    eventosImportantes: [],       // Array de eventos importantes con timestamp y descripción
+    preferenciasSexuales: [],     // Preferencias sexuales detectadas (gustos del usuario)
+    limitesEstablecidos: [],      // Límites o cosas que no le gustan al usuario
+    nivelExcitacion: 0,           // Nivel acumulado de excitación (0-10)
+    ultimaPosicion: null,         // Última posición sexual utilizada
+    duracionUltimoEncuentro: 0    // Turnos que duró el último encuentro íntimo
+};
+
+// MEMORIA DE PREFERENCIAS - Gustos específicos del usuario
+let memoriaPreferencias = {
+    posicionesFavoritas: [],      // Posiciones que el usuario más disfruta
+    accionesFavoritas: [],        // Acciones que el usuario prefiere
+    frecuenciaDeseada: '',        // Ritmo preferido (lento, medio, rápido, intenso)
+    zonasErogenas: [],            // Zonas que el usuario más disfruta
+    fetichesMencionados: [],      // Fetiches o kinks mencionados
+    respuestasPlacenteras: []     // Qué respuestas/actions generan más placer en el usuario
+};
+
+// MEMORIA ESPACIO-TEMPORAL - Contexto ambiental detallado
+let memoriaEspacioTemporal = {
+    ubicacionActual: null,        // Dónde están exactamente (ej: "habitación de Ichika", "hotel", "playa")
+    ubicacionAnterior: null,      // Dónde estaban antes
+    horaActual: null,             // Hora del día en la historia (ej: "noche", "tarde", "madrugada")
+    horaInicio: null,             // Cuándo comenzó la escena actual
+    clima: null,                  // Clima/contexto ambiental (ej: "lluvia", "caluroso", "frío")
+    iluminacion: null,            // Tipo de iluminación (ej: "tenue", "luz de luna", "velas")
+    sonidosAmbientales: [],       // Sonidos de fondo relevantes
+    objetosEnEscena: [],          // Objetos presentes en la ubicación actual
+    privacidad: 'privado',        // Nivel de privacidad ('privado', 'semi-privado', 'publico')
+    tiempoTranscurrido: 0         // Minutos/horas transcurridos desde inicio de escena
 };
 
 // SISTEMA DE RELACIÓN CON EL USUARIO - Estado de relación por personaje
@@ -535,7 +570,7 @@ function registrarEventoImportante(descripcion) {
 }
 
 /**
- * AGREGA UN HECHO A LA MEMORIA DE HECHOS
+ * AGREGA UN HECHO A LA MEMORIA DE HECHOS MEJORADO
  * @param {string} categoria - Categoría del hecho (nombres, preferencias, lugares, objetos, eventosPasados, relaciones, datosPersonales, accionesRecientes)
  * @param {string} valor - El valor a recordar
  */
@@ -560,6 +595,100 @@ function agregarHechoMemoria(categoria, valor) {
         
         logQuinti('INFO', `💾 HECHO GUARDADO [${categoria}]: ${valor}`);
     }
+}
+
+/**
+ * ACTUALIZA LA MEMORIA DE PREFERENCIAS SEXUALES
+ * @param {string} tipo - Tipo de preferencia ('posiciones', 'acciones', 'fetiches', 'zonas', 'ritmo')
+ * @param {string} valor - La preferencia específica
+ * @param {boolean} esPositivo - Si es algo que le gusta (true) o no le gusta (false)
+ */
+function actualizarPreferenciaSexual(tipo, valor, esPositivo = true) {
+    if (!valor || !tipo) return;
+    
+    switch (tipo) {
+        case 'posiciones':
+        case 'posicion':
+            if (esPositivo) {
+                if (!memoriaPreferencias.posicionesFavoritas.includes(valor)) {
+                    memoriaPreferencias.posicionesFavoritas.push(valor);
+                    // Mantener solo las últimas 5
+                    if (memoriaPreferencias.posicionesFavoritas.length > 5) {
+                        memoriaPreferencias.posicionesFavoritas.shift();
+                    }
+                }
+            }
+            break;
+        case 'acciones':
+        case 'accion':
+            if (esPositivo) {
+                if (!memoriaPreferencias.accionesFavoritas.includes(valor)) {
+                    memoriaPreferencias.accionesFavoritas.push(valor);
+                    if (memoriaPreferencias.accionesFavoritas.length > 5) {
+                        memoriaPreferencias.accionesFavoritas.shift();
+                    }
+                }
+            } else {
+                // Límites - cosas que NO le gustan
+                if (!memoriaEventosIntimos.limitesEstablecidos.includes(valor)) {
+                    memoriaEventosIntimos.limitesEstablecidos.push(valor);
+                }
+            }
+            break;
+        case 'fetiches':
+        case 'fetiche':
+        case 'kink':
+            if (esPositivo && !memoriaPreferencias.fetichesMencionados.includes(valor)) {
+                memoriaPreferencias.fetichesMencionados.push(valor);
+                if (memoriaPreferencias.fetichesMencionados.length > 5) {
+                    memoriaPreferencias.fetichesMencionados.shift();
+                }
+            }
+            break;
+        case 'zonas':
+        case 'zona':
+        case 'zona_erogena':
+            if (esPositivo && !memoriaPreferencias.zonasErogenas.includes(valor)) {
+                memoriaPreferencias.zonasErogenas.push(valor);
+                if (memoriaPreferencias.zonasErogenas.length > 5) {
+                    memoriaPreferencias.zonasErogenas.shift();
+                }
+            }
+            break;
+        case 'ritmo':
+        case 'frecuencia':
+        case 'intensidad':
+            memoriaPreferencias.frecuenciaDeseada = valor;
+            break;
+    }
+    
+    logQuinti('INFO', `💕 PREFERENCIA ACTUALIZADA [${tipo}]: ${valor} (${esPositivo ? 'le gusta' : 'no le gusta'})`);
+}
+
+/**
+ * ACTUALIZA EL CONTEXTO ESPACIO-TEMPORAL
+ * @param {Object} actualizacion - Objeto con campos a actualizar
+ */
+function actualizarContextoEspacioTemporal(actualizacion) {
+    if (!actualizacion) return;
+    
+    // Guardar ubicación anterior si cambia la actual
+    if (actualizacion.ubicacionActual && actualizacion.ubicacionActual !== memoriaEspacioTemporal.ubicacionActual) {
+        memoriaEspacioTemporal.ubicacionAnterior = memoriaEspacioTemporal.ubicacionActual;
+    }
+    
+    // Actualizar campos
+    for (const [campo, valor] of Object.entries(actualizacion)) {
+        if (memoriaEspacioTemporal.hasOwnProperty(campo) && valor !== undefined) {
+            memoriaEspacioTemporal[campo] = valor;
+        }
+    }
+    
+    logQuinti('DEBUG', `📍 CONTEXTO ESPACIO-TEMPORAL ACTUALIZADO: ${JSON.stringify({
+        ubicacion: memoriaEspacioTemporal.ubicacionActual,
+        hora: memoriaEspacioTemporal.horaActual,
+        clima: memoriaEspacioTemporal.clima
+    })}`);
 }
 
 /**
@@ -591,9 +720,10 @@ function actualizarMemoriaTrabajo(mensajeUsuario, respuestaAsistente) {
 }
 
 /**
- * GENERA RESUMEN NARRATIVO PERIÓDICO
+ * GENERA RESUMEN NARRATIVO PERIÓDICO MEJORADO
  * Se llama cada TURNOS_PARA_RESUMEN turnos para condensar la conversación
  * Ahora también resume mensajes de las chicas, no solo del usuario
+ * Y PRESERVA EL HILO PRINCIPAL DE LA HISTORIA
  */
 function generarResumenNarrativo() {
     // Extraer puntos clave de los últimos mensajes (usuario Y chica)
@@ -604,6 +734,25 @@ function generarResumenNarrativo() {
         return `- Usuario: ${resumenUsuario} | Chica: ${resumenChica}`;
     });
     
+    // Actualizar el hilo principal - ESTO ES CRÍTICO PARA NO PERDER EL CONTEXTO
+    if (memoriaNarrativa.hiloPrincipal === '') {
+        // Primer resumen: establecer el hilo principal
+        memoriaNarrativa.hiloPrincipal = puntosNuevos.join(' -> ');
+        memoriaNarrativa.eventosCriticos.push({
+            descripcion: 'Inicio de la historia',
+            turno: historialConversacion.length / 2,
+            timestamp: new Date().toISOString()
+        });
+    } else {
+        // Actualizar hilo principal con evolución natural
+        const evolucionHilo = puntosNuevos.join(' -> ');
+        // Mantener solo lo más relevante (últimos 500 caracteres)
+        if (memoriaNarrativa.hiloPrincipal.length > 500) {
+            memoriaNarrativa.hiloPrincipal = memoriaNarrativa.hiloPrincipal.substring(memoriaNarrativa.hiloPrincipal.length - 500);
+        }
+        memoriaNarrativa.hiloPrincipal += ' -> ' + evolucionHilo;
+    }
+    
     // Actualizar el resumen general
     if (memoriaNarrativa.resumenGeneral === '') {
         memoriaNarrativa.resumenGeneral = 'Inicio de conversación. ' + puntosNuevos.join(' ');
@@ -611,19 +760,45 @@ function generarResumenNarrativo() {
         memoriaNarrativa.resumenGeneral += ' Luego: ' + puntosNuevos.join(' ');
     }
     
-    // Limitar longitud del resumen
+    // Limitar longitud del resumen general
     if (memoriaNarrativa.resumenGeneral.length > 1000) {
         memoriaNarrativa.resumenGeneral = memoriaNarrativa.resumenGeneral.substring(memoriaNarrativa.resumenGeneral.length - 1000);
+    }
+    
+    // Actualizar personajes activos
+    const personajesUnicos = new Set();
+    ultimosMensajes.forEach(m => {
+        if (m.asistente) {
+            // Extraer nombre del personaje si está en el formato [Nombre]:
+            const match = m.asistente.match(/\[([A-Za-zÁÉÍÓÚáéíóúñÑ]+)\]/);
+            if (match) {
+                personajesUnicos.add(match[1]);
+            }
+        }
+    });
+    memoriaNarrativa.personajesActivos = Array.from(personajesUnicos);
+    
+    // Detectar objetivo actual basado en el contexto
+    const ultimoMensaje = ultimosMensajes[ultimosMensajes.length - 1];
+    if (ultimoMensaje) {
+        const textoCompleto = (ultimoMensaje.usuario + ' ' + (ultimoMensaje.asistente || '')).toLowerCase();
+        if (textoCompleto.includes('hotel') || textoCompleto.includes('habitación')) {
+            memoriaNarrativa.objetivoActual = 'Encuentro íntimo en privado';
+        } else if (textoCompleto.includes('bes') || textoCompleto.includes('toc') || textoCompleto.includes('sexo')) {
+            memoriaNarrativa.objetivoActual = 'Actividad sexual en curso';
+        } else if (textoCompleto.includes('habl') || textoCompleto.includes('convers')) {
+            memoriaNarrativa.objetivoActual = 'Conversación y conexión emocional';
+        }
     }
     
     memoriaNarrativa.ultimoResumenTurno = historialConversacion.length / 2;
     memoriaNarrativa.turnosDesdeUltimoResumen = 0;
     
-    logQuinti('INFO', `📖 RESUMEN NARRATIVO GENERADO: ${memoriaNarrativa.resumenGeneral.substring(0, 150)}...`);
+    logQuinti('INFO', `📖 RESUMEN NARRATIVO GENERADO - Hilo Principal: ${memoriaNarrativa.hiloPrincipal.substring(0, 100)}...`);
 }
 
 /**
- * OBTIENE EL ESTADO COMPLETO DE LA MEMORIA PARA INCLUIR EN EL PROMPT
+ * OBTIENE EL ESTADO COMPLETO DE LA MEMORIA PARA INCLUIR EN EL PROMPT MEJORADO
  * @returns {string} - Texto formateado con toda la memoria relevante
  */
 function obtenerEstadoMemoriaParaPrompt() {
@@ -635,10 +810,23 @@ function obtenerEstadoMemoriaParaPrompt() {
         estadoMemoria += `   ⚠️ CRÍTICO: Esta relación NUNCA debe olvidarse. Mencionala naturalmente en tus respuestas.\\n`;
     }
     
-    // 1. Memoria Narrativa (Resumen general) - HILO PRINCIPAL DE LA HISTORIA
+    // 0.5 HILO PRINCIPAL DE LA HISTORIA - LO MÁS IMPORTANTE PARA NO PERDER EL CONTEXTO
+    if (memoriaNarrativa.hiloPrincipal) {
+        estadoMemoria += `🔗 HILO PRINCIPAL DE LA HISTORIA (NUNCA OLVIDAR): ${memoriaNarrativa.hiloPrincipal}\\n`;
+        estadoMemoria += `   ⚠️ CRÍTICO: Este es el hilo conductor. TODO debe ser coherente con esto.\\n`;
+    }
+    
+    // 1. Memoria Narrativa (Resumen general)
     if (memoriaNarrativa.resumenGeneral) {
-        estadoMemoria += `📖 RESUMEN CONVERSACIÓN (HILO PRINCIPAL): ${memoriaNarrativa.resumenGeneral}\\n`;
-        estadoMemoria += `   ⚠️ CRÍTICO: Este es el hilo de la historia. NUNCA lo pierdas. Seguilo siempre.\\n`;
+        estadoMemoria += `📖 RESUMEN CONVERSACIÓN: ${memoriaNarrativa.resumenGeneral}\\n`;
+    }
+    
+    // 1.5 OBJETIVO ACTUAL Y PERSONAJES
+    if (memoriaNarrativa.objetivoActual) {
+        estadoMemoria += `🎯 OBJETIVO ACTUAL: ${memoriaNarrativa.objetivoActual}\\n`;
+    }
+    if (memoriaNarrativa.personajesActivos.length > 0) {
+        estadoMemoria += `👥 PERSONAJES EN ESCENA: ${memoriaNarrativa.personajesActivos.join(', ')}\\n`;
     }
     
     // 2. Memoria de Hechos (Datos importantes)
@@ -666,16 +854,44 @@ function obtenerEstadoMemoriaParaPrompt() {
         estadoMemoria += `💾 DATOS RECORDADOS: ${hechosRelevantes.join(' | ')}\\n`;
     }
     
-    // 3. Memoria de Eventos Íntimos
+    // 3. Memoria de Eventos Íntimos MEJORADA
     if (memoriaEventosIntimos.totalBesos > 0 || memoriaEventosIntimos.totalMamadas > 0 || 
         memoriaEventosIntimos.totalFolladas > 0 || memoriaEventosIntimos.totalAnal > 0 ||
         memoriaEventosIntimos.totalHandjobs > 0) {
         estadoMemoria += `🔥 HISTORIAL ÍNTIMO: Besos(${memoriaEventosIntimos.totalBesos}) | Mamadas(${memoriaEventosIntimos.totalMamadas}) | Folladas(${memoriaEventosIntimos.totalFolladas}) | Anal(${memoriaEventosIntimos.totalAnal}) | Handjobs(${memoriaEventosIntimos.totalHandjobs})\\n`;
     }
     
+    // 3.5 PREFERENCIAS SEXUALES DEL USUARIO
+    if (memoriaPreferencias.posicionesFavoritas.length > 0) {
+        estadoMemoria += `💕 POSICIONES FAVORITAS DEL USUARIO: ${memoriaPreferencias.posicionesFavoritas.slice(-3).join(', ')}\\n`;
+    }
+    if (memoriaPreferencias.accionesFavoritas.length > 0) {
+        estadoMemoria += `❤️ ACCIONES QUE MÁS DISFRUTA: ${memoriaPreferencias.accionesFavoritas.slice(-3).join(', ')}\\n`;
+    }
+    if (memoriaPreferencias.fetichesMencionados.length > 0) {
+        estadoMemoria += `🔞 FETICHES MENCIONADOS: ${memoriaPreferencias.fetichesMencionados.slice(-3).join(', ')}\\n`;
+    }
+    
     // 4. Acción en curso
     if (accionEnCurso) {
         estadoMemoria += `⚡ ACCIÓN EN CURSO: ${accionEnCurso} (desde hace ${contadorTurnosAccion} turnos)\\n`;
+    }
+    
+    // 4.5 CONTEXTO ESPACIO-TEMPORAL
+    if (memoriaEspacioTemporal.ubicacionActual) {
+        estadoMemoria += `📍 UBICACIÓN ACTUAL: ${memoriaEspacioTemporal.ubicacionActual}\\n`;
+    }
+    if (memoriaEspacioTemporal.horaActual) {
+        estadoMemoria += `🕐 HORA: ${memoriaEspacioTemporal.horaActual}\\n`;
+    }
+    if (memoriaEspacioTemporal.clima) {
+        estadoMemoria += `🌤️ CLIMA: ${memoriaEspacioTemporal.clima}\\n`;
+    }
+    if (memoriaEspacioTemporal.iluminacion) {
+        estadoMemoria += `💡 ILUMINACIÓN: ${memoriaEspacioTemporal.iluminacion}\\n`;
+    }
+    if (memoriaEspacioTemporal.privacidad !== 'privado') {
+        estadoMemoria += `🔒 PRIVACIDAD: ${memoriaEspacioTemporal.privacidad}\\n`;
     }
     
     // 5. Últimos eventos importantes
@@ -685,6 +901,11 @@ function obtenerEstadoMemoriaParaPrompt() {
         ultimosEventos.forEach(evento => {
             estadoMemoria += `   - ${evento.descripcion}\\n`;
         });
+    }
+    
+    // 6. Estado emocional actual
+    if (memoriaEmocional.tonoActual !== 'neutral' || memoriaEmocional.intensidadEmocional > 3) {
+        estadoMemoria += `💗 ESTADO EMOCIONAL: ${memoriaEmocional.tonoActual} (intensidad: ${memoriaEmocional.intensidadEmocional}/10)\\n`;
     }
     
     estadoMemoria += `=================================\\n`;
@@ -3753,6 +3974,8 @@ export {
     generarResumenNarrativo,
     obtenerEstadoMemoriaParaPrompt,
     procesarMensajeParaMemoria,
+    actualizarPreferenciaSexual,       // NUEVA: Gestión de preferencias sexuales
+    actualizarContextoEspacioTemporal, // NUEVA: Gestión de contexto espacial-temporal
     // Funciones de intención y contexto
     detectarIntencion,
     obtenerFraseVariable,
@@ -3802,6 +4025,8 @@ if (typeof window !== 'undefined') {
     window.generarResumenNarrativo = generarResumenNarrativo;
     window.obtenerEstadoMemoriaParaPrompt = obtenerEstadoMemoriaParaPrompt;
     window.procesarMensajeParaMemoria = procesarMensajeParaMemoria;
+    window.actualizarPreferenciaSexual = actualizarPreferenciaSexual;       // NUEVA
+    window.actualizarContextoEspacioTemporal = actualizarContextoEspacioTemporal; // NUEVA
     // Funciones de intención y contexto
     window.detectarIntencion = detectarIntencion;
     window.obtenerFraseVariable = obtenerFraseVariable;
