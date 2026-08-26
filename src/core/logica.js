@@ -33,6 +33,7 @@ import { getImagenTagsMapping as getImagenTagsMappingHistoria } from '../stories
 import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion, calcularSimilitud } from '../systems/antiRepeticion.js';
 import { detectarAccionEnTexto, detectarAccionEnTextoSimple } from '../utils/parserAcciones.js';
 import { detectarIntencion, obtenerFraseVariable, determinarVariacionPorDuracion, analizarNombreImagen, buscarImagenPorEntrada, memoriaContextoGlobal } from '../systems/intencionContexto.js';
+import { actualizarRelacionPersonajes, generarResumenDinamicasGrupales, determinarOrdenTurnos, generarAcotacionInterna, analizarSolapamientoDialogos } from '../systems/multiPersonajeInteraccion.js';
 
 // ============================================================
 //  CONFIGURACIÓN DE API KEYS
@@ -2473,14 +2474,17 @@ async function obtenerRespuestaGroq(mensaje, historialPrevio = []) {
             }
         }
         
-        // Ordenar array de personajes: el personaje objetivo va PRIMERO
-        let personajesArray = Array.from(chicasEnChat);
-        if (personajeObjetivo && personajesArray.includes(personajeObjetivo)) {
-            // Mover el personaje objetivo al principio del array
-            personajesArray = personajesArray.filter(p => p !== personajeObjetivo);
-            personajesArray.unshift(personajeObjetivo);
-            logQuinti('INFO', `Orden de respuesta ajustado: ${personajeObjetivo} responde primero`);
-        }
+        // MEJORA: Usar sistema avanzado de turnos dinámicos basado en personalidad y contexto
+        const ordenTurnos = determinarOrdenTurnos(
+            Array.from(chicasEnChat),
+            mensaje,
+            historialConversacion
+        );
+        
+        // Ordenar array de personajes según el sistema de turnos dinámicos
+        let personajesArray = ordenTurnos.map(t => t.nombre);
+        
+        logQuinti('INFO', `Orden de turnos determinado dinámicamente: ${personajesArray.join(' → ')}`);
         
         const respuestasPorChica = [];
         let errorGlobal = null;
@@ -2505,6 +2509,13 @@ async function obtenerRespuestaGroq(mensaje, historialPrevio = []) {
         
         // AGREGAR RELACIONES ESPECÍFICAS ENTRE PERSONAJES (ex-novios, amigos, etc.)
         const personajesEnChat = Array.from(chicasEnChat);
+
+        // MEJORA: Usar sistema dinámico de relaciones entre personajes
+        const dinamicasGrupales = generarResumenDinamicasGrupales(personajesEnChat);
+        if (dinamicasGrupales) {
+            contextoUnificado += dinamicasGrupales + '\n\n';
+        }
+
         const hayExParejas = (personajesEnChat.includes('CapitanFutbol') && personajesEnChat.includes('Nino')) || 
                              (personajesEnChat.includes('CapitanBasket') && personajesEnChat.includes('Ichika'));
         
@@ -2864,6 +2875,33 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
                 respuesta: datos && datos.respuesta ? datos.respuesta : '...',
                 imagen_tag: (datos && datos.imagen_tag && datos.imagen_tag.toLowerCase().trim() !== 'none') ? datos.imagen_tag : 'hablando'
             });
+            
+            // MEJORA: Actualizar relaciones entre personajes basado en la interacción
+            if (respuestasPorChica.length > 1) {
+                const ultimaRespuesta = respuestasPorChica[respuestasPorChica.length - 2];
+                if (ultimaRespuesta) {
+                    // Detectar tipo de interacción basado en el contenido
+                    const contenidoRespuesta = datos?.respuesta || '';
+                    let tipoInteraccion = 'neutral';
+                    
+                    if (contenidoRespuesta.toLowerCase().includes('acuerdo') || 
+                        contenidoRespuesta.toLowerCase().includes('apoyo') ||
+                        contenidoRespuesta.toLowerCase().includes('tiene razón')) {
+                        tipoInteraccion = 'aliado';
+                    } else if (contenidoRespuesta.toLowerCase().includes('no estoy de acuerdo') || 
+                               contenidoRespuesta.toLowerCase().includes('pero') ||
+                               contenidoRespuesta.toLowerCase().includes('discrepo')) {
+                        tipoInteraccion = 'conflicto';
+                    } else if (contenidoRespuesta.toLowerCase().includes('quiero') || 
+                               contenidoRespuesta.toLowerCase().includes('deseo') ||
+                               contenidoRespuesta.toLowerCase().includes('atractivo')) {
+                        tipoInteraccion = 'romantico';
+                    }
+                    
+                    // Actualizar relación con el personaje anterior
+                    actualizarRelacionPersonajes(ultimaRespuesta.chica, nombrePersonaje, tipoInteraccion, 3);
+                }
+            }
             
             // Ya no se usa contextoAcumulado porque ahora todo el historial va en contextoUnificado
             // Esto evita que los mensajes se acumulen de forma fragmentada y mejora la coherencia
