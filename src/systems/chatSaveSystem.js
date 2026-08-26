@@ -283,6 +283,35 @@ const ChatSaveSystem = {
     },
 
     /**
+     * Edita metadata de un slot (título e imagen)
+     * @param {number} slotNumber - Número del slot
+     */
+    editSlotMetadata(slotNumber) {
+        const chatData = this.loadChat(slotNumber);
+        if (!chatData) {
+            alert('❌ El slot está vacío.');
+            return;
+        }
+
+        const nuevoTitulo = prompt('Editar título del chat:', chatData.tituloPersonalizado || '');
+        if (nuevoTitulo === null) return; // Cancelado
+
+        const nuevaImagen = prompt('URL de imagen personalizada (opcional):', chatData.imagenPersonalizada || '');
+        if (nuevaImagen === null) return; // Cancelado
+
+        // Actualizar datos
+        chatData.tituloPersonalizado = nuevoTitulo.trim() || null;
+        chatData.imagenPersonalizada = nuevaImagen.trim() || null;
+
+        // Guardar cambios
+        const slotKey = this.getSlotKey(slotNumber);
+        localStorage.setItem(slotKey, JSON.stringify(chatData));
+
+        alert('✅ Metadata actualizada');
+        this.renderSlotsPanel();
+    },
+
+    /**
      * Carga y restaura un chat desde un slot
      * @param {number} slotNumber - Número del slot a cargar
      */
