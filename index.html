@@ -3028,6 +3028,7 @@ Responde EXCLUSIVAMENTE en formato JSON:
             // Actualizar información de la chica en el chat
             const infoChica = QuintiImagenesPrueba[chicaSeleccionadaActual];
             if (infoChica) {
+                window.currentChica = infoChica;
                 document.getElementById('chicaNombreHeader').textContent = infoChica.nombre;
                 document.getElementById('chicaNombreInfo').textContent = infoChica.nombre;
                 document.getElementById('chicaDescripcion').textContent = infoChica.descripcion;
@@ -3072,6 +3073,12 @@ Responde EXCLUSIVAMENTE en formato JSON:
             // Cerrar panel de guardado
             document.getElementById('chatSavePanel').style.display = 'none';
             
+            // Refrescar el panel de memorias para mostrar la memoria contextual del chat cargado
+            setTimeout(() => {
+                if (window.MemorySystem && typeof window.MemorySystem.renderMemoryHistoryInChat === 'function') {
+                    window.MemorySystem.renderMemoryHistoryInChat();
+                }
+            }, 500);
             alert(`✅ Chat restaurado exitosamente.\nMensajes cargados: ${chatData.mensajes?.length || 0}\nChicas: ${chatData.chicasEnChat ? chatData.chicasEnChat.join(', ') : chatData.chicaPrincipal}`);
         };
 
