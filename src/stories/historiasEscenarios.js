@@ -154,7 +154,16 @@ export const HISTORIAS_POR_CHICA = {
                 imagenBienvenida: "",
                 mensajeBienvenida: "*Miku se despierta primero y se arrastra silenciosamente bajo las sábanas, nerviosa pero excitada*\\n\\nMiku: \"Fabrizio-kun... espero que esto te guste...\" *susurra apenas audible mientras besa tu longitud*\\n\\n*Sus labios suaves te envuelven con ternura, chupando lentamente al principio y luego ganando confianza, mirándote con ojos llenos de amor* \"Quiero hacerte sentir bien desde la mañana... ¿está rico?\" *su cabeza sube y baja con ritmo gentil pero dedicado, disfrutando cada reacción tuya*",
                 activa: true
-            }
+            },
+            {
+    id: "miku_mas_culona_colegio",
+    nombre: "Miku: La Más Culona del Colegio",
+    descripcion: "Miku es la chica con el culo y el ano más deseados de todo el colegio, y todos quieren follársela",
+    imagenSelector: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD15/main/imagenes/img_1773601234567.jpg",
+    imagenBienvenida: "",
+    mensajeBienvenida: "*Miku está de espaldas a ti en el pasillo vacío del colegio, con las manos apoyadas en la pared y la falda ligeramente levantada. Su enorme y redondo culo sobresale de forma obscena, perfectamente moldeado y pesado*\n\nMiku: \"Fabrizio-kun...\" *habla en voz baja, casi susurrando, pero con un tono cargado de vergüenza y excitación* \"Yo sé lo que todos piensan de mí... que tengo el culo más grande, más suave y más perfecto del colegio. El que todos quieren agarrar, separarme las nalgas y follarme sin piedad... incluso el ano\" *se muerde el labio y empuja su trasero un poco más hacia atrás, invitándote a mirarlo*\n\n*Gira ligeramente la cabeza para mirarte por encima del hombro, las mejillas completamente rojas* \"Todos me miran cuando camino... todos quieren meterme la verga entre estas nalgas y usarme. Y yo... yo quiero que seas tú el que lo haga. ¿Vas a dejarme aquí así... o vas a tomar lo que todos desean?\"",
+    activa: true
+}
         ],
         escenarios: [
             {
