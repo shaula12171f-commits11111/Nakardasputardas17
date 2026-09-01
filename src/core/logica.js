@@ -735,39 +735,24 @@ function generarResumenNarrativo() {
         return `- Usuario: ${resumenUsuario} | Chica: ${resumenChica}`;
     });
     
-   // Actualizar el hilo principal - ESTO ES CRÍTICO PARA NO PERDER EL CONTEXTO
-if (memoriaNarrativa.hiloPrincipal === '') {
-    // Primer resumen: establecer el hilo principal
-    memoriaNarrativa.hiloPrincipal = puntosNuevos.join(' -> ');
-    memoriaNarrativa.eventosCriticos.push({
-        descripcion: 'Inicio de la historia',
-        turno: historialConversacion.length / 2,
-        timestamp: new Date().toISOString()
-    });
-} else {
-    // Actualizar hilo principal SIN borrar lo anterior
-    const evolucionHilo = puntosNuevos.join(' -> ');
-    
-    // Solo recortar si se vuelve demasiado largo (proteger más contenido)
-    if (memoriaNarrativa.hiloPrincipal.length > 1200) {
-        memoriaNarrativa.hiloPrincipal = memoriaNarrativa.hiloPrincipal.substring(memoriaNarrativa.hiloPrincipal.length - 900);
+    // Actualizar el hilo principal - ESTO ES CRÍTICO PARA NO PERDER EL CONTEXTO
+    if (memoriaNarrativa.hiloPrincipal === '') {
+        // Primer resumen: establecer el hilo principal
+        memoriaNarrativa.hiloPrincipal = puntosNuevos.join(' -> ');
+        memoriaNarrativa.eventosCriticos.push({
+            descripcion: 'Inicio de la historia',
+            turno: historialConversacion.length / 2,
+            timestamp: new Date().toISOString()
+        });
+    } else {
+        // Actualizar hilo principal con evolución natural
+        const evolucionHilo = puntosNuevos.join(' -> ');
+        // Mantener solo lo más relevante (últimos 500 caracteres)
+        if (memoriaNarrativa.hiloPrincipal.length > 500) {
+            memoriaNarrativa.hiloPrincipal = memoriaNarrativa.hiloPrincipal.substring(memoriaNarrativa.hiloPrincipal.length - 500);
+        }
+        memoriaNarrativa.hiloPrincipal += ' -> ' + evolucionHilo;
     }
-    
-    // Agregar la evolución sin sobrescribir
-    memoriaNarrativa.hiloPrincipal += ' -> ' + evolucionHilo;
-}
-
-// Guardar también en puntosClave (para que no se pierdan)
-puntosNuevos.forEach(punto => {
-    if (!memoriaNarrativa.puntosClave.includes(punto)) {
-        memoriaNarrativa.puntosClave.push(punto);
-    }
-});
-
-// Limitar puntosClave a los últimos 30 para que no crezca infinito
-if (memoriaNarrativa.puntosClave.length > 30) {
-    memoriaNarrativa.puntosClave = memoriaNarrativa.puntosClave.slice(-30);
-}
     
     // Actualizar el resumen general
     if (memoriaNarrativa.resumenGeneral === '') {
@@ -3848,12 +3833,9 @@ function seleccionarChica(nombrePersonaje) {
     // Verificar si es Aldo, un personaje masculino o una quintilliza
     if (esAldo(nombrePersonaje) || existePersonajeMasculino(nombrePersonaje) || PERSONALIDADES[nombrePersonaje]) {
         chicaSeleccionada = nombrePersonaje;
-        
-        // YA NO se resetea el historial ni la memoria al cambiar de personaje
-        // Así los puntos clave se mantienen dentro de la misma sesión
-        chicasEnChat.add(nombrePersonaje); // Solo se agrega, no se resetea
-        
-        logQuinti('INFO', `Personaje seleccionado: ${nombrePersonaje} (memoria e historial preservados)`);
+        historialConversacion = []; // Resetear historial al cambiar de personaje
+        chicasEnChat = new Set([nombrePersonaje]); // Resetear conjunto de personajes en chat
+        logQuinti('INFO', `Personaje seleccionado: ${nombrePersonaje}`);
         return true;
     }
     logQuinti('ERROR', `Intento de seleccionar personaje inválido: ${nombrePersonaje}`);
