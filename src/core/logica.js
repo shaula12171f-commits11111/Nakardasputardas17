@@ -27,7 +27,7 @@ import { generarSystemPrompt, QUINT_PRUEBA_SYSTEM_MINIMO, QUINT_PRUEBA_FASE1, QU
 import { PERSONALIDADES, getChicasDisponibles, existeChica, tieneImagenes } from '../characters/personalidades.js';
 import { ALDO_PERSONALIDAD, ALDO_INSTRUCCIONES_SISTEMA, getAldoPersonalidad, esAldo, aldoDebeResponder } from '../characters/aldo.js';
 import { PERSONAJES_MASCULINOS, IMAGENES_MASCULINOS, getPersonalidadMasculino, getPersonajesMasculinosDisponibles, existePersonajeMasculino, tieneImagenesMasculino, getImagenesMasculino, personajeMasculinoDebeResponder, getImagenSelectorMasculino } from '../characters/personajesMasculinos.js';
-import { obtenerMensajeError, generarPayloadFase, getOrdenFases, getInfoFase, obtenerFallbackLocal, obtenerFallbackAntiRepeticion, obtenerFallbackChicaSecundaria } from '../systems/fallbacks.js';
+import { obtenerMensajeError, generarPayloadFase, getOrdenFases, getInfoFase, obtenerFallbackLocal, obtenerFallbackAntiRepeticion, obtenerFallbackChicaSecundaria, obtenerFallbackConMemoria } from '../systems/fallbacks.js';
 import { QuintiImagenesPrueba } from '../systems/imagenes.js';
 import { getImagenTagsMapping as getImagenTagsMappingHistoria } from '../stories/historiasParalelas.js';
 import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion, calcularSimilitud } from '../systems/antiRepeticion.js';
@@ -2849,6 +2849,17 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
                     logQuinti('ERROR', `${nombrePersonaje} - Todas las fases de reintento fallaron, usando fallback`);
                     const fallbackTag = tagsDisponibles.includes('hablando') ? 'hablando' : tagsDisponibles[0] || 'normal';
                     
+                    // IMPORTANTE: Guardar backup de la memoria antes del fallback para no perder puntos clave
+                    const memoriaBackup = {
+                        hiloPrincipal: memoriaNarrativa.hiloPrincipal,
+                        resumenGeneral: memoriaNarrativa.resumenGeneral,
+                        personajesActivos: [...memoriaNarrativa.personajesActivos],
+                        objetivoActual: memoriaNarrativa.objetivoActual,
+                        eventosIntimos: {...memoriaEventosIntimos},
+                        relacionActual: {...relacionActualConUsuario},
+                        contextoEspacioTemporal: {...memoriaEspacioTemporal}
+                    };
+                    
                     // Si es una chica secundaria (no la primera) y hay respuestas previas, usar fallback contextual
                     if (!esPrimero && respuestasPorChica.length > 0) {
                         // Obtener contexto de la respuesta anterior para crear una respuesta coherente
@@ -2859,12 +2870,25 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
                         };
                         logQuinti('INFO', `${nombrePersonaje} - Usando fallback contextual para chica secundaria`);
                     } else {
-                        // Primera chica o única chica: usar fallback anti-repetición normal
+                        // Primera chica o única chica: usar fallback con preservación de memoria
+                        // Esto asegura que los puntos clave NO se pierdan cuando el bot no puede responder
                         datos = {
-                            respuesta: obtenerFallbackAntiRepeticion(),
+                            respuesta: obtenerFallbackConMemoria(nombrePersonaje, memoriaBackup),
                             imagen_tag: fallbackTag
                         };
-                        logQuinti('INFO', `${nombrePersonaje} - Usando fallback anti-repetición`);
+                        logQuinti('INFO', `${nombrePersonaje} - Usando fallback con preservación de memoria (puntos clave guardados)`);
+                    }
+                    
+                    // CRÍTICO: Restaurar/verificar que la memoria esté intacta después del fallback
+                    // Los puntos clave deben mantenerse aunque la API falle
+                    if (memoriaBackup) {
+                        memoriaNarrativa.hiloPrincipal = memoriaBackup.hiloPrincipal;
+                        memoriaNarrativa.resumenGeneral = memoriaBackup.resumenGeneral;
+                        memoriaNarrativa.personajesActivos = memoriaBackup.personajesActivos;
+                        memoriaNarrativa.objetivoActual = memoriaBackup.objetivoActual;
+                        // No restauramos eventosIntimos ni relacionActual porque podrían haber sido actualizados
+                        // pero sí verificamos que no se hayan perdido
+                        logQuinti('INFO', `${nombrePersonaje} - Memoria preservada durante fallback. Hilo principal: ${memoriaNarrativa.hiloPrincipal.substring(0, 80)}...`);
                     }
                 }
             }
@@ -3200,7 +3224,30 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
     // ========================================
     logQuinti('ERROR', 'Todas las fases fallaron - Lanzando error para mostrar al usuario');
     
-    throw new Error('No se pudo obtener una respuesta después de múltiples intentos. Por favor, intenta de nuevo.');
+    // CRÍTICO: Guardar backup de la memoria ANTES de lanzar el error
+    // Esto asegura que los puntos clave NO se pierdan cuando el bot no puede responder
+    const memoriaBackup = {
+        hiloPrincipal: memoriaNarrativa.hiloPrincipal,
+        resumenGeneral: memoriaNarrativa.resumenGeneral,
+        personajesActivos: [...memoriaNarrativa.personajesActivos],
+        objetivoActual: memoriaNarrativa.objetivoActual,
+        eventosIntimos: {...memoriaEventosIntimos},
+        relacionActual: {...relacionActualConUsuario},
+        contextoEspacioTemporal: {...memoriaEspacioTemporal},
+        accionEnCurso: accionEnCurso,
+        contadorTurnosAccion: contadorTurnosAccion
+    };
+    
+    // Loggear la memoria que se está preservando
+    logQuinti('INFO', `MEMORIA PRESERVADA ANTES DEL ERROR - Hilo principal: ${memoriaNarrativa.hiloPrincipal.substring(0, 100)}...`);
+    logQuinti('INFO', `Puntos clave guardados: ${memoriaNarrativa.puntosClave ? memoriaNarrativa.puntosClave.length : 0} elementos`);
+    
+    // Crear error con información de que la memoria está preservada
+    const error = new Error('No se pudo obtener una respuesta después de múltiples intentos. Por favor, intenta de nuevo.');
+    error.memoriaPreservada = true;
+    error.memoriaBackup = memoriaBackup;
+    
+    throw error;
 }
 
 /**
