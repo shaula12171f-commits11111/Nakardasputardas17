@@ -42,6 +42,7 @@ const FALLBACK_ANTI_REPETICION = [
  * Se usa cuando una chica secundaria falla pero la primera respondió correctamente.
  * Este fallback genera una respuesta coherente que reacciona a la situación actual
  * sin repetir lo que dijo la otra chica.
+ * IMPORTANTE: Incluye el nombre del personaje para claridad en multi-personaje
  * @param {string} nombreChica - Nombre de la chica que debe responder
  * @param {string} contextoPrevio - Respuesta de la(s) otra(s) chica(s)
  * @returns {string} - Respuesta de fallback contextualizada
@@ -56,6 +57,23 @@ export function obtenerFallbackChicaSecundaria(nombreChica, contextoPrevio = '')
     ];
     
     return fallbacksContextuales[Math.floor(Math.random() * fallbacksContextuales.length)];
+}
+
+/**
+ * Fallback ANTI-REPETICIÓN MEJORADO para cuando el bot no puede responder
+ * PRESERVA LOS PUNTOS CLAVE DE LA MEMORIA y los retoma cuando pueda responder
+ * @param {string} nombrePersonaje - Nombre del personaje que debe responder
+ * @param {object} memoriaBackup - Objeto con la memoria que debe preservarse
+ * @returns {string} - Respuesta de fallback que mantiene coherencia narrativa
+ */
+export function obtenerFallbackConMemoria(nombrePersonaje, memoriaBackup = null) {
+    const fallbacksConMemoria = [
+        `*${nombrePersonaje || 'La chica'} respira hondo y te mira con determinación* E-eh... Creo que me perdí un poco por un momento, pero recuerdo perfectamente lo que estábamos hablando... *sonríe nerviosa pero cálida* Déjame continuar desde donde estábamos~`,
+        `*${nombrePersonaje || 'La chica'} frunce el ceño ligeramente* ¡Oye! Algo falló por aquí... *se toca la sien* Pero no te preocupes, tengo muy presente todo lo que pasó antes... *toma tu mano* Continuemos~`,
+        `*${nombrePersonaje || 'La chica'} inclina la cabeza curiosa* Hm... *tamborilea los dedos pensativa* Creo que me confundí un segundo, pero recuerdo exactamente dónde estamos y qué estábamos haciendo... *sonríe con complicidad* ¿Seguimos?`,
+    ];
+    
+    return fallbacksConMemoria[Math.floor(Math.random() * fallbacksConMemoria.length)];
 }
 
 /**
@@ -249,6 +267,7 @@ if (typeof module !== 'undefined' && module.exports) {
         obtenerFallbackLocal,
         obtenerFallbackAntiRepeticion,
         obtenerFallbackChicaSecundaria,
+        obtenerFallbackConMemoria,
         CONFIG_REINTENTOS,
         generarPayloadFase,
         getOrdenFases,
