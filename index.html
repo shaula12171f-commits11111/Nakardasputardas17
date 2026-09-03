@@ -1861,6 +1861,26 @@
             window.historiaGrupalActiva = historiaId;
             window.esHistoriaGrupal = true;
             window.chicasHistoriaGrupal = chicasParticipantes;
+            
+            // IMPORTANTE: Configurar window.currentChica para el sistema de memorias en historias grupales
+            // Usamos un objeto especial que representa el grupo
+            window.currentChica = {
+                nombre: tituloGrupal,
+                esGrupo: true,
+                chicas: chicasParticipantes,
+                imagenSelector: historia.imagenSelector,
+                descripcion: `Historia Grupal: ${historia.nombre}`
+            };
+            
+            // Resetear estado del panel de memorias al iniciar historia grupal
+            const memoryPanel = document.getElementById('memoryHistoryPanel');
+            if (memoryPanel) {
+                memoryPanel.style.display = 'none';
+            }
+            const memoryContent = document.getElementById('memoryHistoryContent');
+            if (memoryContent) {
+                memoryContent.classList.remove('collapsed');
+            }
         }
         
         // Iniciar una historia específica

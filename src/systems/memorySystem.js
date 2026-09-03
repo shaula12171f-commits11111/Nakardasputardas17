@@ -651,6 +651,7 @@ const MemorySystem = {
     /**
      * Renderiza el historial de memorias en el panel dentro del chat
      * Ahora muestra la memoria contextual específica del chat actual
+     * Soporta tanto chats individuales como historias grupales
      */
     renderMemoryHistoryInChat() {
         const contentEl = document.getElementById('memoryHistoryContent');
@@ -661,7 +662,7 @@ const MemorySystem = {
 
         // Obtener el personaje actual del chat
         const currentCharacter = window.currentChica || null;
-        
+
         if (!currentCharacter) {
             contentEl.innerHTML = `
                 <div class="no-memories-history">
@@ -671,13 +672,24 @@ const MemorySystem = {
             return;
         }
 
-        // Obtener memoria contextual específica de este personaje/chat
-        const contextualMemory = this.getContextualMemory(currentCharacter.nombre);
+        // Determinar si es una historia grupal o individual
+        const isGroupStory = currentCharacter.esGrupo === true;
+        const characterName = currentCharacter.nombre;
         
+        // Obtener memoria contextual específica de este personaje/chat
+        const contextualMemory = this.getContextualMemory(characterName);
+
         if (!contextualMemory) {
+            const groupInfo = isGroupStory 
+                ? `<p style="font-size: 13px; color: #A78BFA; margin-top: 8px;">
+                    👥 Participantes: ${currentCharacter.chicas ? currentCharacter.chicas.join(', ') : ''}
+                   </p>`
+                : '';
+            
             contentEl.innerHTML = `
                 <div class="no-memories-history">
-                    <p>📝 No hay memoria contextual generada para ${currentCharacter.nombre} aún.</p>
+                    <p>📝 No hay memoria contextual generada para ${characterName} aún.</p>
+                    ${groupInfo}
                     <p style="font-size: 13px; color: #A78BFA; margin-top: 8px;">
                         La memoria se genera automáticamente después de varios mensajes.
                     </p>
@@ -694,13 +706,21 @@ const MemorySystem = {
             minute: '2-digit'
         });
 
+        const groupHeader = isGroupStory
+            ? `<p style="font-size: 12px; color: #A78BFA; margin-bottom: 10px;">
+                   👥 Grupo: ${currentCharacter.chicas ? currentCharacter.chicas.join(', ') : ''}
+               </p>`
+            : '';
+
         let html = `
             <div class="memory-contextual-card">
                 <div class="memory-contextual-header">
-                    <h4>🧠 Memoria Contextual: ${this.escapeHtml(currentCharacter.nombre)}</h4>
+                    <h4>🧠 Memoria Contextual: ${this.escapeHtml(characterName)}</h4>
                     <span class="memory-contextual-date">${fecha}</span>
                 </div>
                 
+                ${groupHeader}
+
                 <div class="memory-contextual-content">
                     <div class="memory-section">
                         <h5>📌 Puntos Clave</h5>
@@ -708,14 +728,14 @@ const MemorySystem = {
                             ${contextualMemory.puntosClave.map(punto => `<li>${this.escapeHtml(punto)}</li>`).join('')}
                         </ul>
                     </div>
-                    
+
                     ${contextualMemory.resumenChat ? `
                     <div class="memory-section">
                         <h5>📝 Resumen del Chat</h5>
                         <p class="memory-resumen">${this.escapeHtml(contextualMemory.resumenChat)}</p>
                     </div>
                     ` : ''}
-                    
+
                     ${contextualMemory.datosUsuario && Object.keys(contextualMemory.datosUsuario).length > 0 ? `
                     <div class="memory-section">
                         <h5>👤 Datos del Usuario Recordados</h5>
@@ -728,16 +748,16 @@ const MemorySystem = {
                         </div>
                     </div>
                     ` : ''}
-                    
+
                     <div class="memory-section">
                         <h5>💬 Mensajes Analizados</h5>
                         <p class="memory-stats">Total: ${contextualMemory.mensajesAnalizados || 0} mensajes procesados</p>
                     </div>
                 </div>
-                
+
                 <div class="memory-contextual-actions">
-                    <button class="memory-item-btn delete" onclick="MemorySystem.clearContextualMemory('${currentCharacter.nombre}')">🗑️ Limpiar Memoria</button>
-                    <button class="memory-item-btn" onclick="MemorySystem.forceGenerateContextualMemory('${currentCharacter.nombre}')">🔄 Forzar Actualización</button>
+                    <button class="memory-item-btn delete" onclick="MemorySystem.clearContextualMemory('${characterName}')">🗑️ Limpiar Memoria</button>
+                    <button class="memory-item-btn" onclick="MemorySystem.forceGenerateContextualMemory('${characterName}')">🔄 Forzar Actualización</button>
                 </div>
             </div>
         `;
