@@ -1888,11 +1888,31 @@ async function generarMultipleRespuestas(mensajesPayload, modelo, mensajeOrigina
     
     logQuinti('INFO', `🎲 BEST-OF-N: ${respuestasGeneradas.length}/${BEST_OF_N_CONFIG.numRespuestas} respuestas válidas generadas en ${Date.now() - tiempoInicio}ms`);
     
-    // Mostrar TODAS las respuestas en consola para depuración (VISIBILIDAD MEJORADA)
+    // ============================================
+    // MOSTRAR TODAS LAS RESPUESTAS EN CONSOLA (MEJORADO PARA VISIBILIDAD)
+    // ============================================
     if (respuestasGeneradas.length > 0) {
-        console.groupCollapsed('🎲 BEST-OF-N: TODAS LAS RESPUESTAS GENERADAS (Click para expandir)');
+        // Log compacto para ver rápidamente todas las respuestas
+        console.log('\n' + '='.repeat(80));
+        console.log('🎲 BEST-OF-N: TODAS LAS RESPUESTAS GENERADAS');
         console.log('='.repeat(80));
         
+        respuestasGeneradas.forEach((resp, idx) => {
+            console.log(`\n--- RESPUESTA #${resp.indice + 1} ---`);
+            console.log(`🌡️  Temperatura: ${resp.temperatura.toFixed(3)}`);
+            console.log(`📏 Longitud: ${resp.respuesta.respuesta.length} caracteres`);
+            console.log(`🏷️  Imagen Tag: ${resp.respuesta.imagen_tag || 'N/A'}`);
+            console.log(`⏰ Timestamp: ${new Date(resp.timestamp).toLocaleTimeString()}`);
+            console.log(`💬 TEXTO COMPLETO:`);
+            console.log(resp.respuesta.respuesta);
+            console.log('-'.repeat(60));
+        });
+        
+        console.log('='.repeat(80) + '\n');
+        
+        // También usar groupCollapsed para organización
+        console.groupCollapsed('🎲 BEST-OF-N: VER DETALLES COMPLETOS (Click para expandir)');
+        console.log('='.repeat(80));
         respuestasGeneradas.forEach((resp, idx) => {
             console.group(`--- RESPUESTA #${resp.indice + 1} ---`);
             console.log('🌡️  Temperatura:', resp.temperatura.toFixed(3));
@@ -1904,9 +1924,15 @@ async function generarMultipleRespuestas(mensajesPayload, modelo, mensajeOrigina
             console.log('─'.repeat(60));
             console.groupEnd();
         });
-        
         console.log('='.repeat(80));
         console.groupEnd();
+    }
+    
+    // Mostrar respuestas descartadas (si las hubo)
+    if (respuestasGeneradas.length < BEST_OF_N_CONFIG.numRespuestas) {
+        console.log('\n⚠️  RESPUESTAS DESCARTADAS: Se generaron menos respuestas de las esperadas.');
+        console.log(`   Esperadas: ${BEST_OF_N_CONFIG.numRespuestas}, Válidas: ${respuestasGeneradas.length}`);
+        console.log('   Revisa los logs anteriores para ver cuáles fueron rechazadas.\n');
     }
     
     // Si no hay respuestas válidas, retornar null para usar fallback normal
@@ -1924,8 +1950,26 @@ async function generarMultipleRespuestas(mensajesPayload, modelo, mensajeOrigina
     // Ordenar por puntaje (mayor a menor)
     respuestasConPuntaje.sort((a, b) => b.puntaje - a.puntaje);
     
-    // Mostrar ranking en consola (MEJORADO)
-    console.groupCollapsed('🏆 BEST-OF-N: RANKING DE RESPUESTAS (Click para expandir)');
+    // ============================================
+    // MOSTRAR RANKING EN CONSOLA (MEJORADO PARA VISIBILIDAD)
+    // ============================================
+    console.log('\n' + '='.repeat(60));
+    console.log('🏆 BEST-OF-N: RANKING DE RESPUESTAS');
+    console.log('='.repeat(60));
+    
+    respuestasConPuntaje.forEach((resp, idx) => {
+        const emoji = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '  ';
+        const detalle = `#${resp.indice + 1}: Puntaje ${resp.puntaje.toFixed(3)} | Temp: ${resp.temperatura.toFixed(2)} | Long: ${resp.respuesta.respuesta.length} chars`;
+        console.log(`${emoji} ${detalle}`);
+        
+        // Mostrar detalles adicionales para TODAS las respuestas
+        console.log(`   └─ Frases Rechazo: ${contieneFrasesRechazo(resp.respuesta.respuesta) ? '❌ SÍ' : '✅ NO'}`);
+        console.log(`   └─ Variedad Léxica: ${(new Set(resp.respuesta.respuesta.split(' ')).size / resp.respuesta.respuesta.split(' ').length).toFixed(2)}`);
+    });
+    console.log('='.repeat(60) + '\n');
+    
+    // También usar groupCollapsed para organización
+    console.groupCollapsed('🏆 BEST-OF-N: VER RANKING COMPLETO (Click para expandir)');
     console.log('-'.repeat(60));
     respuestasConPuntaje.forEach((resp, idx) => {
         const emoji = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '  ';
