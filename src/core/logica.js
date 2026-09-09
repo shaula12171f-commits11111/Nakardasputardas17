@@ -2985,6 +2985,15 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
                 imagen_tag: (datos && datos.imagen_tag && datos.imagen_tag.toLowerCase().trim() !== 'none') ? datos.imagen_tag : 'hablando'
             });
             
+            // AGREGAR A respuestasGeneradas para mostrar en consola las alternativas no seleccionadas
+            if (respuestasPorChica.length === 1) {
+                // Primera respuesta - se usará como principal
+                logQuinti('INFO', `✅ RESPUESTA PRINCIPAL SELECCIONADA (${nombrePersonaje}): ${datos?.respuesta?.substring(0, 100)}...`);
+            } else {
+                // Respuestas adicionales - mostrar en consola como alternativas
+                logQuinti('INFO', `🔄 ALTERNATIVA #${respuestasPorChica.length} (${nombrePersonaje}): ${datos?.respuesta?.substring(0, 100)}...`);
+            }
+            
             // MEJORA: Actualizar relaciones entre personajes basado en la interacción
             if (respuestasPorChica.length > 1) {
                 const ultimaRespuesta = respuestasPorChica[respuestasPorChica.length - 2];
