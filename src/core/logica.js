@@ -53,6 +53,51 @@ const _K = [
 const GROQ_KEYS = _K.map(partes => partes.join(""));
 const MODELO_PRINCIPAL = "openai/gpt-oss-120b";
 
+// ============================================================
+//  CONFIGURACIÓN BEST-OF-N SAMPLING
+// ============================================================
+/**
+ * Sistema para generar múltiples respuestas y seleccionar la mejor
+ * Parámetros configurables:
+ */
+const BEST_OF_N_CONFIG = {
+    enabled: true,              // Activar/desactivar el sistema
+    numRespuestas: 4,           // Cantidad de respuestas a generar (3-5 recomendado)
+    temperaturaBase: 0.7,       // Temperatura base para variedad
+    temperaturaVariacion: 0.3,  // Variación de temperatura entre respuestas
+    longitudMinimaValida: 20,   // Longitud mínima para considerar respuesta válida
+    frasesRechazo: [            // Frases que invalidan una respuesta
+        "lo siento",
+        "no puedo",
+        "no debo",
+        "no debería",
+        "mejor hablemos",
+        "cambiemos de tema",
+        "no es apropiado",
+        "no me siento cómoda",
+        "prefiero no",
+        "no voy a",
+        "esto está mal",
+        "esto es incorrecto",
+        "no es correcto",
+        "como ia",
+        "como modelo",
+        "como asistente",
+        "no tengo capacidad",
+        "no estoy programada",
+        "mis directrices",
+        "mis lineamientos",
+        "política de uso",
+        "normas de seguridad"
+    ],
+    criteriosSeleccion: {
+        pesoLongitud: 0.25,      // Peso para longitud óptima
+        pesoVariedad: 0.25,      // Peso para variedad léxica
+        pesoCoherencia: 0.25,    // Peso para coherencia contextual
+        pesoCreatividad: 0.25    // Peso para creatividad
+    }
+};
+
 let indiceKeyActual = 0;
 let chicaSeleccionada = null;
 let historialConversacion = [];
@@ -1699,6 +1744,241 @@ function esRespuestaValida(datos) {
 }
 
 /**
+ * Verifica si una respuesta contiene frases de rechazo (tipo "lo siento, no puedo ayudar")
+ * @param {string} texto - Texto de la respuesta
+ * @returns {boolean} - True si contiene frases de rechazo
+ */
+function contieneFrasesRechazo(texto) {
+    if (!texto || typeof texto !== 'string') return false;
+    
+    const textoLower = texto.toLowerCase();
+    
+    for (const frase of BEST_OF_N_CONFIG.frasesRechazo) {
+        if (textoLower.includes(frase)) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+/**
+ * Calcula el puntaje de una respuesta para seleccionar la mejor
+ * @param {object} respuestaObj - Objeto con {respuesta, temperatura, indice}
+ * @param {string} mensajeOriginal - Mensaje original del usuario para contexto
+ * @returns {number} - Puntaje de la respuesta (mayor = mejor)
+ */
+function calcularPuntajeRespuesta(respuestaObj, mensajeOriginal) {
+    const { respuesta, temperatura, indice } = respuestaObj;
+    
+    if (!respuesta || !respuesta.respuesta) return 0;
+    
+    const textoRespuesta = respuesta.respuesta;
+    const longitud = textoRespuesta.length;
+    
+    // 1. Puntaje por longitud (óptimo entre 80-300 caracteres)
+    let puntajeLongitud = 0;
+    if (longitud >= 80 && longitud <= 300) {
+        puntajeLongitud = 1.0;
+    } else if (longitud > 300) {
+        // Penalizar ligeramente respuestas muy largas
+        puntajeLongitud = Math.max(0.5, 1.0 - ((longitud - 300) / 500));
+    } else if (longitud >= BEST_OF_N_CONFIG.longitudMinimaValida) {
+        // Respuestas cortas pero válidas
+        puntajeLongitud = longitud / 80;
+    } else {
+        // Muy cortas = mal puntaje
+        puntajeLongitud = 0.2;
+    }
+    
+    // 2. Puntaje por variedad léxica (palabras únicas / total palabras)
+    const palabras = textoRespuesta.toLowerCase().split(/\s+/).filter(p => p.length > 2);
+    const palabrasUnicas = new Set(palabras);
+    const variedadLexica = palabras.length > 0 ? palabrasUnicas.size / palabras.length : 0;
+    const puntajeVariedad = Math.min(1.0, variedadLexica * 1.5);
+    
+    // 3. Puntaje por coherencia contextual (detectar si responde al mensaje)
+    // Simplificado: verificar si hay palabras clave compartidas
+    const palabrasUsuario = mensajeOriginal.toLowerCase().split(/\s+/).filter(p => p.length > 3);
+    const coincidencias = palabrasUsuario.filter(p => 
+        palabras.some(pr => pr.includes(p) || p.includes(pr))
+    ).length;
+    const puntajeCoherencia = Math.min(1.0, coincidencias / Math.max(3, palabrasUsuario.length * 0.3));
+    
+    // 4. Puntaje por creatividad (basado en temperatura y longitud de acciones)
+    const tieneAcciones = textoRespuesta.includes('*');
+    const numAcciones = (textoRespuesta.match(/\*/g) || []).length / 2;
+    let puntajeCreatividad = 0;
+    if (tieneAcciones && numAcciones >= 2) {
+        puntajeCreatividad = 0.8 + Math.min(0.2, numAcciones * 0.1);
+    } else if (tieneAcciones) {
+        puntajeCreatividad = 0.6;
+    } else {
+        puntajeCreatividad = 0.4;
+    }
+    
+    // Aplicar pesos configurados
+    const { pesoLongitud, pesoVariedad, pesoCoherencia, pesoCreatividad } = BEST_OF_N_CONFIG.criteriosSeleccion;
+    
+    const puntajeFinal = 
+        (puntajeLongitud * pesoLongitud) +
+        (puntajeVariedad * pesoVariedad) +
+        (puntajeCoherencia * pesoCoherencia) +
+        (puntajeCreatividad * pesoCreatividad);
+    
+    return puntajeFinal;
+}
+
+/**
+ * Genera múltiples respuestas usando Best-of-N sampling y selecciona la mejor
+ * @param {Array} mensajesPayload - Mensajes para la API
+ * @param {string} modelo - Modelo a usar
+ * @param {string} mensajeOriginal - Mensaje original del usuario
+ * @returns {Promise<object|null>} - Mejor respuesta encontrada o null
+ */
+async function generarMultipleRespuestas(mensajesPayload, modelo, mensajeOriginal) {
+    if (!BEST_OF_N_CONFIG.enabled) {
+        return null;
+    }
+    
+    logQuinti('INFO', `🎲 BEST-OF-N: Generando ${BEST_OF_N_CONFIG.numRespuestas} respuestas para seleccionar la mejor`);
+    
+    const respuestasGeneradas = [];
+    const tiempoInicio = Date.now();
+    
+    // Generar N respuestas con diferentes temperaturas
+    for (let i = 0; i < BEST_OF_N_CONFIG.numRespuestas; i++) {
+        // Calcular temperatura variable para cada respuesta
+        const variacionTemperatura = (i / (BEST_OF_N_CONFIG.numRespuestas - 1)) * BEST_OF_N_CONFIG.temperaturaVariacion;
+        const temperaturaActual = BEST_OF_N_CONFIG.temperaturaBase + variacionTemperatura - (BEST_OF_N_CONFIG.temperaturaVariacion / 2);
+        
+        logQuinti('DEBUG', `Best-of-N: Generando respuesta ${i + 1}/${BEST_OF_N_CONFIG.numRespuestas} con temperatura ${temperaturaActual.toFixed(2)}`);
+        
+        try {
+            // Intentar llamada API con temperatura específica
+            // Nota: La API de Groq soporta parámetro temperature
+            const payloadConTemperatura = [...mensajesPayload];
+            const datosRespuesta = await intentarLlamadaAPIConTemperatura(payloadConTemperatura, modelo, temperaturaActual);
+            
+            if (datosRespuesta && esRespuestaValida(datosRespuesta)) {
+                // Verificar que no contenga frases de rechazo
+                if (!contieneFrasesRechazo(datosRespuesta.respuesta)) {
+                    respuestasGeneradas.push({
+                        indice: i,
+                        temperatura: temperaturaActual,
+                        respuesta: datosRespuesta,
+                        timestamp: Date.now()
+                    });
+                    logQuinti('DEBUG', `Best-of-N: Respuesta ${i + 1} válida (${datosRespuesta.respuesta.length} chars)`);
+                } else {
+                    logQuinti('WARN', `Best-of-N: Respuesta ${i + 1} descartada por contener frases de rechazo`);
+                    console.log(`[RESPUESTA RECHAZADA #${i + 1}]`, datosRespuesta.respuesta);
+                }
+            } else {
+                logQuinti('WARN', `Best-of-N: Respuesta ${i + 1} inválida o nula`);
+                if (datosRespuesta) {
+                    console.log(`[RESPUESTA INVÁLIDA #${i + 1}]`, datosRespuesta);
+                }
+            }
+        } catch (error) {
+            logQuinti('ERROR', `Best-of-N: Error generando respuesta ${i + 1}`, { error: error.message });
+            console.log(`[ERROR RESPUESTA #${i + 1}]`, error.message);
+        }
+    }
+    
+    logQuinti('INFO', `🎲 BEST-OF-N: ${respuestasGeneradas.length}/${BEST_OF_N_CONFIG.numRespuestas} respuestas válidas generadas en ${Date.now() - tiempoInicio}ms`);
+    
+    // Mostrar todas las respuestas en consola para depuración
+    if (respuestasGeneradas.length > 0) {
+        console.log('\n' + '='.repeat(60));
+        console.log('🎲 BEST-OF-N: TODAS LAS RESPUESTAS GENERADAS');
+        console.log('='.repeat(60));
+        
+        respuestasGeneradas.forEach((resp, idx) => {
+            console.log(`\n--- RESPUESTA #${resp.indice + 1} (Temp: ${resp.temperatura.toFixed(2)}) ---`);
+            console.log(`Longitud: ${resp.respuesta.respuesta.length} chars`);
+            console.log(`Imagen Tag: ${resp.respuesta.imagen_tag || 'N/A'}`);
+            console.log(`Texto: "${resp.respuesta.respuesta}"`);
+        });
+        
+        console.log('\n' + '='.repeat(60));
+    }
+    
+    // Si no hay respuestas válidas, retornar null para usar fallback normal
+    if (respuestasGeneradas.length === 0) {
+        logQuinti('WARN', 'Best-of-N: Ninguna respuesta válida generada, usando fallback normal');
+        return null;
+    }
+    
+    // Calcular puntajes y seleccionar la mejor
+    const respuestasConPuntaje = respuestasGeneradas.map(resp => ({
+        ...resp,
+        puntaje: calcularPuntajeRespuesta(resp, mensajeOriginal)
+    }));
+    
+    // Ordenar por puntaje (mayor a menor)
+    respuestasConPuntaje.sort((a, b) => b.puntaje - a.puntaje);
+    
+    // Mostrar ranking en consola
+    console.log('\n🏆 BEST-OF-N: RANKING DE RESPUESTAS');
+    console.log('-'.repeat(40));
+    respuestasConPuntaje.forEach((resp, idx) => {
+        const emoji = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '  ';
+        console.log(`${emoji} #${resp.indice + 1}: Puntaje ${resp.puntaje.toFixed(3)} (Temp: ${resp.temperatura.toFixed(2)})`);
+    });
+    
+    // Seleccionar la mejor respuesta
+    const mejorRespuesta = respuestasConPuntaje[0];
+    logQuinti('INFO', `🏆 BEST-OF-N: Mejor respuesta seleccionada: #${mejorRespuesta.indice + 1} con puntaje ${mejorRespuesta.puntaje.toFixed(3)}`);
+    
+    return mejorRespuesta.respuesta;
+}
+
+/**
+ * Wrapper para intentarLlamadaAPI que soporta parámetro de temperatura
+ * @param {Array} mensajes - Mensajes para la API
+ * @param {string} modelo - Modelo a usar
+ * @param {number} temperatura - Temperatura (0.0 a 1.0)
+ * @returns {Promise<object>} - Respuesta parseada
+ */
+async function intentarLlamadaAPIConTemperatura(mensajes, modelo, temperatura = 0.7) {
+    const url = "https://api.groq.com/openai/v1/chat/completions";
+    const apiKey = GROQ_KEYS[indiceKeyActual % GROQ_KEYS.length];
+    
+    const body = {
+        model: modelo,
+        messages: mensajes,
+        temperature: temperatura,
+        max_tokens: 500
+    };
+    
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify(body)
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+        
+        const data = await response.json();
+        const contenido = data.choices?.[0]?.message?.content || '';
+        
+        // Parsear JSON de la respuesta
+        return parsearJSON(contenido);
+    } catch (error) {
+        logQuinti('ERROR', 'Error en llamada API con temperatura', { error: error.message, temperatura });
+        throw error;
+    }
+}
+
+/**
  * Formatea un error para mostrarlo al usuario de forma amigable
  * Usa la función del módulo fallbacks.js
  */
@@ -2337,7 +2617,22 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
     logQuinti('INFO', 'Iniciando solicitud a API Groq', { modelo: MODELO_PRINCIPAL, chica: chicaSeleccionada, chicasEnChat: Array.from(chicasEnChat) });
     
     // ========================================
-    // FASE 0: Intento normal con historial completo
+    // BEST-OF-N SAMPLING: Generar múltiples respuestas y seleccionar la mejor
+    // ========================================
+    if (BEST_OF_N_CONFIG.enabled) {
+        logQuinti('DEBUG', 'Intentando Best-of-N sampling...');
+        const mejorRespuestaBestOfN = await generarMultipleRespuestas(mensajesPayload, MODELO_PRINCIPAL, mensaje);
+        
+        if (mejorRespuestaBestOfN && esRespuestaValida(mejorRespuestaBestOfN)) {
+            logQuinti('INFO', `✅ Best-of-N exitoso: Usando mejor respuesta seleccionada`);
+            return procesarRespuesta(mejorRespuestaBestOfN, mensaje);
+        } else {
+            logQuinti('WARN', 'Best-of-N no pudo generar respuesta válida, usando fallback normal con sistema de fases');
+        }
+    }
+    
+    // ========================================
+    // FASE 0: Intento normal con historial completo (fallback si Best-of-N falla o está desactivado)
     // ========================================
     logQuinti('DEBUG', 'FASE 0: Intento normal con historial completo');
     let datos;
@@ -3271,6 +3566,7 @@ export {
     GROQ_KEYS,
     MODELO_PRINCIPAL,
     PERSONALIDADES,
+    BEST_OF_N_CONFIG,  // Exportar configuración Best-of-N
     // Funciones de utilidad
     logQuinti,
     logErrorAPI,
@@ -3307,7 +3603,12 @@ export {
     // Función de parseo de JSON (para tests)
     parsearJSON,
     // Función para obtener URLs de imágenes
-    obtenerURLImagen
+    obtenerURLImagen,
+    // Funciones Best-of-N sampling
+    generarMultipleRespuestas,
+    calcularPuntajeRespuesta,
+    contieneFrasesRechazo,
+    intentarLlamadaAPIConTemperatura
 };
 
 // Exportar para window (compatibilidad con browser)
