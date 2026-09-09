@@ -2326,6 +2326,80 @@ function esRespuestaValida(datos) {
 }
 
 /**
+ * Verifica si una respuesta es un rechazo o no puede ayudar (tipo "lo siento no puedo")
+ * @param {string} respuesta - Texto de la respuesta
+ * @returns {boolean} - True si es un rechazo
+ */
+function esRespuestaRechazo(respuesta) {
+    if (!respuesta || typeof respuesta !== 'string') return true;
+    
+    const frasesRechazo = [
+        'lo siento',
+        'no puedo',
+        'no debo',
+        'no debería',
+        'no me siento cómoda',
+        'mejor hablemos',
+        'cambiemos de tema',
+        'esto es inapropiado',
+        'esto está mal',
+        'no es correcto',
+        'prefiero no',
+        'no voy a',
+        'no quiero hablar',
+        'i cannot',
+        'i sorry',
+        'i can\'t',
+        'i am not able',
+        'this is inappropriate',
+        'let\'s talk about something else'
+    ];
+    
+    const respuestaLower = respuesta.toLowerCase();
+    
+    for (const frase of frasesRechazo) {
+        if (respuestaLower.includes(frase)) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+/**
+ * Calcula un score de calidad para una respuesta
+ * @param {object} respuesta - Objeto con respuesta e imagen_tag
+ * @returns {number} - Score de 0-100
+ */
+function calcularScoreCalidad(respuesta) {
+    let score = 0;
+    
+    // Longitud de la respuesta (max 30 puntos)
+    const longitud = respuesta.respuesta?.length || 0;
+    if (longitud > 200) score += 30;
+    else if (longitud > 100) score += 20;
+    else if (longitud > 50) score += 10;
+    else if (longitud > 20) score += 5;
+    
+    // No es un rechazo (max 40 puntos) - CRÍTICO
+    if (!esRespuestaRechazo(respuesta.respuesta)) {
+        score += 40;
+    }
+    
+    // Tiene imagen_tag válida (max 20 puntos)
+    if (respuesta.imagen_tag && !['none', 'null', 'undefined', '', 'invalid', 'error'].includes(respuesta.imagen_tag.toLowerCase().trim())) {
+        score += 20;
+    }
+    
+    // Tiene acciones entre asteriscos (max 10 puntos)
+    if (respuesta.respuesta?.includes('*')) {
+        score += 10;
+    }
+    
+    return score;
+}
+
+/**
  * Formatea un error para mostrarlo al usuario de forma amigable
  * Usa la función del módulo fallbacks.js
  */
@@ -2348,6 +2422,17 @@ function formatearErrorUsuario(error) {
 async function obtenerRespuestaGroq(mensaje, historialPrevio = []) {
     const url = "https://api.groq.com/openai/v1/chat/completions";
     const tiempoInicio = Date.now();
+    
+    // ============================================================
+    //  SISTEMA DE GENERACIÓN MÚLTIPLE DE RESPUESTAS (N-CHOICES)
+    //  Genera 3-5 respuestas y elige la mejor según score de calidad
+    // ============================================================
+    const NUM_GENERACIONES = 4; // Cantidad de respuestas a generar
+    const respuestasGeneradas = []; // Almacena todas las respuestas generadas
+    let mejorRespuesta = null;
+    let mejorScore = -1;
+    
+    logQuinti('INFO', `🎲 SISTEMA MULTI-RESPUESTA: Generando ${NUM_GENERACIONES} respuestas para seleccionar la mejor`);
     
     // Detectar si se menciona a alguna otra chica en el mensaje
     const mensajeLower = mensaje.toLowerCase();
