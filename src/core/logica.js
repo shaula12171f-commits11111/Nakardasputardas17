@@ -1888,20 +1888,25 @@ async function generarMultipleRespuestas(mensajesPayload, modelo, mensajeOrigina
     
     logQuinti('INFO', `🎲 BEST-OF-N: ${respuestasGeneradas.length}/${BEST_OF_N_CONFIG.numRespuestas} respuestas válidas generadas en ${Date.now() - tiempoInicio}ms`);
     
-    // Mostrar todas las respuestas en consola para depuración
+    // Mostrar TODAS las respuestas en consola para depuración (VISIBILIDAD MEJORADA)
     if (respuestasGeneradas.length > 0) {
-        console.log('\n' + '='.repeat(60));
-        console.log('🎲 BEST-OF-N: TODAS LAS RESPUESTAS GENERADAS');
-        console.log('='.repeat(60));
+        console.groupCollapsed('🎲 BEST-OF-N: TODAS LAS RESPUESTAS GENERADAS (Click para expandir)');
+        console.log('='.repeat(80));
         
         respuestasGeneradas.forEach((resp, idx) => {
-            console.log(`\n--- RESPUESTA #${resp.indice + 1} (Temp: ${resp.temperatura.toFixed(2)}) ---`);
-            console.log(`Longitud: ${resp.respuesta.respuesta.length} chars`);
-            console.log(`Imagen Tag: ${resp.respuesta.imagen_tag || 'N/A'}`);
-            console.log(`Texto: "${resp.respuesta.respuesta}"`);
+            console.group(`--- RESPUESTA #${resp.indice + 1} ---`);
+            console.log('🌡️  Temperatura:', resp.temperatura.toFixed(3));
+            console.log('📏 Longitud:', resp.respuesta.respuesta.length, 'caracteres');
+            console.log('🏷️  Imagen Tag:', resp.respuesta.imagen_tag || 'N/A');
+            console.log('⏰ Timestamp:', new Date(resp.timestamp).toLocaleTimeString());
+            console.log('💬 TEXTO COMPLETO:');
+            console.log(resp.respuesta.respuesta);
+            console.log('─'.repeat(60));
+            console.groupEnd();
         });
         
-        console.log('\n' + '='.repeat(60));
+        console.log('='.repeat(80));
+        console.groupEnd();
     }
     
     // Si no hay respuestas válidas, retornar null para usar fallback normal
@@ -1919,13 +1924,22 @@ async function generarMultipleRespuestas(mensajesPayload, modelo, mensajeOrigina
     // Ordenar por puntaje (mayor a menor)
     respuestasConPuntaje.sort((a, b) => b.puntaje - a.puntaje);
     
-    // Mostrar ranking en consola
-    console.log('\n🏆 BEST-OF-N: RANKING DE RESPUESTAS');
-    console.log('-'.repeat(40));
+    // Mostrar ranking en consola (MEJORADO)
+    console.groupCollapsed('🏆 BEST-OF-N: RANKING DE RESPUESTAS (Click para expandir)');
+    console.log('-'.repeat(60));
     respuestasConPuntaje.forEach((resp, idx) => {
         const emoji = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '  ';
-        console.log(`${emoji} #${resp.indice + 1}: Puntaje ${resp.puntaje.toFixed(3)} (Temp: ${resp.temperatura.toFixed(2)})`);
+        const detalle = `#${resp.indice + 1}: Puntaje ${resp.puntaje.toFixed(3)} | Temp: ${resp.temperatura.toFixed(2)} | Long: ${resp.respuesta.respuesta.length} chars`;
+        console.log(`${emoji} ${detalle}`);
+        
+        // Mostrar detalles adicionales solo para el top 3
+        if (idx < 3) {
+            console.log(`   └─ Frases Rechazo: ${contieneFrasesRechazo(resp.respuesta.respuesta) ? '❌ SÍ' : '✅ NO'}`);
+            console.log(`   └─ Variedad Léxica: ${(new Set(resp.respuesta.respuesta.split(' ')).size / resp.respuesta.respuesta.split(' ').length).toFixed(2)}`);
+        }
     });
+    console.log('-'.repeat(60));
+    console.groupEnd();
     
     // Seleccionar la mejor respuesta
     const mejorRespuesta = respuestasConPuntaje[0];
@@ -3567,7 +3581,7 @@ export {
     MODELO_PRINCIPAL,
     PERSONALIDADES,
     BEST_OF_N_CONFIG,  // Exportar configuración Best-of-N
-    // Funciones de utilidad
+    // Funciones de utilidad para depuración y testing
     logQuinti,
     logErrorAPI,
     formatearErrorUsuario,
@@ -3584,6 +3598,10 @@ export {
     actualizarMemoriaTrabajo,
     generarResumenNarrativo,
     obtenerEstadoMemoriaParaPrompt,
+    // Funciones Best-of-N para testing
+    contieneFrasesRechazo,
+    calcularPuntajeRespuesta,
+    generarMultipleRespuestas,
     procesarMensajeParaMemoria,
     // Funciones de intención y contexto
     detectarIntencion,
