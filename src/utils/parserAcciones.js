@@ -697,12 +697,87 @@ export function validarAccionConContexto(texto, tagDetectado = null) {
 }
 
 /**
+ * PATRONES PARA DETECTAR PROPUESTAS/INVITACIONES (NO ACCIONES EN CURSO)
+ * Estas frases indican una intención futura, NO una acción presente
+ * @type {RegExp[]}
+ */
+const PATRONES_PROPUESTA = [
+    /vamos a (el |la )?(hotel|cama|cuarto|habitación)/i,
+    /vamos al hotel/i,
+    /vamos a la cama/i,
+    /tengamos un polvo/i,
+    /tengamos sexo/i,
+    /hagamos el amor/i,
+    /juguemos/i,
+    /¿jugamos?/i,
+    /¿qué te parece si/i,
+    /¿te gustaría/i,
+    /¿quieres/i,
+    /¿vamos a/i,
+    /propongo/i,
+    /te propongo/i,
+    /me gustaría/i,
+    /quiero que/i,
+    /deberíamos/i,
+    /podríamos/i,
+    /¿por qué no/i,
+    /sería bueno/i,
+    /preparate/i,
+    /prepárate/i,
+    /vení conmigo/i,
+    /ven conmigo/i,
+    /acompañame/i,
+    /sígueme/i
+];
+
+/**
+ * Detecta si un mensaje es una PROPUESTA/INVITACIÓN en lugar de una acción en curso
+ * @param {string} texto - Texto a analizar
+ * @returns {{esPropuesta: boolean, tipoPropuesta: string|null}}
+ */
+export function detectarPropuesta(texto) {
+    if (!texto) return { esPropuesta: false, tipoPropuesta: null };
+    
+    const textoLower = texto.toLowerCase();
+    
+    for (const patron of PATRONES_PROPUESTA) {
+        if (patron.test(texto)) {
+            // Extraer el tipo de propuesta
+            const match = patron.exec(texto);
+            return { 
+                esPropuesta: true, 
+                tipoPropuesta: match ? match[0] : 'propuesta_general',
+                patron: patron.toString()
+            };
+        }
+    }
+    
+    return { esPropuesta: false, tipoPropuesta: null };
+}
+
+/**
  * Función principal mejorada que combina detección primaria + validación de contexto
  * @param {string} texto - Texto completo a analizar
  * @param {Object} opciones - Opciones de configuración
  * @returns {{tag: string|null, puntuacion: number, validacionContexto: Object, coincidencias: Array}}
  */
 export function detectarAccionMejorada(texto, opciones = {}) {
+    // Paso 0: Verificar si es una propuesta (prioridad máxima)
+    const propuesta = detectarPropuesta(texto);
+    if (propuesta.esPropuesta) {
+        // Si es una propuesta, NO detectar acción explícita
+        // Esto evita que "vamos al hotel" active imágenes de sexo
+        console.log(`[PROPUESTA DETECTADA] ${propuesta.tipoPropuesta} - No activar acción explícita`);
+        return {
+            tag: null,  // Null porque es una propuesta, no una acción en curso
+            puntuacion: 0,
+            esPropuesta: true,
+            tipoPropuesta: propuesta.tipoPropuesta,
+            coincidencias: [],
+            detectado: false
+        };
+    }
+    
     // Paso 1: Detección primaria
     const deteccionPrimaria = detectarAccionEnTexto(texto, opciones);
     

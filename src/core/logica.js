@@ -31,7 +31,7 @@ import { obtenerMensajeError, generarPayloadFase, getOrdenFases, getInfoFase, ob
 import { QuintiImagenesPrueba } from '../systems/imagenes.js';
 import { getImagenTagsMapping as getImagenTagsMappingHistoria } from '../stories/historiasParalelas.js';
 import { detectarRepeticion, detectarRepeticionEntreChicas, agregarDialogoAlHistorial, generarPromptAntiRepeticion, getEstadisticasRepeticion, calcularSimilitud } from '../systems/antiRepeticion.js';
-import { detectarAccionEnTexto, detectarAccionEnTextoSimple } from '../utils/parserAcciones.js';
+import { detectarAccionEnTexto, detectarAccionEnTextoSimple, detectarPropuesta } from '../utils/parserAcciones.js';
 import { detectarIntencion, obtenerFraseVariable, determinarVariacionPorDuracion, analizarNombreImagen, buscarImagenPorEntrada, memoriaContextoGlobal } from '../systems/intencionContexto.js';
 
 // ============================================================
@@ -586,6 +586,23 @@ async function verificarAccionEnCurso(mensajeUsuario, respuestaIA, chicaNombre, 
     
     // Primero intentar detectar localmente sin llamada a API
     // Esto es más rápido y evita llamadas innecesarias
+    
+    // 0. VERIFICAR SI ES UNA PROPUESTA/INVITACIÓN (prioridad máxima)
+    // Si el usuario está proponiendo algo ("vamos al hotel", "tengamos un polvo"),
+    // NO debe detectarse como acción en curso para evitar saltar directamente al resultado
+    const propuestaUsuario = detectarPropuesta(mensajeUsuario);
+    if (propuestaUsuario.esPropuesta) {
+        logQuinti('INFO', `[PROPUESTA] Usuario propone: "${propuestaUsuario.tipoPropuesta}" - No activar acción explícita, mantener estado actual`);
+        // Retornar null para que no se active ninguna imagen de acción explícita
+        // La escena debe desarrollarse gradualmente
+        return { 
+            accion: null, 
+            cambioDetectado: false,
+            esPropuesta: true,
+            tipoPropuesta: propuestaUsuario.tipoPropuesta,
+            detalle: propuestaUsuario
+        };
+    }
     
     // 1. Detectar acción en el mensaje del usuario (prioridad máxima)
     const resultadoMensaje = detectarAccionEnTexto(mensajeUsuario);
