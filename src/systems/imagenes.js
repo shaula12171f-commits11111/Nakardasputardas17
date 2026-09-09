@@ -143,9 +143,9 @@ anal: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDD
 manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630311500_1.png", audio: "", descripcion: "" },
 lamiendo_pene:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778618613406.jpg", audio: "", descripcion: "" },
              desnuda_en_cama:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986586569.png", audio: "", descripcion: "" },
-           
-           
-            usuario_nalguea_el_culo_a_nino:  { url: "https://files.catbox.moe/d2oele.png", audio: "https://files.catbox.moe/5xmzxb.mp3", descripcion: "" },
+           usuario_agarra_el_culo_a_nino_NOSEX:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914334012.webp", audio: "", descripcion: "" },
+           usuario_agarra_el_culo_a_nino_:  { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788027497223.webp", audio: "", descripcion: "" },
+            usuario_nalguea_el_culo_a_nino_NOSEX:  { url: "https://files.catbox.moe/d2oele.png", audio: "https://files.catbox.moe/5xmzxb.mp3", descripcion: "" },
         }
     },
     Miku: {
