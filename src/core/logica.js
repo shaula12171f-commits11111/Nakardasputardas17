@@ -231,22 +231,37 @@ const ACCIONES_SEXUALES_EXPLICITAS = [
     'enMisionero', 'enReverseCowgirl', 'mamando', 'chupandoBolas'
 ];
 
+// ACCIONES QUE INDICAN CONTEXTO SEXUAL O PRE-SEXUAL (activan contextoSexual pero no necesariamente enEscenaSexo)
+const ACCIONES_CONTEXTO_SEXUAL = [
+    'besando', 'desnuda', 'mostrandoCulo', 'lamiendoAno', 'haciendoHandjob',
+    'agarrar_culo', 'agarrar_pechos', 'tocar', 'acariciar', 'besar',
+    'usuario_agarra_el_culo', 'usuario_besa', 'usuario_toca'
+];
+
 /**
  * Actualiza el estado de la escena sexual basado en la acción actual
  */
 function actualizarEstadoEscenaSexual() {
     const hayAccionSexualExplicita = ACCIONES_SEXUALES_EXPLICITAS.some(accion => estadoAccionesExplicitas[accion]);
     
+    // Verificar también acciones de contexto sexual (pre-sexo, tocamientos, etc.)
+    const hayContextoSexo = ACCIONES_CONTEXTO_SEXUAL.some(accion => 
+        estadoAccionesExplicitas[accion] || 
+        (accionEnCurso && accionEnCurso.toLowerCase().includes(accion))
+    );
+    
     // Actualizar estado de escena sexual
-    estadoEscenaSexual.enEscenaSexo = hayAccionSexualExplicita || estadoAccionesExplicitas.follando;
-    estadoEscenaSexual.contextoSexual = hayAccionSexualExplicita || estadoAccionesExplicitas.mamando || estadoAccionesExplicitas.desnuda;
+    // enEscenaSexo: solo para sexo explícito (follando, mamando, etc.)
+    // contextoSexual: incluye pre-sexo, tocamientos, besos, desnudez
+    estadoEscenaSexual.enEscenaSexo = hayAccionSexualExplicita;
+    estadoEscenaSexual.contextoSexual = hayAccionSexualExplicita || hayContextoSexo;
     
     if (estadoEscenaSexual.enEscenaSexo && estadoEscenaSexual.turnoInicioSexo === 0) {
         estadoEscenaSexual.turnoInicioSexo = historialConversacion.length;
         estadoEscenaSexual.nivelIntensidad = 8;
     } else if (!estadoEscenaSexual.enEscenaSexo) {
         estadoEscenaSexual.turnoInicioSexo = 0;
-        estadoEscenaSexual.nivelIntensidad = 0;
+        estadoEscenaSexual.nivelIntensidad = hayContextoSexo ? 3 : 0; // Intensidad menor si es solo contexto sexual
         estadoEscenaSexual.ultimaAccionSexual = null;
     }
     
@@ -258,9 +273,11 @@ function actualizarEstadoEscenaSexual() {
                 break;
             }
         }
+    } else if (hayContextoSexo && accionEnCurso) {
+        estadoEscenaSexual.ultimaAccionSexual = accionEnCurso;
     }
     
-    logQuinti('DEBUG', `Estado escena sexual: ${JSON.stringify(estadoEscenaSexual)}`);
+    logQuinti('DEBUG', `Estado escena sexual: enEscenaSexo=${estadoEscenaSexual.enEscenaSexo}, contextoSexual=${estadoEscenaSexual.contextoSexual}, accionEnCurso=${accionEnCurso}`);
 }
 
 /**
@@ -3971,20 +3988,21 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
     let urlDescripcion = null;
     
     // MEJORA CRÍTICA: SISTEMA NOSEX - Filtrar imágenes según contexto sexual
-    // Si estamos en escena de sexo, EXCLUIR imágenes con tag NOSEX
-    // Si NO estamos en escena de sexo, PRIORIZAR imágenes NOSEX si existen
+    // Si estamos en escena de sexo EXPLÍCITO, EXCLUIR imágenes con tag NOSEX
+    // Si NO estamos en escena de sexo explícito (solo contexto sexual/pre-sexo), PRIORIZAR imágenes NOSEX si existen
     const esEscenaSexoActiva = estadoEscenaSexual.enEscenaSexo || ACCIONES_SEXUALES_EXPLICITAS.some(a => estadoAccionesExplicitas[a]);
     
-    logQuinti('DEBUG', `obtenerURLImagen: Contexto sexual=${esEscenaSexoActiva}, Tag solicitado=${tag}`);
+    logQuinti('DEBUG', `obtenerURLImagen: Contexto sexual=${esEscenaSexoActiva}, contextoSexual=${estadoEscenaSexual.contextoSexual}, Tag solicitado=${tag}, accionEnCurso=${accionEnCurso}`);
     
     // MEJORA: Buscar TODAS las variantes numeradas del tag (ej: "tag", "tag2", "tag_1") y seleccionar una aleatoriamente
     if (tag && chicaData.imagenes) {
         const tagsDisponibles = Object.keys(chicaData.imagenes);
-        const tagBase = tag.replace(/_\d+$/, '').replace(/\d+$/, '').replace('_NOSEX', ''); // Remover números y NOSEX al final
+        // CORRECCIÓN: Manejar tags que terminan con _ o números, y también NOSEX
+        const tagBase = tag.replace(/_NOSEX$/, '').replace(/_\d+$/, '').replace(/\d+$/, '').replace(/_$/, ''); // Remover NOSEX, números y guión bajo final
         
         // Buscar todas las variantes de este tag (base + numeradas + NOSEX)
         const variantes = tagsDisponibles.filter(t => {
-            const tNormalizado = t.replace(/_\d+$/, '').replace(/\d+$/, '').replace('_NOSEX', '');
+            const tNormalizado = t.replace(/_NOSEX$/, '').replace(/_\d+$/, '').replace(/\d+$/, '').replace(/_$/, '');
             return tNormalizado === tagBase;
         });
         
@@ -3995,17 +4013,17 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
             let variantesFiltradas = variantes;
             
             if (esEscenaSexoActiva) {
-                // EN ESCENA SEXUAL: Excluir variantes NOSEX
+                // EN ESCENA SEXUAL EXPLÍCITA: Excluir variantes NOSEX
                 variantesFiltradas = variantes.filter(t => !t.includes('_NOSEX'));
-                logQuinti('INFO', `Escena sexual activa: Excluyendo tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
+                logQuinti('INFO', `Escena sexual EXPLÍCITA activa: Excluyendo tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
             } else {
-                // FUERA DE ESCENA SEXUAL: PRIORIZAR variantes NOSEX si existen
+                // FUERA DE ESCENA SEXUAL EXPLÍCITA (incluye pre-sexo, tocamientos, besos): PRIORIZAR variantes NOSEX si existen
                 const variantesNosex = variantes.filter(t => t.includes('_NOSEX'));
                 if (variantesNosex.length > 0) {
                     variantesFiltradas = variantesNosex;
-                    logQuinti('INFO', `Fuera de escena sexual: Priorizando tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
+                    logQuinti('INFO', `Sin escena sexual explícita (contextoSexual=${estadoEscenaSexual.contextoSexual}): Priorizando tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
                 } else {
-                    logQuinti('DEBUG', `No hay variantes NOSEX disponibles para "${tagBase}"`);
+                    logQuinti('DEBUG', `No hay variantes NOSEX disponibles para "${tagBase}", usando variantes normales`);
                 }
             }
             
