@@ -215,6 +215,54 @@ let estadoAccionesExplicitas = {
     lamiendoAno: false
 };
 
+// ESTADO DE ESCENA SEXUAL - Determina si estamos en contexto sexual explícito
+// Usado para decidir si mostrar imágenes NOSEX o versiones normales
+let estadoEscenaSexual = {
+    enEscenaSexo: false,      // true = estamos en escena de sexo activo
+    turnoInicioSexo: 0,       // Turno en que comenzó la escena sexual
+    nivelIntensidad: 0,       // 0-10: intensidad de la escena sexual
+    ultimaAccionSexual: null, // Última acción sexual realizada
+    contextoSexual: false     // Contexto general sexual (pre-sexo, durante, post-sexo)
+};
+
+// ACCIONES QUE INDICAN ESCENA SEXUAL ACTIVA
+const ACCIONES_SEXUALES_EXPLICITAS = [
+    'follando', 'siendoFollada', 'haciendoAnal', 'enDoggystyle', 
+    'enMisionero', 'enReverseCowgirl', 'mamando', 'chupandoBolas'
+];
+
+/**
+ * Actualiza el estado de la escena sexual basado en la acción actual
+ */
+function actualizarEstadoEscenaSexual() {
+    const hayAccionSexualExplicita = ACCIONES_SEXUALES_EXPLICITAS.some(accion => estadoAccionesExplicitas[accion]);
+    
+    // Actualizar estado de escena sexual
+    estadoEscenaSexual.enEscenaSexo = hayAccionSexualExplicita || estadoAccionesExplicitas.follando;
+    estadoEscenaSexual.contextoSexual = hayAccionSexualExplicita || estadoAccionesExplicitas.mamando || estadoAccionesExplicitas.desnuda;
+    
+    if (estadoEscenaSexual.enEscenaSexo && estadoEscenaSexual.turnoInicioSexo === 0) {
+        estadoEscenaSexual.turnoInicioSexo = historialConversacion.length;
+        estadoEscenaSexual.nivelIntensidad = 8;
+    } else if (!estadoEscenaSexual.enEscenaSexo) {
+        estadoEscenaSexual.turnoInicioSexo = 0;
+        estadoEscenaSexual.nivelIntensidad = 0;
+        estadoEscenaSexual.ultimaAccionSexual = null;
+    }
+    
+    // Actualizar última acción sexual
+    if (hayAccionSexualExplicita) {
+        for (const accion of ACCIONES_SEXUALES_EXPLICITAS) {
+            if (estadoAccionesExplicitas[accion]) {
+                estadoEscenaSexual.ultimaAccionSexual = accion;
+                break;
+            }
+        }
+    }
+    
+    logQuinti('DEBUG', `Estado escena sexual: ${JSON.stringify(estadoEscenaSexual)}`);
+}
+
 /**
  * Actualiza el estado de la acción en curso desde logica.js
  * @param {string|null} nuevaAccion - La acción detectada en el mensaje del usuario
@@ -229,6 +277,9 @@ function actualizarAccionEnCurso(nuevaAccion) {
             
             // Actualizar booleanos de acciones explícitas
             actualizarEstadoAccionesExplicitas(nuevaAccion, true);
+            
+            // Actualizar estado de escena sexual
+            actualizarEstadoEscenaSexual();
             
             // Registrar evento importante en memoria
             registrarEventoImportante(`Inicio de acción: ${nuevaAccion}`);
@@ -248,6 +299,9 @@ function actualizarAccionEnCurso(nuevaAccion) {
             
             // Resetear booleanos de acciones explícitas
             resetearEstadoAccionesExplicitas();
+            
+            // Actualizar estado de escena sexual
+            actualizarEstadoEscenaSexual();
             
             accionEnCurso = null;
             contadorTurnosAccion = 0;
@@ -2986,6 +3040,12 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
             });
             
             // AGREGAR A respuestasGeneradas para mostrar en consola las alternativas no seleccionadas
+            respuestasGeneradas.push({
+                chica: nombrePersonaje,
+                respuesta: datos && datos.respuesta ? datos.respuesta : '...',
+                imagen_tag: (datos && datos.imagen_tag && datos.imagen_tag.toLowerCase().trim() !== 'none') ? datos.imagen_tag : 'hablando'
+            });
+            
             if (respuestasPorChica.length === 1) {
                 // Primera respuesta - se usará como principal
                 logQuinti('INFO', `✅ RESPUESTA PRINCIPAL SELECCIONADA (${nombrePersonaje}): ${datos?.respuesta?.substring(0, 100)}...`);
@@ -3048,6 +3108,15 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
         
         logRespuestaExitosa(MODELO_PRINCIPAL, respuestaCombinada.length, Date.now() - tiempoInicio);
         
+        // Mostrar en consola TODAS las respuestas generadas (incluyendo las no seleccionadas) para depuración
+        if (respuestasGeneradas.length > 1) {
+            logQuinti('INFO', `📊 RESPUESTAS GENERADAS (${respuestasGeneradas.length} total):`);
+            respuestasGeneradas.forEach((r, idx) => {
+                const esPrincipal = idx === 0 ? '✅ PRINCIPAL' : `🔄 ALT #${idx + 1}`;
+                logQuinti('DEBUG', `${esPrincipal} [${r.chica}]: ${r.respuesta.substring(0, 150)}... | Tag: ${r.imagen_tag}`);
+            });
+        }
+        
         return {
             respuesta: respuestaCombinada,
             imagen_tag: tagImagenPrincipal,
@@ -3058,7 +3127,8 @@ DEBES HACER TRES COSAS OBLIGATORIAMENTE:
             chicaPrincipal: chicaPrincipal,
             chicasRespondiendo: personajesArray,
             chicasEnChat: Array.from(chicasEnChat),
-            respuestasIndividuales: respuestasPorChica
+            respuestasIndividuales: respuestasPorChica,
+            todasLasRespuestasGeneradas: respuestasGeneradas // Incluir todas para depuración
         };
     }
     
@@ -3900,30 +3970,59 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
     let urlAudio = null;
     let urlDescripcion = null;
     
+    // MEJORA CRÍTICA: SISTEMA NOSEX - Filtrar imágenes según contexto sexual
+    // Si estamos en escena de sexo, EXCLUIR imágenes con tag NOSEX
+    // Si NO estamos en escena de sexo, PRIORIZAR imágenes NOSEX si existen
+    const esEscenaSexoActiva = estadoEscenaSexual.enEscenaSexo || ACCIONES_SEXUALES_EXPLICITAS.some(a => estadoAccionesExplicitas[a]);
+    
+    logQuinti('DEBUG', `obtenerURLImagen: Contexto sexual=${esEscenaSexoActiva}, Tag solicitado=${tag}`);
+    
     // MEJORA: Buscar TODAS las variantes numeradas del tag (ej: "tag", "tag2", "tag_1") y seleccionar una aleatoriamente
     if (tag && chicaData.imagenes) {
         const tagsDisponibles = Object.keys(chicaData.imagenes);
-        const tagBase = tag.replace(/_\d+$/, '').replace(/\d+$/, ''); // Remover números al final
+        const tagBase = tag.replace(/_\d+$/, '').replace(/\d+$/, '').replace('_NOSEX', ''); // Remover números y NOSEX al final
         
-        // Buscar todas las variantes de este tag (base + numeradas)
+        // Buscar todas las variantes de este tag (base + numeradas + NOSEX)
         const variantes = tagsDisponibles.filter(t => {
-            const tNormalizado = t.replace(/_\d+$/, '').replace(/\d+$/, '');
+            const tNormalizado = t.replace(/_\d+$/, '').replace(/\d+$/, '').replace('_NOSEX', '');
             return tNormalizado === tagBase;
         });
         
+        logQuinti('DEBUG', `Tags disponibles para "${tagBase}": [${variantes.join(', ')}]`);
+        
         if (variantes.length > 0) {
-            // Seleccionar aleatoriamente una variante entre TODAS las disponibles
-            const tagElegido = variantes[Math.floor(Math.random() * variantes.length)];
+            // FILTRAR según contexto sexual
+            let variantesFiltradas = variantes;
+            
+            if (esEscenaSexoActiva) {
+                // EN ESCENA SEXUAL: Excluir variantes NOSEX
+                variantesFiltradas = variantes.filter(t => !t.includes('_NOSEX'));
+                logQuinti('INFO', `Escena sexual activa: Excluyendo tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
+            } else {
+                // FUERA DE ESCENA SEXUAL: PRIORIZAR variantes NOSEX si existen
+                const variantesNosex = variantes.filter(t => t.includes('_NOSEX'));
+                if (variantesNosex.length > 0) {
+                    variantesFiltradas = variantesNosex;
+                    logQuinti('INFO', `Fuera de escena sexual: Priorizando tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
+                } else {
+                    logQuinti('DEBUG', `No hay variantes NOSEX disponibles para "${tagBase}"`);
+                }
+            }
+            
+            if (variantesFiltradas.length === 0) {
+                // Fallback: usar todas las variantes si el filtrado dejó vacío
+                variantesFiltradas = variantes;
+                logQuinti('WARN', `Filtrado NOSEX dejó sin opciones, usando todas: [${variantes.join(', ')}]`);
+            }
+            
+            // Seleccionar aleatoriamente una variante entre las filtradas
+            const tagElegido = variantesFiltradas[Math.floor(Math.random() * variantesFiltradas.length)];
             const imgObjVariante = chicaData.imagenes[tagElegido];
             urlImagen = imgObjVariante?.url || imgObjVariante;
             urlAudio = imgObjVariante?.audio || null;
             urlDescripcion = imgObjVariante?.descripcion || null;
             
-            if (variantes.length > 1) {
-                logQuinti('INFO', `Tag "${tag}" tiene ${variantes.length} variantes: [${variantes.join(', ')}]. Usando: "${tagElegido}" para ${nombrePersonaje}`);
-            } else {
-                logQuinti('DEBUG', `Usando tag exacto "${tagElegido}" para ${nombrePersonaje}`);
-            }
+            logQuinti('INFO', `Tag "${tag}" (${esEscenaSexoActiva ? 'SEXO' : 'NO-SEXO'}) tiene ${variantes.length} variantes totales, ${variantesFiltradas.length} después de filtrar. Usando: "${tagElegido}" para ${nombrePersonaje}`);
         }
     }
     
