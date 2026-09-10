@@ -267,10 +267,84 @@ function esTagSexoExplicito(tag) {
 }
 
 /**
+ * Verifica mediante API call el estado del contexto sexual
+ * Esta función hace una llamada ligera a la API para determinar con mayor precisión
+ * si estamos en un contexto sexual basado en el mensaje del usuario y la respuesta de la IA
+ * 
+ * @param {string} mensajeUsuario - El mensaje original del usuario
+ * @param {string} respuestaIA - La respuesta completa de la IA
+ * @param {string} accionActual - La acción actualmente en curso
+ * @returns {Promise<{contextoSexual: boolean, enEscenaSexo: boolean, intensidad: number}>}
+ */
+async function verificarContextoSexualAPI(mensajeUsuario, respuestaIA, accionActual) {
+    try {
+        const contextoCompleto = `
+            Mensaje usuario: "${mensajeUsuario}"
+            Respuesta IA: "${respuestaIA}"
+            Acción en curso: "${accionActual || 'ninguna'}"
+        `.trim();
+        
+        const mensajesPayload = [
+            {
+                role: "user",
+                content: `Analizá el siguiente contexto de conversación y determiná si hay contexto sexual:
+
+${contextoCompleto}
+
+Respondé ÚNICAMENTE con un JSON en este formato exacto:
+{
+    "contextoSexual": true/false,
+    "enEscenaSexo": true/false,
+    "intensidad": número_del_0_al_10,
+    "razon": "breve explicación"
+}
+
+Definiciones:
+- contextoSexual: true si hay insinuaciones, besos, tocamientos, desnudez, pre-sexo, durante o post-sexo
+- enEscenaSexo: true SOLO si hay sexo explícito (penetración, sexo oral, etc.)
+- intensidad: 0=nada, 1-3=ligero (besos, caricias), 4-6=medio (tocamientos íntimos, desnudez), 7-10=alto (sexo explícito)`
+            }
+        ];
+        
+        logQuinti('DEBUG', '[verificarContextoSexualAPI] Iniciando verificación por API...');
+        
+        const resultado = await intentarLlamadaAPI(mensajesPayload, MODELO_PRINCIPAL, true);
+        
+        if (resultado && resultado.content) {
+            try {
+                // Intentar parsear el JSON de la respuesta
+                const jsonMatch = resultado.content.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    const analisis = JSON.parse(jsonMatch[0]);
+                    logQuinti('INFO', `[verificarContextoSexualAPI] Resultado: contextoSexual=${analisis.contextoSexual}, enEscenaSexo=${analisis.enEscenaSexo}, intensidad=${analisis.intensidad}`);
+                    return {
+                        contextoSexual: Boolean(analisis.contextoSexual),
+                        enEscenaSexo: Boolean(analisis.enEscenaSexo),
+                        intensidad: Number(analisis.intensidad) || 0,
+                        razon: analisis.razon || ''
+                    };
+                }
+            } catch (parseError) {
+                logQuinti('WARN', `[verificarContextoSexualAPI] Error al parsear JSON: ${parseError.message}`);
+            }
+        }
+        
+        // Fallback si la API falla
+        logQuinti('WARN', '[verificarContextoSexualAPI] Fallback a verificación local');
+        return null;
+        
+    } catch (error) {
+        logQuinti('ERROR', `[verificarContextoSexualAPI] Error: ${error.message}`);
+        return null;
+    }
+}
+
+/**
  * Actualiza el estado de la escena sexual basado en la acción actual
  * MEJORA: Ahora también verifica si hay tags sexuales explícitos en la acción en curso
+ * OPTIMIZACIÓN: Usa verificación por API call para mayor precisión en contextoSexual
  */
-function actualizarEstadoEscenaSexual() {
+async function actualizarEstadoEscenaSexual(mensajeUsuario = '', respuestaIA = '') {
     const hayAccionSexualExplicita = ACCIONES_SEXUALES_EXPLICITAS.some(accion => estadoAccionesExplicitas[accion]);
     
     // Verificar también acciones de contexto sexual (pre-sexo, tocamientos, etc.)
@@ -282,45 +356,63 @@ function actualizarEstadoEscenaSexual() {
     // MEJORA: Verificar si la acción en curso o el tag implica sexo explícito directamente
     const hayTagSexualEnAccion = accionEnCurso && esTagSexoExplicito(accionEnCurso);
     
+    // VERIFICACIÓN POR API CALL para mayor precisión
+    let resultadoAPI = null;
+    if (mensajeUsuario && respuestaIA) {
+        resultadoAPI = await verificarContextoSexualAPI(mensajeUsuario, respuestaIA, accionEnCurso);
+    }
+    
     // Actualizar estado de escena sexual
     // enEscenaSexo: solo para sexo explícito (follando, mamando, etc.) O tags sexuales explícitos
     // contextoSexual: incluye pre-sexo, tocamientos, besos, desnudez
-    estadoEscenaSexual.enEscenaSexo = hayAccionSexualExplicita || hayTagSexualEnAccion;
-    estadoEscenaSexual.contextoSexual = hayAccionSexualExplicita || hayContextoSexo || hayTagSexualEnAccion;
     
-    if (estadoEscenaSexual.enEscenaSexo && estadoEscenaSexual.turnoInicioSexo === 0) {
-        estadoEscenaSexual.turnoInicioSexo = historialConversacion.length;
-        estadoEscenaSexual.nivelIntensidad = 8;
-    } else if (!estadoEscenaSexual.enEscenaSexo) {
-        estadoEscenaSexual.turnoInicioSexo = 0;
-        estadoEscenaSexual.nivelIntensidad = hayContextoSexo || hayTagSexualEnAccion ? 3 : 0; // Intensidad menor si es solo contexto sexual
-        estadoEscenaSexual.ultimaAccionSexual = null;
+    // Si la API dio resultado, usarlo como prioridad (es más preciso)
+    if (resultadoAPI) {
+        estadoEscenaSexual.enEscenaSexo = resultadoAPI.enEscenaSexo;
+        estadoEscenaSexual.contextoSexual = resultadoAPI.contextoSexual;
+        estadoEscenaSexual.nivelIntensidad = resultadoAPI.intensidad;
+        logQuinti('INFO', `[actualizarEstadoEscenaSexual] Usando verificación API: enEscenaSexo=${estadoEscenaSexual.enEscenaSexo}, contextoSexual=${estadoEscenaSexual.contextoSexual}, intensidad=${estadoEscenaSexual.nivelIntensidad}`);
+    } else {
+        // Fallback a verificación local por tags
+        estadoEscenaSexual.enEscenaSexo = hayAccionSexualExplicita || hayTagSexualEnAccion;
+        estadoEscenaSexual.contextoSexual = hayAccionSexualExplicita || hayContextoSexo || hayTagSexualEnAccion;
+        
+        if (estadoEscenaSexual.enEscenaSexo && estadoEscenaSexual.turnoInicioSexo === 0) {
+            estadoEscenaSexual.turnoInicioSexo = historialConversacion.length;
+            estadoEscenaSexual.nivelIntensidad = 8;
+        } else if (!estadoEscenaSexual.enEscenaSexo) {
+            estadoEscenaSexual.turnoInicioSexo = 0;
+            estadoEscenaSexual.nivelIntensidad = hayContextoSexo || hayTagSexualEnAccion ? 3 : 0;
+            estadoEscenaSexual.ultimaAccionSexual = null;
+        }
     }
     
     // Actualizar última acción sexual
-    if (hayAccionSexualExplicita || hayTagSexualEnAccion) {
-        for (const accion of ACCIONES_SEXUALES_EXPLICITAS) {
-            if (estadoAccionesExplicitas[accion]) {
-                estadoEscenaSexual.ultimaAccionSexual = accion;
-                break;
+    if (estadoEscenaSexual.enEscenaSexo || estadoEscenaSexual.contextoSexual) {
+        if (hayAccionSexualExplicita) {
+            for (const accion of ACCIONES_SEXUALES_EXPLICITAS) {
+                if (estadoAccionesExplicitas[accion]) {
+                    estadoEscenaSexual.ultimaAccionSexual = accion;
+                    break;
+                }
             }
         }
-        // Si no hay acción explícita pero hay tag sexual, usar la acción en curso
+        // Si no hay acción explícita pero hay contexto sexual, usar la acción en curso
         if (!estadoEscenaSexual.ultimaAccionSexual && accionEnCurso) {
             estadoEscenaSexual.ultimaAccionSexual = accionEnCurso;
         }
-    } else if (hayContextoSexo && accionEnCurso) {
-        estadoEscenaSexual.ultimaAccionSexual = accionEnCurso;
     }
     
-    logQuinti('DEBUG', `Estado escena sexual: enEscenaSexo=${estadoEscenaSexual.enEscenaSexo}, contextoSexual=${estadoEscenaSexual.contextoSexual}, accionEnCurso=${accionEnCurso}, hayTagSexualEnAccion=${hayTagSexualEnAccion}`);
+    logQuinti('DEBUG', `Estado escena sexual: enEscenaSexo=${estadoEscenaSexual.enEscenaSexo}, contextoSexual=${estadoEscenaSexual.contextoSexual}, accionEnCurso=${accionEnCurso}, hayTagSexualEnAccion=${hayTagSexualEnAccion}, usóAPI=${resultadoAPI !== null}`);
 }
 
 /**
  * Actualiza el estado de la acción en curso desde logica.js
  * @param {string|null} nuevaAccion - La acción detectada en el mensaje del usuario
+ * @param {string} mensajeUsuario - El mensaje original del usuario (para verificación API)
+ * @param {string} respuestaIA - La respuesta de la IA (para verificación API)
  */
-function actualizarAccionEnCurso(nuevaAccion) {
+async function actualizarAccionEnCurso(nuevaAccion, mensajeUsuario = '', respuestaIA = '') {
     if (nuevaAccion) {
         // Nueva acción detectada: reiniciar contador
         if (accionEnCurso !== nuevaAccion) {
@@ -331,8 +423,8 @@ function actualizarAccionEnCurso(nuevaAccion) {
             // Actualizar booleanos de acciones explícitas
             actualizarEstadoAccionesExplicitas(nuevaAccion, true);
             
-            // Actualizar estado de escena sexual
-            actualizarEstadoEscenaSexual();
+            // Actualizar estado de escena sexual CON VERIFICACIÓN POR API
+            await actualizarEstadoEscenaSexual(mensajeUsuario, respuestaIA);
             
             // Registrar evento importante en memoria
             registrarEventoImportante(`Inicio de acción: ${nuevaAccion}`);
@@ -353,8 +445,8 @@ function actualizarAccionEnCurso(nuevaAccion) {
             // Resetear booleanos de acciones explícitas
             resetearEstadoAccionesExplicitas();
             
-            // Actualizar estado de escena sexual
-            actualizarEstadoEscenaSexual();
+            // Actualizar estado de escena sexual CON VERIFICACIÓN POR API
+            await actualizarEstadoEscenaSexual(mensajeUsuario, respuestaIA);
             
             accionEnCurso = null;
             contadorTurnosAccion = 0;
@@ -4028,11 +4120,7 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
     // Si NO estamos en escena de sexo explícito (solo contexto sexual/pre-sexo), PRIORIZAR imágenes NOSEX si existen
     const esEscenaSexoActiva = estadoEscenaSexual.enEscenaSexo || ACCIONES_SEXUALES_EXPLICITAS.some(a => estadoAccionesExplicitas[a]);
     
-    // MEJORA ADICIONAL: Verificar si el TAG solicitado implica sexo explícito directamente
-    // Esto corrige el problema cuando el contexto no se actualiza correctamente pero el tag es claramente sexual
-    const esTagSexual = esTagSexoExplicito(tag);
-    
-    logQuinti('DEBUG', `obtenerURLImagen: Contexto sexual=${esEscenaSexoActiva}, contextoSexual=${estadoEscenaSexual.contextoSexual}, Tag solicitado=${tag}, esTagSexual=${esTagSexual}, accionEnCurso=${accionEnCurso}`);
+    logQuinti('DEBUG', `obtenerURLImagen: Contexto sexual=${esEscenaSexoActiva}, contextoSexual=${estadoEscenaSexual.contextoSexual}, Tag solicitado=${tag}, accionEnCurso=${accionEnCurso}`);
     
     // MEJORA: Buscar TODAS las variantes numeradas del tag (ej: "tag", "tag2", "tag_1") y seleccionar una aleatoriamente
     if (tag && chicaData.imagenes) {
@@ -4052,13 +4140,13 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
             // FILTRAR según contexto sexual
             let variantesFiltradas = variantes;
             
-            // VERIFICACIÓN DOBLE: usar contexto O el tag solicitado si es explícito
-            const debemosTratarComoSexo = esEscenaSexoActiva || esTagSexual;
+            // VERIFICACIÓN: usar solo el contexto sexual (ya no usamos esTagSexual)
+            const debemosTratarComoSexo = esEscenaSexoActiva;
             
             if (debemosTratarComoSexo) {
-                // EN ESCENA SEXUAL EXPLÍCITA O TAG SEXUAL: Excluir variantes NOSEX
+                // EN ESCENA SEXUAL EXPLÍCITA: Excluir variantes NOSEX
                 variantesFiltradas = variantes.filter(t => !t.includes('_NOSEX'));
-                logQuinti('INFO', `Escena sexual EXPLÍCITA activa o tag sexual detectado: Excluyendo tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
+                logQuinti('INFO', `Escena sexual EXPLÍCITA activa: Excluyendo tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
             } else {
                 // FUERA DE ESCENA SEXUAL EXPLÍCITA (incluye pre-sexo, tocamientos, besos): PRIORIZAR variantes NOSEX si existen
                 const variantesNosex = variantes.filter(t => t.includes('_NOSEX'));
@@ -4083,7 +4171,7 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
             urlAudio = imgObjVariante?.audio || null;
             urlDescripcion = imgObjVariante?.descripcion || null;
             
-            logQuinti('INFO', `Tag "${tag}" (${debemosTratarComoSexo ? 'SEXO' : 'NO-SEXO'}, esTagSexual=${esTagSexual}) tiene ${variantes.length} variantes totales, ${variantesFiltradas.length} después de filtrar. Usando: "${tagElegido}" para ${nombrePersonaje}`);
+            logQuinti('INFO', `Tag "${tag}" (${debemosTratarComoSexo ? 'SEXO' : 'NO-SEXO'}) tiene ${variantes.length} variantes totales, ${variantesFiltradas.length} después de filtrar. Usando: "${tagElegido}" para ${nombrePersonaje}`);
         }
     }
     
@@ -4298,6 +4386,7 @@ export {
     actualizarAccionEnCurso,
     getAccionEnCurso,
     verificarAccionEnCurso,  // NUEVA FUNCIÓN: Verificación dinámica de acción en curso
+    verificarContextoSexualAPI,  // NUEVA FUNCIÓN: Verificación de contexto sexual por API
     getEstadoAccion,
     getMemoriaEventosIntimos,
     registrarEventoImportante,
@@ -4350,6 +4439,7 @@ if (typeof window !== 'undefined') {
     window.actualizarAccionEnCurso = actualizarAccionEnCurso;
     window.getAccionEnCurso = getAccionEnCurso;
     window.verificarAccionEnCurso = verificarAccionEnCurso;  // NUEVA FUNCIÓN
+    window.verificarContextoSexualAPI = verificarContextoSexualAPI;  // NUEVA FUNCIÓN: Verificación de contexto sexual por API
     window.getEstadoAccion = getEstadoAccion;
     window.getMemoriaEventosIntimos = getMemoriaEventosIntimos;
     window.registrarEventoImportante = registrarEventoImportante;
