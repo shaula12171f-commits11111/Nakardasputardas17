@@ -4120,11 +4120,7 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
     // Si NO estamos en escena de sexo explícito (solo contexto sexual/pre-sexo), PRIORIZAR imágenes NOSEX si existen
     const esEscenaSexoActiva = estadoEscenaSexual.enEscenaSexo || ACCIONES_SEXUALES_EXPLICITAS.some(a => estadoAccionesExplicitas[a]);
     
-    // MEJORA ADICIONAL: Verificar si el TAG solicitado implica sexo explícito directamente
-    // Esto corrige el problema cuando el contexto no se actualiza correctamente pero el tag es claramente sexual
-    const esTagSexual = esTagSexoExplicito(tag);
-    
-    logQuinti('DEBUG', `obtenerURLImagen: Contexto sexual=${esEscenaSexoActiva}, contextoSexual=${estadoEscenaSexual.contextoSexual}, Tag solicitado=${tag}, esTagSexual=${esTagSexual}, accionEnCurso=${accionEnCurso}`);
+    logQuinti('DEBUG', `obtenerURLImagen: Contexto sexual=${esEscenaSexoActiva}, contextoSexual=${estadoEscenaSexual.contextoSexual}, Tag solicitado=${tag}, accionEnCurso=${accionEnCurso}`);
     
     // MEJORA: Buscar TODAS las variantes numeradas del tag (ej: "tag", "tag2", "tag_1") y seleccionar una aleatoriamente
     if (tag && chicaData.imagenes) {
@@ -4144,13 +4140,13 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
             // FILTRAR según contexto sexual
             let variantesFiltradas = variantes;
             
-            // VERIFICACIÓN DOBLE: usar contexto O el tag solicitado si es explícito
-            const debemosTratarComoSexo = esEscenaSexoActiva || esTagSexual;
+            // VERIFICACIÓN: usar solo el contexto sexual (ya no usamos esTagSexual)
+            const debemosTratarComoSexo = esEscenaSexoActiva;
             
             if (debemosTratarComoSexo) {
-                // EN ESCENA SEXUAL EXPLÍCITA O TAG SEXUAL: Excluir variantes NOSEX
+                // EN ESCENA SEXUAL EXPLÍCITA: Excluir variantes NOSEX
                 variantesFiltradas = variantes.filter(t => !t.includes('_NOSEX'));
-                logQuinti('INFO', `Escena sexual EXPLÍCITA activa o tag sexual detectado: Excluyendo tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
+                logQuinti('INFO', `Escena sexual EXPLÍCITA activa: Excluyendo tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
             } else {
                 // FUERA DE ESCENA SEXUAL EXPLÍCITA (incluye pre-sexo, tocamientos, besos): PRIORIZAR variantes NOSEX si existen
                 const variantesNosex = variantes.filter(t => t.includes('_NOSEX'));
@@ -4175,7 +4171,7 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
             urlAudio = imgObjVariante?.audio || null;
             urlDescripcion = imgObjVariante?.descripcion || null;
             
-            logQuinti('INFO', `Tag "${tag}" (${debemosTratarComoSexo ? 'SEXO' : 'NO-SEXO'}, esTagSexual=${esTagSexual}) tiene ${variantes.length} variantes totales, ${variantesFiltradas.length} después de filtrar. Usando: "${tagElegido}" para ${nombrePersonaje}`);
+            logQuinti('INFO', `Tag "${tag}" (${debemosTratarComoSexo ? 'SEXO' : 'NO-SEXO'}) tiene ${variantes.length} variantes totales, ${variantesFiltradas.length} después de filtrar. Usando: "${tagElegido}" para ${nombrePersonaje}`);
         }
     }
     
