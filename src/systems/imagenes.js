@@ -95,7 +95,7 @@ const QuintiImagenesPrueba = {
             // 31. ropa_vestido
             ropa_vestido: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD66/main/imagenes/img_1781640176371.webp", audio: "", descripcion: "" },
             // 32. mostrando_culo_tanga_negra
-            mostrando_culo_tanga_negra: { url: "https://pbs.twimg.com/media/HGJ4KmyW8AAZfgm?format=jpg&name=small", audio: "", descripcion: "" },
+            mostrando_culo_tanga: { url: "https://pbs.twimg.com/media/HGJ4KmyW8AAZfgm?format=jpg&name=small", audio: "", descripcion: "tanga negra" },
 
             // === 33-34  MANOS / LENGUA ===
             // 33. manos_alrededor_del_cuello
@@ -301,7 +301,8 @@ const QuintiImagenesPrueba = {
             ropa_idol: { url: "https://is.gd/f1Mytq", audio: "", descripcion: "" },
             // 31. ropa_vestido
             // falta
-            // 32. mostrando_culo_tanga_negra
+            // 32. mostrando_culo_tanga
+            mostrando_culo_tanga: { url: "https://img.ge/i/C1YPp43.jpg", audio: "", descripcion: "tanga blanca" },
             // falta
 
             // === 33-34  MANOS / LENGUA ===
