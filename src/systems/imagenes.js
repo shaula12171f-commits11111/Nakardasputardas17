@@ -59,7 +59,7 @@ const QuintiImagenesPrueba = {
             // 16. follando_en_la_ventana
             follando_en_la_ventana: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773691932895.jpg", audio: "", descripcion: "" },
             // 17. handjob_paja
-            handjob_paja: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773692613338.jpg", audio: "", descripcion: "" },
+            handjob_paja: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD58/main/imagenes/img_1780228240243.jpg", audio: "", descripcion: "" },
             // 18. reverse_cowgirl
             reverse_cowgirl: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773692627261.jpg", audio: "https://files.catbox.moe/t4r8hw.mp3", descripcion: "" },
             // 19. reverse_cowgirl_le_estiro_el_ano
@@ -266,7 +266,7 @@ const QuintiImagenesPrueba = {
             // 16. follando_en_la_ventana
             follando_en_la_ventana: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773691916421.jpg", audio: "", descripcion: "" },
             // 17. handjob_paja
-            handjob_paja: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773692609296.jpg", audio: "https://litter.catbox.moe/gybisrc3ys50tlum.mp3", descripcion: "" },
+            handjob_paja: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD58/main/imagenes/img_1780228236266.jpg", audio: "https://litter.catbox.moe/gybisrc3ys50tlum.mp3", descripcion: "" },
             // 18. reverse_cowgirl
             reverse_cowgirl: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773692621326.jpg", audio: "https://files.catbox.moe/mjyomo.mp3", descripcion: "" },
             // 19. reverse_cowgirl_le_estiro_el_ano
