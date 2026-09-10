@@ -323,7 +323,9 @@ const QuintiImagenesPrueba = {
             // 39. quitandose_la_ropa2
             // falta
             // 40. ichika_enseñando_ano
-            // falta
+            Nino_enseñando_ano: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773407751527.jpg", audio: "", descripcion: "" },
+            Nino_enseñando_ano2: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773407753883.jpg", audio: "", descripcion: "" },
+         
             // 41. ichika_enseñando_ano2
             // falta
             // 42. ichika_estirando_ano_calzon_todavia_le_cubre_el_ano
