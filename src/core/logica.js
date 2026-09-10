@@ -231,6 +231,15 @@ const ACCIONES_SEXUALES_EXPLICITAS = [
     'enMisionero', 'enReverseCowgirl', 'mamando', 'chupandoBolas'
 ];
 
+// TAGS QUE IMPLICAN SEXO EXPLÍCITO DIRECTAMENTE
+// Estos tags por sí solos indican que estamos en una escena sexual
+const TAGS_SEXO_EXPLICITO = [
+    'doggystyle', 'misionero', 'reverse_cowgirl', 'anal', 'follando',
+    'standfuck_follando_de_pie', 'follando_en_la_ventana', 'handjob_paja',
+    'sidefuck', 'follando_en_el_aire', 'anal_cumming', 'me_corro_en_su_boca',
+    'cumming', 'creampie', 'pov_follando', 'sex'
+];
+
 // ACCIONES QUE INDICAN CONTEXTO SEXUAL O PRE-SEXUAL (activan contextoSexual pero no necesariamente enEscenaSexo)
 const ACCIONES_CONTEXTO_SEXUAL = [
     'besando', 'desnuda', 'mostrandoCulo', 'lamiendoAno', 'haciendoHandjob',
@@ -239,7 +248,27 @@ const ACCIONES_CONTEXTO_SEXUAL = [
 ];
 
 /**
+ * Verifica si un tag implica sexo explícito directamente
+ * @param {string} tag - El tag de imagen a verificar
+ * @returns {boolean} - true si el tag indica sexo explícito
+ */
+function esTagSexoExplicito(tag) {
+    if (!tag) return false;
+    const tagLower = tag.toLowerCase();
+    
+    // Verificación directa en la lista de tags sexuales
+    if (TAGS_SEXO_EXPLICITO.some(t => tagLower.includes(t))) {
+        return true;
+    }
+    
+    // Verificar si contiene palabras clave sexuales explícitas
+    const palabrasSexoExplicito = ['foll', 'penetr', 'culo', 'ano', 'pene', 'verga', 'polla'];
+    return palabrasSexoExplicito.some(palabra => tagLower.includes(palabra));
+}
+
+/**
  * Actualiza el estado de la escena sexual basado en la acción actual
+ * MEJORA: Ahora también verifica si hay tags sexuales explícitos en la acción en curso
  */
 function actualizarEstadoEscenaSexual() {
     const hayAccionSexualExplicita = ACCIONES_SEXUALES_EXPLICITAS.some(accion => estadoAccionesExplicitas[accion]);
@@ -250,34 +279,41 @@ function actualizarEstadoEscenaSexual() {
         (accionEnCurso && accionEnCurso.toLowerCase().includes(accion))
     );
     
+    // MEJORA: Verificar si la acción en curso o el tag implica sexo explícito directamente
+    const hayTagSexualEnAccion = accionEnCurso && esTagSexoExplicito(accionEnCurso);
+    
     // Actualizar estado de escena sexual
-    // enEscenaSexo: solo para sexo explícito (follando, mamando, etc.)
+    // enEscenaSexo: solo para sexo explícito (follando, mamando, etc.) O tags sexuales explícitos
     // contextoSexual: incluye pre-sexo, tocamientos, besos, desnudez
-    estadoEscenaSexual.enEscenaSexo = hayAccionSexualExplicita;
-    estadoEscenaSexual.contextoSexual = hayAccionSexualExplicita || hayContextoSexo;
+    estadoEscenaSexual.enEscenaSexo = hayAccionSexualExplicita || hayTagSexualEnAccion;
+    estadoEscenaSexual.contextoSexual = hayAccionSexualExplicita || hayContextoSexo || hayTagSexualEnAccion;
     
     if (estadoEscenaSexual.enEscenaSexo && estadoEscenaSexual.turnoInicioSexo === 0) {
         estadoEscenaSexual.turnoInicioSexo = historialConversacion.length;
         estadoEscenaSexual.nivelIntensidad = 8;
     } else if (!estadoEscenaSexual.enEscenaSexo) {
         estadoEscenaSexual.turnoInicioSexo = 0;
-        estadoEscenaSexual.nivelIntensidad = hayContextoSexo ? 3 : 0; // Intensidad menor si es solo contexto sexual
+        estadoEscenaSexual.nivelIntensidad = hayContextoSexo || hayTagSexualEnAccion ? 3 : 0; // Intensidad menor si es solo contexto sexual
         estadoEscenaSexual.ultimaAccionSexual = null;
     }
     
     // Actualizar última acción sexual
-    if (hayAccionSexualExplicita) {
+    if (hayAccionSexualExplicita || hayTagSexualEnAccion) {
         for (const accion of ACCIONES_SEXUALES_EXPLICITAS) {
             if (estadoAccionesExplicitas[accion]) {
                 estadoEscenaSexual.ultimaAccionSexual = accion;
                 break;
             }
         }
+        // Si no hay acción explícita pero hay tag sexual, usar la acción en curso
+        if (!estadoEscenaSexual.ultimaAccionSexual && accionEnCurso) {
+            estadoEscenaSexual.ultimaAccionSexual = accionEnCurso;
+        }
     } else if (hayContextoSexo && accionEnCurso) {
         estadoEscenaSexual.ultimaAccionSexual = accionEnCurso;
     }
     
-    logQuinti('DEBUG', `Estado escena sexual: enEscenaSexo=${estadoEscenaSexual.enEscenaSexo}, contextoSexual=${estadoEscenaSexual.contextoSexual}, accionEnCurso=${accionEnCurso}`);
+    logQuinti('DEBUG', `Estado escena sexual: enEscenaSexo=${estadoEscenaSexual.enEscenaSexo}, contextoSexual=${estadoEscenaSexual.contextoSexual}, accionEnCurso=${accionEnCurso}, hayTagSexualEnAccion=${hayTagSexualEnAccion}`);
 }
 
 /**
@@ -3992,7 +4028,11 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
     // Si NO estamos en escena de sexo explícito (solo contexto sexual/pre-sexo), PRIORIZAR imágenes NOSEX si existen
     const esEscenaSexoActiva = estadoEscenaSexual.enEscenaSexo || ACCIONES_SEXUALES_EXPLICITAS.some(a => estadoAccionesExplicitas[a]);
     
-    logQuinti('DEBUG', `obtenerURLImagen: Contexto sexual=${esEscenaSexoActiva}, contextoSexual=${estadoEscenaSexual.contextoSexual}, Tag solicitado=${tag}, accionEnCurso=${accionEnCurso}`);
+    // MEJORA ADICIONAL: Verificar si el TAG solicitado implica sexo explícito directamente
+    // Esto corrige el problema cuando el contexto no se actualiza correctamente pero el tag es claramente sexual
+    const esTagSexual = esTagSexoExplicito(tag);
+    
+    logQuinti('DEBUG', `obtenerURLImagen: Contexto sexual=${esEscenaSexoActiva}, contextoSexual=${estadoEscenaSexual.contextoSexual}, Tag solicitado=${tag}, esTagSexual=${esTagSexual}, accionEnCurso=${accionEnCurso}`);
     
     // MEJORA: Buscar TODAS las variantes numeradas del tag (ej: "tag", "tag2", "tag_1") y seleccionar una aleatoriamente
     if (tag && chicaData.imagenes) {
@@ -4012,10 +4052,13 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
             // FILTRAR según contexto sexual
             let variantesFiltradas = variantes;
             
-            if (esEscenaSexoActiva) {
-                // EN ESCENA SEXUAL EXPLÍCITA: Excluir variantes NOSEX
+            // VERIFICACIÓN DOBLE: usar contexto O el tag solicitado si es explícito
+            const debemosTratarComoSexo = esEscenaSexoActiva || esTagSexual;
+            
+            if (debemosTratarComoSexo) {
+                // EN ESCENA SEXUAL EXPLÍCITA O TAG SEXUAL: Excluir variantes NOSEX
                 variantesFiltradas = variantes.filter(t => !t.includes('_NOSEX'));
-                logQuinti('INFO', `Escena sexual EXPLÍCITA activa: Excluyendo tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
+                logQuinti('INFO', `Escena sexual EXPLÍCITA activa o tag sexual detectado: Excluyendo tags NOSEX. Opciones: [${variantesFiltradas.join(', ')}]`);
             } else {
                 // FUERA DE ESCENA SEXUAL EXPLÍCITA (incluye pre-sexo, tocamientos, besos): PRIORIZAR variantes NOSEX si existen
                 const variantesNosex = variantes.filter(t => t.includes('_NOSEX'));
@@ -4040,7 +4083,7 @@ function obtenerURLImagen(nombrePersonaje, tag, historiaId = null) {
             urlAudio = imgObjVariante?.audio || null;
             urlDescripcion = imgObjVariante?.descripcion || null;
             
-            logQuinti('INFO', `Tag "${tag}" (${esEscenaSexoActiva ? 'SEXO' : 'NO-SEXO'}) tiene ${variantes.length} variantes totales, ${variantesFiltradas.length} después de filtrar. Usando: "${tagElegido}" para ${nombrePersonaje}`);
+            logQuinti('INFO', `Tag "${tag}" (${debemosTratarComoSexo ? 'SEXO' : 'NO-SEXO'}, esTagSexual=${esTagSexual}) tiene ${variantes.length} variantes totales, ${variantesFiltradas.length} después de filtrar. Usando: "${tagElegido}" para ${nombrePersonaje}`);
         }
     }
     
@@ -4285,6 +4328,8 @@ export {
     getEstadisticasRepeticion,
     regenerarDialogoAntiRepeticion,
     regenerarDialogoAntiRepeticionEntreChicas,
+    // Nueva función para verificar tags sexuales
+    esTagSexoExplicito,
     // Función de formateo de texto
     formatearTextoConAsteriscos,
     // Función de parseo de JSON (para tests)
