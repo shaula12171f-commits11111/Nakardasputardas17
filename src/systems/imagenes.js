@@ -189,7 +189,7 @@ const QuintiImagenesPrueba = {
             // 74. moviendo_el_culo
             // falta
 
-                        BikiniPlaya: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Ichika/BikiniPlaya.jpg", audio: "", descripcion: "Bikini doorado sombrero de paja grande liston azul" },
+                        bikini_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Ichika/BikiniPlaya.jpg", audio: "", descripcion: "Bikini doorado sombrero de paja grande liston azul" },
 
 // === 75-77  EXTRAS NINO (agarres) ===
             // 75. usuario_agarra_el_culo_a_nino_NOSEX
@@ -404,7 +404,7 @@ const QuintiImagenesPrueba = {
             moviendo_el_culo: { url: "https://files.catbox.moe/fw4m70.gif", audio: "", descripcion: "" },
 
                      
-            NinoPlaya: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/NinoPlaya.jpg", audio: "", descripcion: "Sombrero de paja grande bikini dorado solo cubre los pezones hilos cruzan su cuello tanga en v" },
+            bikini_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/NinoPlaya.jpg", audio: "", descripcion: "Sombrero de paja grande bikini dorado solo cubre los pezones hilos cruzan su cuello tanga en v" },
 
 // === 75-77  EXTRAS NINO (agarres) ===
             // 75. usuario_agarra_el_culo_a_nino_NOSEX
