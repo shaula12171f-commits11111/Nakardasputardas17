@@ -300,6 +300,8 @@ const QuintiImagenesPrueba = {
 
                         verga_en_su_cara: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/verga_en_su_cara.jpg", audio: "", descripcion: "ella mira la verga que esta chocando su cara" },
 
+            me_corro_en_su_cara: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/me_corro_en_su_cara.png", audio: "", descripcion: "semen en su cara" },
+
 // === 30-32  ROPA (Ichika) ===
             // 30. ropa_idol
             ropa_idol: { url: "https://is.gd/f1Mytq", audio: "", descripcion: "" },
