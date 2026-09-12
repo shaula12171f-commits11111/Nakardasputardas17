@@ -401,7 +401,9 @@ const QuintiImagenesPrueba = {
             // 74. moviendo_el_culo
             moviendo_el_culo: { url: "https://files.catbox.moe/fw4m70.gif", audio: "", descripcion: "" },
 
-            // === 75-77  EXTRAS NINO (agarres) ===
+                        ninoPlaya: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/ninoPlaya.jpg", audio: "", descripcion: "Sombreo de paja bikini dorado hiloz se cruzan alrededor del cuello" },
+
+// === 75-77  EXTRAS NINO (agarres) ===
             // 75. usuario_agarra_el_culo_a_nino_NOSEX
             usuario_agarra_el_culo_a_nino_NOSEX: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914334012.webp", audio: "", descripcion: "" },
             // 76. usuario_agarra_el_culo_a_nino_
