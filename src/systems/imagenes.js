@@ -309,7 +309,7 @@ const QuintiImagenesPrueba = {
             // 33. manos_alrededor_del_cuello
             manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630311500_1.png", audio: "", descripcion: "" },
             // 34. lamiendo_pene
-            lamiendo_pene: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914356175.webp", audio: "", descripcion: "" },
+            lamiendo_pene: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778618109261.jpg", audio: "", descripcion: "" },
 
             // === 35-57  ESPECÍFICOS ICHIKA (toques, tetas, dedos, 69...) ===
             // 35. usuario_chupa_concha_a_ichika
