@@ -1027,7 +1027,9 @@ const QuintiImagenesPrueba = {
             // 74. moviendo_el_culo
             // falta
 
-            // === 75-77  EXTRAS NINO (agarres) ===
+                        bikini_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Itsuki/bikini_playa.jpg", audio: "", descripcion: "sombrero de paja grande liston blanco bikini dorado" },
+
+// === 75-77  EXTRAS NINO (agarres) ===
             // 75. usuario_agarra_el_culo_a_nino_NOSEX
             // falta
             // 76. usuario_agarra_el_culo_a_nino_
