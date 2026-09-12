@@ -189,7 +189,9 @@ const QuintiImagenesPrueba = {
             // 74. moviendo_el_culo
             // falta
 
-            // === 75-77  EXTRAS NINO (agarres) ===
+                        BikiniPlaya: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Ichika/BikiniPlaya.jpg", audio: "", descripcion: "Bikini doorado sombrero de paja grande liston azul" },
+
+// === 75-77  EXTRAS NINO (agarres) ===
             // 75. usuario_agarra_el_culo_a_nino_NOSEX
             // falta
             // 76. usuario_agarra_el_culo_a_nino_
