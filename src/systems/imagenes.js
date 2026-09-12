@@ -339,7 +339,7 @@ const QuintiImagenesPrueba = {
             // 46. usuario_agarra_el_culo_a_Ichika
             // falta
             // 47. _mi_verga_erecta
-            Mirando_Verga: { url: "https://img.ge/i/z9FVw35.webp", audio: "", descripcion: "Verga grande " },
+            usuario_muestra_su_verga_a_nino: { url: "https://img.ge/i/z9FVw35.webp", audio: "", descripcion: "Verga grande " },
             
             // falta
             // 48. post_sexo_semen_derramando_de_ella
