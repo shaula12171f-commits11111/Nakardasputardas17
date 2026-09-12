@@ -298,7 +298,9 @@ const QuintiImagenesPrueba = {
             // 29. me_corro_en_su_boca
             me_corro_en_su_boca: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854164065.jpg", audio: "", descripcion: "" },
 
-            // === 30-32  ROPA (Ichika) ===
+                        verga_en_su_cara: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/verga_en_su_cara.jpg", audio: "", descripcion: "ella mira la verga que esta chocando su cara" },
+
+// === 30-32  ROPA (Ichika) ===
             // 30. ropa_idol
             ropa_idol: { url: "https://is.gd/f1Mytq", audio: "", descripcion: "" },
             // 31. ropa_vestido
