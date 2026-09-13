@@ -443,9 +443,11 @@ const QuintiImagenesPrueba = {
             // falta
             // 86. pene_rozando_su_ano
             // falta
+              // → Resumen Nino: 37 presentes / 49 faltantes de 86
+               assjob: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/assjob.jpg", audio: "", descripcion: "assjob mi verga entre sus nalgas" },
         },
-        // → Resumen Nino: 37 presentes / 49 faltantes de 86
-                assjob: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/assjob.jpg", audio: "", descripcion: "assjob mi verga entre sus nalgas" },
+      
+             
 
 },
 
