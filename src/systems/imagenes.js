@@ -254,7 +254,9 @@ const QuintiImagenesPrueba = {
             // 10. chupando_bola_derecha
             chupando_bola_derecha: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD3/main/imagenes/img_1773178598793.jpg", audio: "", descripcion: "" },
 
-            // === 11-22  POSICIONES ===
+                        chupando_polla_le_jalo_el_cabello: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/chupando_polla_le_jalo_el_cabello.jpg", audio: "", descripcion: "le jalo las coletas del cabello de ambos lados con mis dos manos ella pone sus manos en mis piernas y  chupa mientras me mira" },
+
+// === 11-22  POSICIONES ===
             // 11. doggystyle
             doggystyle: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773407766732.jpg", audio: "https://files.catbox.moe/04emjp.mp3", descripcion: "" },
             // 12. misionero
