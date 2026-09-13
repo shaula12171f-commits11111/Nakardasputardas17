@@ -236,7 +236,9 @@ const QuintiImagenesPrueba = {
             // 2. besando
             besando: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD12/main/imagenes/img_1773506144298.png", audio: "https://files.catbox.moe/tu_audio_beso.mp3", descripcion: "" },
 
-            // === 3-10  ORAL / CHUPADAS ===
+                        enojada: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/enojada.jpg", audio: "", descripcion: "enojada cruzando brazos" },
+
+// === 3-10  ORAL / CHUPADAS ===
             // 3. chupando_solo_la_punta_del_pene
             chupando_solo_la_punta_del_pene: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD3/main/imagenes/img_1773178619655.jpg", audio: "https://files.catbox.moe/6dbsec.mp3", descripcion: "" },
             // 4. chupando_solo_la_punta_del_pene2
