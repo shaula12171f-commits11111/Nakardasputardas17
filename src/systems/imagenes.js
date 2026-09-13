@@ -346,7 +346,9 @@ const QuintiImagenesPrueba = {
             // =====================================================
             le_agarro_las_tetas_a_nino_NOSEX: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772911710759.jpg", audio: "", descripcion: "le agarro las tetas a nino" },
 
-            // =====================================================
+                        nino_muestra_tetas: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1773000558835.jpg", audio: "", descripcion: "nino muestra las tetas esas tetas de diosa" },
+
+// =====================================================
             //  69
             // =====================================================
            
