@@ -332,6 +332,11 @@ const QuintiImagenesPrueba = {
             //  TETAS
             // =====================================================
             le_agarro_las_tetas_a_nino_NOSEX: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772911710759.jpg", audio: "", descripcion: "le agarro las tetas a nino" },
+
+            // =====================================================
+            //  69
+            // =====================================================
+            acostada_en_la_cama_mostrando_coño_y_ano_SEX: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1781983211741.png", audio: "", descripcion: "acostada en la cama mostando coño y ano abriendo las piernas" },
 }
     },
 
