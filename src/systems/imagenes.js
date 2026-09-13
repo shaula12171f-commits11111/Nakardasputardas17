@@ -230,7 +230,9 @@ const QuintiImagenesPrueba = {
             me_corro_en_su_cara: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/me_corro_en_su_cara.png", audio: "", descripcion: "semen en su cara" },
             verga_en_su_cara: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/verga_en_su_cara.jpg", audio: "", descripcion: "ella mira la verga que esta chocando su cara" },
 
-            // =====================================================
+                        me_corro_en_sus_nalgas_SEX: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD57/main/imagenes/img_1780179929825.jpg", audio: "", descripcion: "me corro en las nalgas de nino eyaculo mi semen afuera en sus nalgas" },
+
+// =====================================================
             //  HANDJOB / PAJA / ASSJOB
             // =====================================================
             assjob: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/assjob.jpg", audio: "", descripcion: "assjob mi verga entre sus nalgas" },
