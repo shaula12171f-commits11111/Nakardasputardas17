@@ -356,6 +356,11 @@ const QuintiImagenesPrueba = {
             //  69
             // =====================================================
            
+
+            // =====================================================
+            //  DEDOS / SQUIRT / CONCHA
+            // =====================================================
+            rozo_mi_verga_en_el_coño_de_nino_SEX: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773407764110.jpg", audio: "", descripcion: "rozo mi verga contra su coño" },
 }
     },
 
