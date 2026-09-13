@@ -199,7 +199,9 @@ const QuintiImagenesPrueba = {
             // =====================================================
             enojada: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/enojada.jpg", audio: "", descripcion: "enojada cruzando brazos" },
 
-            // =====================================================
+                        nino_feliz: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD68/main/imagenes/img_1782521747768.jpg", audio: "", descripcion: "nino feliz" },
+
+// =====================================================
             //  ORAL / MAMADA
             // =====================================================
             chupando_bola_derecha: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD3/main/imagenes/img_1773178598793.jpg", audio: "", descripcion: "" },
