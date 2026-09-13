@@ -189,6 +189,8 @@ const QuintiImagenesPrueba = {
 
                         nino_se_agacha_a_recoger_algo: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504262047.png", audio: "", descripcion: "nino se agacha a recoger algo y se ve su culo y tanga negra" },
 
+            follando_grabando_porno_SEX: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772817497560.jpg", audio: "", descripcion: "follamos mientras grabamos porno para subirlo a  internet" },
+
 // =====================================================
             //  BESOS
             // =====================================================
