@@ -298,7 +298,9 @@ const QuintiImagenesPrueba = {
             ropa_sexy: { url: "https://is.gd/YlMfEf", audio: "", descripcion: "" },
             ropa_yukata: { url: "https://is.gd/lLI6wB", audio: "", descripcion: "" },
 
-            // =====================================================
+                        ropa_gymnasio: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504280279.png", audio: "", descripcion: "nino ropa de gymnasio gym  top morado short corto negro" },
+
+// =====================================================
             //  COSPLAY
             // =====================================================
             cosplay_gatita: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/cosplay_gatita.jpg", audio: "", descripcion: "cosplay gatita morada plug de cola de corazon abertura de gato en el sujetador media moradas tanga en v morada" },
