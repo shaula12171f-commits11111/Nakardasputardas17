@@ -186,6 +186,7 @@ const QuintiImagenesPrueba = {
             //  NEUTRO / HABLANDO
             // =====================================================
             hablando: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD1/main/imagenes/img_1773115420355.jpg", audio: "", descripcion: "" },
+             hablando_desnuda: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD19/main/imagenes/img_1773670997782.jpg", audio: "", descripcion: "" },
 
                         nino_se_agacha_a_recoger_algo: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504262047.png", audio: "", descripcion: "nino se agacha a recoger algo y se ve su culo y tanga negra" },
 
@@ -288,6 +289,7 @@ const QuintiImagenesPrueba = {
             // =====================================================
             desnuda: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD19/main/imagenes/img_1773670997782.jpg", audio: "", descripcion: "" },
             desnuda_en_cama: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986583664.png", audio: "", descripcion: "" },
+             desnuda_acostada_en_la_cama_mostrando_coño_y_ano_SEX: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1781983211741.png", audio: "", descripcion: "acostada en la cama mostando coño y ano abriendo las piernas" },
 
             // =====================================================
             //  ROPA / LENCERÍA
@@ -336,7 +338,7 @@ const QuintiImagenesPrueba = {
             // =====================================================
             //  69
             // =====================================================
-            acostada_en_la_cama_mostrando_coño_y_ano_SEX: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1781983211741.png", audio: "", descripcion: "acostada en la cama mostando coño y ano abriendo las piernas" },
+           
 }
     },
 
