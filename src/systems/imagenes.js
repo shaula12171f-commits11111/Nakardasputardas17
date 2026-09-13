@@ -287,6 +287,8 @@ const QuintiImagenesPrueba = {
 
                       
 
+            agarrando_verga: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914354078.webp", audio: "", descripcion: "agarrando la verga del usuario." },
+
 // =====================================================
             //  DESNUDA / QUITÁNDOSE
             // =====================================================
