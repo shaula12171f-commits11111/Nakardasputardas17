@@ -187,7 +187,9 @@ const QuintiImagenesPrueba = {
             // =====================================================
             hablando: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD1/main/imagenes/img_1773115420355.jpg", audio: "", descripcion: "" },
 
-            // =====================================================
+                        nino_se_agacha_a_recoger_algo: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504262047.png", audio: "", descripcion: "nino se agacha a recoger algo y se ve su culo y tanga negra" },
+
+// =====================================================
             //  BESOS
             // =====================================================
             besando: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD12/main/imagenes/img_1773506144298.png", audio: "https://files.catbox.moe/tu_audio_beso.mp3", descripcion: "" },
