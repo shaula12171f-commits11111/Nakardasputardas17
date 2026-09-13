@@ -194,6 +194,8 @@ const QuintiImagenesPrueba = {
 
             nino_se_masturba_usando_dildo: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504282954.png", audio: "", descripcion: "nino se masturba con un dildo morado" },
 
+            nino_se_masturba_dildo_por_el_ano: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD20/main/imagenes/img_1773688727186.jpg", audio: "", descripcion: "dildo negro" },
+
 // =====================================================
             //  BESOS
             // =====================================================
