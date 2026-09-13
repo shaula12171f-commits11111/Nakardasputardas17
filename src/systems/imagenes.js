@@ -284,7 +284,9 @@ const QuintiImagenesPrueba = {
             usuario_agarra_el_culo_a_nino_NOSEX: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914334012.webp", audio: "", descripcion: "" },
             usuario_nalguea_el_culo_a_nino_NOSEX: { url: "https://files.catbox.moe/d2oele.png", audio: "https://files.catbox.moe/5xmzxb.mp3", descripcion: "" },
 
-            // =====================================================
+                        nino_mostrando_culo_SEX: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504267744.png", audio: "", descripcion: "nino muestra su culo  de diosa" },
+
+// =====================================================
             //  DESNUDA / QUITÁNDOSE
             // =====================================================
             desnuda: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD19/main/imagenes/img_1773670997782.jpg", audio: "", descripcion: "" },
