@@ -300,6 +300,8 @@ const QuintiImagenesPrueba = {
 
                         lugar_cafe: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914312121.webp", audio: "", descripcion: "lugar cafeteria" },
 
+            lugar_calle_caminando: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914310119.webp", audio: "", descripcion: "caminando por la calle nino agarra mi brazo" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
