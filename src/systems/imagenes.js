@@ -323,7 +323,7 @@ const QuintiImagenesPrueba = {
             // =====================================================
             //  TETAS
             // =====================================================
-            le_agarro_las_tetas_a_nino: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772911710759.jpg", audio: "", descripcion: "le agarro las tetas a nino" },
+            le_agarro_las_tetas_a_nino_NOSEX: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772911710759.jpg", audio: "", descripcion: "le agarro las tetas a nino" },
 }
     },
 
