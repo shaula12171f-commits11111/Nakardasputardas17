@@ -192,7 +192,9 @@ const QuintiImagenesPrueba = {
             // =====================================================
             besando: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD12/main/imagenes/img_1773506144298.png", audio: "https://files.catbox.moe/tu_audio_beso.mp3", descripcion: "" },
 
-            // =====================================================
+                        nino_besando_mejilla: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_besando_mejilla.jpg", audio: "", descripcion: "nino besa mi mejilla" },
+
+// =====================================================
             //  EMOCIONES
             // =====================================================
             enojada: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/enojada.jpg", audio: "", descripcion: "enojada cruzando brazos" },
