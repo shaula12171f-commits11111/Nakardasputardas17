@@ -319,6 +319,8 @@ const QuintiImagenesPrueba = {
 
             ropa_de_puta: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772757381208.jpg", audio: "", descripcion: "ropa de puta negra medias negras de lenceria garter belt  no calzon no sujetador mallas en medio de las tetas malla transparente" },
 
+            ropa_gyaru: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773691690007.jpg", audio: "", descripcion: "ropa de gyaru bikini morado  tanga en v morada medias blancas largas con puntos morados  collar de pinchos en el cuello dos pulseras  morada y negra" },
+
 // =====================================================
             //  COSPLAY
             // =====================================================
