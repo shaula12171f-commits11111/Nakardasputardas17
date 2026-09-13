@@ -315,6 +315,8 @@ const QuintiImagenesPrueba = {
 
                         ropa_gymnasio: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504280279.png", audio: "", descripcion: "nino ropa de gymnasio gym  top morado short corto negro" },
 
+            ropa_de_puta: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772757381208.jpg", audio: "", descripcion: "ropa de puta negra medias negras de lenceria garter belt  no calzon no sujetador mallas en medio de las tetas malla transparente" },
+
 // =====================================================
             //  COSPLAY
             // =====================================================
