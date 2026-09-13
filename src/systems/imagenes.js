@@ -445,7 +445,9 @@ const QuintiImagenesPrueba = {
             // falta
         },
         // → Resumen Nino: 37 presentes / 49 faltantes de 86
-    },
+                assjob: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/assjob.jpg", audio: "", descripcion: "assjob mi verga entre sus nalgas" },
+
+},
 
     Miku: {
         nombre: "Miku Nakano",
