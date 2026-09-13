@@ -218,6 +218,8 @@ const QuintiImagenesPrueba = {
 
                         saco_mi_verga_de_la_boca_de_nino: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD69/main/imagenes/img_1783171423586.jpg", audio: "", descripcion: "saco mi verga de la boca de nino ella saca la lengua y tiene los ojos hacia arriba" },
 
+            pongo_mi_verga_en_la_boca_de_nino: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1782055329878.png", audio: "", descripcion: "pongo miverga en su boca ella me mira  y dice umm" },
+
 // =====================================================
             //  FACIAL / CUM
             // =====================================================
