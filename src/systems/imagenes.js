@@ -319,7 +319,12 @@ const QuintiImagenesPrueba = {
             manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630311500_1.png", audio: "", descripcion: "" },
 
             // → Total Nino: 48 tags
-        }
+        
+            // =====================================================
+            //  TETAS
+            // =====================================================
+            le_agarro_las_tetas_a_nino: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772911710759.jpg", audio: "", descripcion: "le agarro las tetas a nino" },
+}
     },
 
     Miku: {
