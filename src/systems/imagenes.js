@@ -279,12 +279,13 @@ const QuintiImagenesPrueba = {
             //  CULO / NALGADAS / AGARRES
             // =====================================================
             mostrando_culo_tanga: { url: "https://img.ge/i/C1YPp43.jpg", audio: "", descripcion: "tanga blanca" },
+              nino_mostrando_culo_desnuda_SEX: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504267744.png", audio: "", descripcion: "nino muestra su culo  de diosa" },
             moviendo_el_culo: { url: "https://files.catbox.moe/fw4m70.gif", audio: "", descripcion: "" },
             usuario_agarra_el_culo_a_nino_: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788027497223.webp", audio: "", descripcion: "" },
             usuario_agarra_el_culo_a_nino_NOSEX: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914334012.webp", audio: "", descripcion: "" },
             usuario_nalguea_el_culo_a_nino_NOSEX: { url: "https://files.catbox.moe/d2oele.png", audio: "https://files.catbox.moe/5xmzxb.mp3", descripcion: "" },
 
-                        nino_mostrando_culo_SEX: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504267744.png", audio: "", descripcion: "nino muestra su culo  de diosa" },
+                      
 
 // =====================================================
             //  DESNUDA / QUITÁNDOSE
