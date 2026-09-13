@@ -192,6 +192,8 @@ const QuintiImagenesPrueba = {
 
             follando_grabando_porno_SEX: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772817497560.jpg", audio: "", descripcion: "follamos mientras grabamos porno para subirlo a  internet" },
 
+            nino_se_masturba_usando_dildo: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504282954.png", audio: "", descripcion: "nino se masturba con un dildo morado" },
+
 // =====================================================
             //  BESOS
             // =====================================================
