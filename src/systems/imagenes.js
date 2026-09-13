@@ -281,7 +281,9 @@ const QuintiImagenesPrueba = {
             follando_anal: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773757218934.jpg", audio: "", descripcion: "" },
             licking_anus: { url: "https://raw.githubusercontent.com/SORFAR123123/WAIFUAJUssola/main/imagenes/img_1774103028570.png", audio: "", descripcion: "" },
 
-            // =====================================================
+                        rozo_mi_verga_en_ano_de_nino_SEX: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773407761785.jpg", audio: "", descripcion: "rozo mi verga en el ano de nino solo la punta" },
+
+// =====================================================
             //  CULO / NALGADAS / AGARRES
             // =====================================================
             mostrando_culo_tanga: { url: "https://img.ge/i/C1YPp43.jpg", audio: "", descripcion: "tanga blanca" },
