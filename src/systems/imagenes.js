@@ -298,7 +298,9 @@ const QuintiImagenesPrueba = {
             // =====================================================
             bikini_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/NinoPlaya.jpg", audio: "", descripcion: "Sombrero de paja grande bikini dorado solo cubre los pezones hilos cruzan su cuello tanga en v" },
 
-            // =====================================================
+                        lugar_cafe: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914312121.webp", audio: "", descripcion: "lugar cafeteria" },
+
+// =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
             usuario_muestra_su_verga_a_nino: { url: "https://img.ge/i/z9FVw35.webp", audio: "", descripcion: "Verga grande " },
