@@ -354,7 +354,9 @@ const QuintiImagenesPrueba = {
             // =====================================================
             cosplay_gatita: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/cosplay_gatita.jpg", audio: "", descripcion: "cosplay gatita morada plug de cola de corazon abertura de gato en el sujetador media moradas tanga en v morada" },
 
-            // =====================================================
+                        nino_ropa_vaquita: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102181568.webp", audio: "", descripcion: "nino ropa de vaquita bikini de vaquita medias de largas de vaquita campana en el cuello cuernos dorados" },
+
+// =====================================================
             //  LUGARES
             // =====================================================
             bikini_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/NinoPlaya.jpg", audio: "", descripcion: "Sombrero de paja grande bikini dorado solo cubre los pezones hilos cruzan su cuello tanga en v" },
