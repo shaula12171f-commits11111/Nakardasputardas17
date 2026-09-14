@@ -324,6 +324,8 @@ const QuintiImagenesPrueba = {
 
             desnuda_en_la_calle: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773416187551.jpg", audio: "", descripcion: "desnuda en la calle de noche" },
 
+            nino_comienza_a_vestirse: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD32/main/imagenes/img_1777831751229.jpg", audio: "", descripcion: "tanga morada medias blancas largas falda verde camisa blanca chaqueta morada" },
+
 // =====================================================
             //  ROPA / LENCERÍA
             // =====================================================
