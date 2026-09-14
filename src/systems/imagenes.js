@@ -310,6 +310,8 @@ const QuintiImagenesPrueba = {
 
             desnuda_sentada_en_la_cama: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854363713.jpg", audio: "", descripcion: "desnuda sentada en la cama" },
 
+            nino_se_desviste_se_quita_la_falda: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854351264.jpg", audio: "", descripcion: "se quita la falda" },
+
 // =====================================================
             //  ROPA / LENCERÍA
             // =====================================================
