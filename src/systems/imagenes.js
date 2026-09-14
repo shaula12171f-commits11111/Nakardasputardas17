@@ -368,7 +368,7 @@ const QuintiImagenesPrueba = {
             // =====================================================
             rozo_mi_verga_en_el_coño_de_nino_SEX: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773407764110.jpg", audio: "", descripcion: "rozo mi verga contra su coño" },
             rozo_mi_verga_en_la_concha_de_nino_SEX: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773407764110.jpg", audio: "", descripcion: "rozo mi verga contra su coño" },
-}
+
                 chupo_la_concha_de_nino: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854099239.jpg", audio: "", descripcion: "chupo y lamo su concha" },
 
             nino_muestra_su_concha_y_la_abre: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854101274.jpg", audio: "", descripcion: "nino abre su concha bien rico" },
@@ -378,7 +378,7 @@ const QuintiImagenesPrueba = {
             meto_dedos_en_su_concha_nino_se_corre: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854105419.jpg", audio: "", descripcion: "nino se corre cuando le meto los deddos en su coño concha" },
 
             nino_squirt: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854107557.jpg", audio: "", descripcion: "nino squirtea despues de jugar con su coño con mis dedos" },
-
+}
 },
 
     Miku: {
