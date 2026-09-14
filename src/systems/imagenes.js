@@ -388,6 +388,8 @@ const QuintiImagenesPrueba = {
 
             paizuri_tit_job_usuario_se_corre: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102194142.webp", audio: "", descripcion: "usuario eyacula mientras nino hace titjob" },
 
+            despues_de_paizuri_semen_en_las_tetas_de_nino: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102196170.jpg", audio: "", descripcion: "usuario se corre y deja su semen en las tetas ded nino despues del paizuri" },
+
 // =====================================================
             //  69
             // =====================================================
