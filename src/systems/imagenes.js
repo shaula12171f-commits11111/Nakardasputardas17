@@ -384,6 +384,8 @@ const QuintiImagenesPrueba = {
 
             chupo_las_tetas_de_nino: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854097045.jpg", audio: "", descripcion: "le chupo las tetas" },
 
+            nino_paizuri_titjob: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102185303.jpg", audio: "", descripcion: "paizuri titjob" },
+
 // =====================================================
             //  69
             // =====================================================
