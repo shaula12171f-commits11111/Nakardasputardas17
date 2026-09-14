@@ -356,6 +356,8 @@ const QuintiImagenesPrueba = {
 
                         nino_muestra_tetas: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1773000558835.jpg", audio: "", descripcion: "nino muestra las tetas esas tetas de diosa" },
 
+            chupo_las_tetas_de_nino: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854097045.jpg", audio: "", descripcion: "le chupo las tetas" },
+
 // =====================================================
             //  69
             // =====================================================
