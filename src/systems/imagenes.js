@@ -314,6 +314,8 @@ const QuintiImagenesPrueba = {
 
             nino_se_desviste_se_quita_la_falda: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854351264.jpg", audio: "", descripcion: "se quita la falda" },
 
+            desnuda_en_la_calle: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773416187551.jpg", audio: "", descripcion: "desnuda en la calle de noche" },
+
 // =====================================================
             //  ROPA / LENCERÍA
             // =====================================================
