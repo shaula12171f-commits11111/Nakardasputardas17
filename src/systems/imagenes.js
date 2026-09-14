@@ -306,7 +306,9 @@ const QuintiImagenesPrueba = {
             desnuda_en_cama: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986583664.png", audio: "", descripcion: "" },
              desnuda_acostada_en_la_cama_mostrando_coño_y_ano_SEX: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1781983211741.png", audio: "", descripcion: "acostada en la cama mostando coño y ano abriendo las piernas" },
 
-            // =====================================================
+                        nino_desnuda_en_la_puerta: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854353264.jpg", audio: "", descripcion: "desnuda en la puerta" },
+
+// =====================================================
             //  ROPA / LENCERÍA
             // =====================================================
             ropa_bikini: { url: "https://is.gd/XxNXzJ", audio: "", descripcion: "" },
