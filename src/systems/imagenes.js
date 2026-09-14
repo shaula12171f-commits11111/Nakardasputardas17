@@ -200,6 +200,8 @@ const QuintiImagenesPrueba = {
 
             nino_quiere_usar_condones_al_follar: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102164009.jpg", audio: "", descripcion: "nino quiere usar condones" },
 
+            nino_comprando_condones: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102172779.jpg", audio: "", descripcion: "nino compra condones" },
+
 // =====================================================
             //  BESOS
             // =====================================================
