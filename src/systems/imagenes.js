@@ -386,6 +386,8 @@ const QuintiImagenesPrueba = {
 
             nino_paizuri_titjob: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102185303.jpg", audio: "", descripcion: "paizuri titjob" },
 
+            paizuri_tit_job_usuario_se_corre: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102194142.webp", audio: "", descripcion: "usuario eyacula mientras nino hace titjob" },
+
 // =====================================================
             //  69
             // =====================================================
