@@ -373,6 +373,8 @@ const QuintiImagenesPrueba = {
 
             nino_muestra_su_concha_y_la_abre: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854101274.jpg", audio: "", descripcion: "nino abre su concha bien rico" },
 
+            meto_dedos_en_la_concha_de_nino: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854103400.jpg", audio: "", descripcion: "meto dedos en su concha suena chapoteo" },
+
 },
 
     Miku: {
