@@ -214,6 +214,8 @@ const QuintiImagenesPrueba = {
 
             nino_dudando: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD19/main/imagenes/img_1773597873511.png", audio: "", descripcion: "dudando dicendo como ah?" },
 
+            nino_sonrojada: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD68/main/imagenes/img_1782521743020.jpg", audio: "", descripcion: "nino sonrojada" },
+
 // =====================================================
             //  ORAL / MAMADA
             // =====================================================
