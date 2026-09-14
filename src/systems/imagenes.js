@@ -308,6 +308,8 @@ const QuintiImagenesPrueba = {
 
                         nino_desnuda_en_la_puerta: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854353264.jpg", audio: "", descripcion: "desnuda en la puerta" },
 
+            desnuda_sentada_en_la_cama: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854363713.jpg", audio: "", descripcion: "desnuda sentada en la cama" },
+
 // =====================================================
             //  ROPA / LENCERÍA
             // =====================================================
