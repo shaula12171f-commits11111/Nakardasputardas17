@@ -375,6 +375,8 @@ const QuintiImagenesPrueba = {
 
             meto_dedos_en_la_concha_de_nino: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854103400.jpg", audio: "", descripcion: "meto dedos en su concha suena chapoteo" },
 
+            meto_dedos_en_su_concha_nino_se_corre: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854105419.jpg", audio: "", descripcion: "nino se corre cuando le meto los deddos en su coño concha" },
+
 },
 
     Miku: {
