@@ -4,7 +4,7 @@
 //    NEUTRO, BESOS, EMOCIONES, ORAL/MAMADA, 69, FACIAL/CUM,
 //    HANDJOB, DOGGYSTYLE, MISIONERO, COWGIRL, SIDEFUCK,
 //    DE PIE/VENTANA/AIRE, ANAL, TETAS, CULO, DEDOS/SQUIRT,
-//    DESNUDA, ROPA, COSPLAY, LUGARES, USUARIO MUESTRA VERGA, EXTRA
+//    CONDON, DESNUDA, ROPA, COSPLAY, LUGARES, USUARIO MUESTRA VERGA, EXTRA
 // ============================================================
 
 const QuintiImagenesPrueba = {
@@ -55,8 +55,12 @@ const QuintiImagenesPrueba = {
             // =====================================================
             //  FACIAL / CUM
             // =====================================================
-            ichika_bebiendo_el_senmen_del_condon: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778615779747.png", audio: "", descripcion: "Condon color rosado" },
             me_corro_en_su_boca: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854981094.jpg", audio: "", descripcion: "" },
+
+            // =====================================================
+            //  CONDON
+            // =====================================================
+            ichika_bebiendo_el_senmen_del_condon: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778615779747.png", audio: "", descripcion: "Condon color rosado" },
 
             // =====================================================
             //  HANDJOB / PAJA / ASSJOB
@@ -196,10 +200,11 @@ const QuintiImagenesPrueba = {
 
             nino_se_masturba_dildo_por_el_ano: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD20/main/imagenes/img_1773688727186.jpg", audio: "", descripcion: "dildo negro" },
 
+            // =====================================================
+            //  CONDON
+            // =====================================================
             nino_condom_en_la_boca: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778620799416.png", audio: "", descripcion: "nino condon en la boca condom 001 muy delgado" },
-
             nino_quiere_usar_condones_al_follar: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102164009.jpg", audio: "", descripcion: "nino quiere usar condones" },
-
             nino_comprando_condones: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102172779.jpg", audio: "", descripcion: "nino compra condones" },
 
 // =====================================================
