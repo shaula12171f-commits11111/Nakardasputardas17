@@ -198,6 +198,8 @@ const QuintiImagenesPrueba = {
 
             nino_condom_en_la_boca: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778620799416.png", audio: "", descripcion: "nino condon en la boca condom 001 muy delgado" },
 
+            nino_quiere_usar_condones_al_follar: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102164009.jpg", audio: "", descripcion: "nino quiere usar condones" },
+
 // =====================================================
             //  BESOS
             // =====================================================
