@@ -244,6 +244,8 @@ const QuintiImagenesPrueba = {
 
             pongo_mi_verga_en_la_boca_de_nino: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1782055329878.png", audio: "", descripcion: "pongo miverga en su boca ella me mira  y dice umm" },
 
+            nino_lamiendo_la_punta_de_mi_polla: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914362131.webp", audio: "", descripcion: "nino lame el glande de mi polla solo la puntita" },
+
 // =====================================================
             //  FACIAL / CUM
             // =====================================================
