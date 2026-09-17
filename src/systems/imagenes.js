@@ -376,6 +376,8 @@ const QuintiImagenesPrueba = {
 
             lugar_calle_caminando: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914310119.webp", audio: "", descripcion: "caminando por la calle nino agarra mi brazo" },
 
+            Piscina: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Piscina.webp", audio: "", descripcion: "en la piscina bikini celeste tanga transparente celeste buen culo" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
