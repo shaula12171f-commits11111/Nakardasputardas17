@@ -402,6 +402,8 @@ const QuintiImagenesPrueba = {
 
             Nino_en_las_Rocas_De_la_playa_se_desnuda: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_en_las_Rocas_De_la_playa_se_desnuda.jpg", audio: "", descripcion: "nino en las rocas de la playa se desnuda" },
 
+            Playa_todas_las_chicas_miran_celosas_a_nino: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Playa_todas_las_chicas_miran_celosas_a_nino.png", audio: "", descripcion: "en la playa todas las chicas miran celosas  a nino por esse cuerpo de diosa culona y tetona" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
