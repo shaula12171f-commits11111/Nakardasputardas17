@@ -426,6 +426,8 @@ const QuintiImagenesPrueba = {
 
             Chupando_pene_en_la_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Chupando_pene_en_la_playa.jpg", audio: "", descripcion: "chupando pene en la playa" },
 
+            La_grabo_en_la_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/La_grabo_en_la_playa.jpg", audio: "", descripcion: "la grabo en al playa bikini rojo de tirantes" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
