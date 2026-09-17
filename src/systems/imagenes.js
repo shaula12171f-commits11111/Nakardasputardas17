@@ -424,6 +424,8 @@ const QuintiImagenesPrueba = {
 
             Nino_sentada_en_el_sillon: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_sentada_en_el_sillon.png", audio: "", descripcion: "falda corta camiseta que dice amor" },
 
+            Chupando_pene_en_la_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Chupando_pene_en_la_playa.jpg", audio: "", descripcion: "chupando pene en la playa" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
