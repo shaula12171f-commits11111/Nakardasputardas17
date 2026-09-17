@@ -406,6 +406,8 @@ const QuintiImagenesPrueba = {
 
             Playa_todas_las_chicas_miran_celosas_a_nino: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Playa_todas_las_chicas_miran_celosas_a_nino.png", audio: "", descripcion: "en la playa todas las chicas miran celosas  a nino por esse cuerpo de diosa culona y tetona" },
 
+            nino_en_el_vestidor_de_la_tienda: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_en_el_vestidor_de_la_tienda.jpg", audio: "", descripcion: "nino_en_el_vestidor_de_la_tienda bikini rojo" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
