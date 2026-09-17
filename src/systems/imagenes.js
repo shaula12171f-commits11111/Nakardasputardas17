@@ -376,6 +376,8 @@ const QuintiImagenesPrueba = {
 
             Nino_manda_Foto_en_lenceria: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_manda_Foto_en_lenceria.jpg", audio: "", descripcion: "nino manda foto en lenceria negra al lado de ella se ve alguien" },
 
+            Nino_ropa_halloween: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_ropa_halloween.jpg", audio: "", descripcion: "ropa de sucubo negra medias negras largas" },
+
 // =====================================================
             //  COSPLAY
             // =====================================================
