@@ -386,6 +386,8 @@ const QuintiImagenesPrueba = {
 
             Nino_ropa_Azafata_avion: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_ropa_Azafata_avion.png", audio: "", descripcion: "nino ropa de azafata de avion gorra medias negras largas tacones falda corta" },
 
+            ropa_sacerdotisa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/ropa_sacerdotisa.jpg", audio: "", descripcion: "ropa de sacerdotisa tacones yukata blanco y rojo liston rojo" },
+
 // =====================================================
             //  COSPLAY
             // =====================================================
