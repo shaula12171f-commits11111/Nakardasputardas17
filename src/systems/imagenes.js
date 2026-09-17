@@ -351,6 +351,8 @@ const QuintiImagenesPrueba = {
 
             nino_comienza_a_vestirse: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD32/main/imagenes/img_1777831751229.jpg", audio: "", descripcion: "tanga morada medias blancas largas falda verde camisa blanca chaqueta morada" },
 
+            Nino_manda_foto_desnuda: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_manda_foto_desnuda.jpg", audio: "", descripcion: "nino manda foto desnuda se ve alguien al lado de ella" },
+
 // =====================================================
             //  ROPA / LENCERÍA
             // =====================================================
