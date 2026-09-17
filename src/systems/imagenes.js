@@ -370,6 +370,8 @@ const QuintiImagenesPrueba = {
 
             Nino_ropa_granjera: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_ropa_granjera.jpg", audio: "", descripcion: "oberol de granjera" },
 
+            Nino_ropa_porrista: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_ropa_porrista.jpg", audio: "", descripcion: "nino ropa de porrista 2 ponpones falda corta camisa corta" },
+
 // =====================================================
             //  COSPLAY
             // =====================================================
