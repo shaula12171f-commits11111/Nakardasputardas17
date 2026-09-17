@@ -428,6 +428,8 @@ const QuintiImagenesPrueba = {
 
             La_grabo_en_la_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/La_grabo_en_la_playa.jpg", audio: "", descripcion: "la grabo en al playa bikini rojo de tirantes" },
 
+            Nino_entrena_en_el_gimnasio: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_entrena_en_el_gimnasio.jpg", audio: "", descripcion: "hace sentadillas short rosado nedias negras top blanco cabello ponytal" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
