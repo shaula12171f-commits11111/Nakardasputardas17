@@ -202,6 +202,8 @@ const QuintiImagenesPrueba = {
 
                         borracha: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/borracha.jpg", audio: "", descripcion: "borracha" },
 
+            Nino_regresa_de_la_tienda: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_regresa_de_la_tienda.png", audio: "", descripcion: "nino regresa de la tienda hace las compras del hogar en su bolsa se ven botellas" },
+
 // =====================================================
             //  CONDON
             // =====================================================
