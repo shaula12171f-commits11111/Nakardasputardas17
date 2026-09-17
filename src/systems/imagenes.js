@@ -206,6 +206,8 @@ const QuintiImagenesPrueba = {
 
             Nino_pone_su_bebida_entre_las_Tetas: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_pone_su_bebida_entre_las_Tetas.jpg", audio: "", descripcion: "nino pone su bebida entre las tetas y la toma sin manos" },
 
+            se_le_cae_la_toalla_a_nino: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/se_le_cae_la_toalla_a_nino.jpg", audio: "", descripcion: "se le cae la toalla se ve un poco la raja de su culo y se ve sus tetas" },
+
 // =====================================================
             //  CONDON
             // =====================================================
