@@ -447,7 +447,9 @@ const QuintiImagenesPrueba = {
             // =====================================================
             hablando: { url: "https://pbs.twimg.com/media/HF-3zGSW4AENtrX?format=jpg&name=medium", audio: "", descripcion: "" },
 
-            // =====================================================
+                        Miku_pijama: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/Miku_pijama.jpg", audio: "", descripcion: "miku pijama azul recien levantada tanga azul" },
+
+// =====================================================
             //  BESOS
             // =====================================================
             besando: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773021246328.jpg", audio: "", descripcion: "" },
