@@ -208,6 +208,8 @@ const QuintiImagenesPrueba = {
 
             se_le_cae_la_toalla_a_nino: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/se_le_cae_la_toalla_a_nino.jpg", audio: "", descripcion: "se le cae la toalla se ve un poco la raja de su culo y se ve sus tetas" },
 
+            Nino_me_molesta_mientras_leo: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_me_molesta_mientras_leo.jpg", audio: "", descripcion: "me molesta mientras leo  tiene sweater azul parece puta tanga celeste" },
+
 // =====================================================
             //  CONDON
             // =====================================================
