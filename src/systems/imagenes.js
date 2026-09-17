@@ -418,6 +418,8 @@ const QuintiImagenesPrueba = {
 
             Nino_entrando_a_la_Ducha: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_entrando_a_la_Ducha.png", audio: "", descripcion: "nino entrando a la ducha" },
 
+            Nino_sentada_en_el_sillon: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_sentada_en_el_sillon.png", audio: "", descripcion: "falda corta camiseta que dice amor" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
