@@ -372,6 +372,8 @@ const QuintiImagenesPrueba = {
 
             Nino_ropa_porrista: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_ropa_porrista.jpg", audio: "", descripcion: "nino ropa de porrista 2 ponpones falda corta camisa corta" },
 
+            Nino_manda_Foto_en_lenceria: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_manda_Foto_en_lenceria.jpg", audio: "", descripcion: "nino manda foto en lenceria negra al lado de ella se ve alguien" },
+
 // =====================================================
             //  COSPLAY
             // =====================================================
