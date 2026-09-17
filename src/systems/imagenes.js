@@ -400,6 +400,8 @@ const QuintiImagenesPrueba = {
 
             Nino_en_las_rocas_de_la_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_en_las_rocas_de_la_playa.jpg", audio: "", descripcion: "nino en las rocas o cueva de la playa" },
 
+            Nino_en_las_Rocas_De_la_playa_se_desnuda: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_en_las_Rocas_De_la_playa_se_desnuda.jpg", audio: "", descripcion: "nino en las rocas de la playa se desnuda" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
