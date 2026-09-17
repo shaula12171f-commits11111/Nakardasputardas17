@@ -210,6 +210,8 @@ const QuintiImagenesPrueba = {
 
             Nino_me_molesta_mientras_leo: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_me_molesta_mientras_leo.jpg", audio: "", descripcion: "me molesta mientras leo  tiene sweater azul parece puta tanga celeste" },
 
+            Nino_bañandose: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_bañandose.jpg", audio: "", descripcion: "nino bañandose cabello recogido en un moño" },
+
 // =====================================================
             //  CONDON
             // =====================================================
