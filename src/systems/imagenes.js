@@ -419,6 +419,8 @@ const QuintiImagenesPrueba = {
 
             despues_de_paizuri_semen_en_las_tetas_de_nino: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102196170.jpg", audio: "", descripcion: "usuario se corre y deja su semen en las tetas ded nino despues del paizuri" },
 
+            Nino_manda_foto_mostrando_tetas: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_manda_foto_mostrando_tetas.jpg", audio: "", descripcion: "nino manda foto mostrando tetas se ve su coño" },
+
 // =====================================================
             //  69
             // =====================================================
