@@ -390,6 +390,8 @@ const QuintiImagenesPrueba = {
 
             ropa_sacerdotisa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/ropa_sacerdotisa.jpg", audio: "", descripcion: "ropa de sacerdotisa tacones yukata blanco y rojo liston rojo" },
 
+            nino_pijama: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_pijama.jpg", audio: "", descripcion: "nino pijama transparente blanco moñito en el pijama moño negro" },
+
 // =====================================================
             //  COSPLAY
             // =====================================================
