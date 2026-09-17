@@ -398,6 +398,8 @@ const QuintiImagenesPrueba = {
 
             Nino_durmiendo_en_la_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_durmiendo_en_la_playa.jpg", audio: "", descripcion: "durmiendo en la playa bikini rojo muy delgado" },
 
+            Nino_en_las_rocas_de_la_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_en_las_rocas_de_la_playa.jpg", audio: "", descripcion: "nino en las rocas o cueva de la playa" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
