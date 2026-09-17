@@ -204,6 +204,8 @@ const QuintiImagenesPrueba = {
 
             Nino_regresa_de_la_tienda: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_regresa_de_la_tienda.png", audio: "", descripcion: "nino regresa de la tienda hace las compras del hogar en su bolsa se ven botellas" },
 
+            Nino_pone_su_bebida_entre_las_Tetas: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_pone_su_bebida_entre_las_Tetas.jpg", audio: "", descripcion: "nino pone su bebida entre las tetas y la toma sin manos" },
+
 // =====================================================
             //  CONDON
             // =====================================================
