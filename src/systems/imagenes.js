@@ -248,6 +248,8 @@ const QuintiImagenesPrueba = {
 
             nino_lamiendo_la_punta_de_mi_polla: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914362131.webp", audio: "", descripcion: "nino lame el glande de mi polla solo la puntita" },
 
+            nino_chupa_pene_ropa_idol: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_chupa_pene_ropa_idol.png", audio: "", descripcion: "nino chupa pene con ropa de idol" },
+
 // =====================================================
             //  FACIAL / CUM
             // =====================================================
