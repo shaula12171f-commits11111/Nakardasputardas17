@@ -408,6 +408,8 @@ const QuintiImagenesPrueba = {
 
             nino_en_el_vestidor_de_la_tienda: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_en_el_vestidor_de_la_tienda.jpg", audio: "", descripcion: "nino_en_el_vestidor_de_la_tienda bikini rojo" },
 
+            Nino_en_el_vestidor_De_la_tienda_ponytail: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_en_el_vestidor_De_la_tienda_ponytail.jpg", audio: "", descripcion: "nino en el vestidor de la tienda bikini rojo ponytail de cabello" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
