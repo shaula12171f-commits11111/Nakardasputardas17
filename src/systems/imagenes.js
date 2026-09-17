@@ -218,6 +218,8 @@ const QuintiImagenesPrueba = {
 
                         nino_besando_mejilla: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_besando_mejilla.jpg", audio: "", descripcion: "nino besa mi mejilla" },
 
+            nino_beso_volado: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_beso_volado.jpg", audio: "", descripcion: "nino da un beso volado al aire" },
+
 // =====================================================
             //  EMOCIONES
             // =====================================================
