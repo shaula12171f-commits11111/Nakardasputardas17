@@ -262,10 +262,10 @@ const QuintiImagenesPrueba = {
 // =====================================================
             //  HANDJOB / PAJA / ASSJOB
             // =====================================================
-            assjob: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/assjob.jpg", audio: "", descripcion: "assjob mi verga entre sus nalgas" },
+            nino_assjob: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/assjob.jpg", audio: "", descripcion: "assjob mi verga entre sus nalgas" },
             handjob_paja: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD58/main/imagenes/img_1780228236266.jpg", audio: "https://litter.catbox.moe/gybisrc3ys50tlum.mp3", descripcion: "" },
 
-                        assjob_me_corro_cumming: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504256061.png", audio: "", descripcion: "me corro mientras nino me hace una assjob" },
+                        nino_hace_assjob_usuario_se_corre: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504256061.png", audio: "", descripcion: "me corro mientras nino me hace una assjob" },
 
             handjob_me_corro_en_sus_tetas_cuerpo_SEX: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1781983221423.png", audio: "", descripcion: "eyaculo en las tetas y cuerpo de nino." },
 
