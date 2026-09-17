@@ -212,6 +212,8 @@ const QuintiImagenesPrueba = {
 
             Nino_bañandose: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_bañandose.jpg", audio: "", descripcion: "nino bañandose cabello recogido en un moño" },
 
+            Nino_me_ve_mientras_estudio: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_me_ve_mientras_estudio.jpg", audio: "", descripcion: "nino me ve mientras estudio" },
+
 // =====================================================
             //  CONDON
             // =====================================================
