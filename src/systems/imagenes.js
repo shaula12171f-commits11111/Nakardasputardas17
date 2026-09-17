@@ -378,6 +378,8 @@ const QuintiImagenesPrueba = {
 
             Piscina: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Piscina.webp", audio: "", descripcion: "en la piscina bikini celeste tanga transparente celeste buen culo" },
 
+            Nino_durmiendo_en_la_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_durmiendo_en_la_playa.jpg", audio: "", descripcion: "durmiendo en la playa bikini rojo muy delgado" },
+
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
