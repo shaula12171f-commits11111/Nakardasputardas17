@@ -382,6 +382,8 @@ const QuintiImagenesPrueba = {
 
             Nino_ropa_halloween: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_ropa_halloween.jpg", audio: "", descripcion: "ropa de sucubo negra medias negras largas" },
 
+            Nino_ropa_Azafata_avion: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_ropa_Azafata_avion.png", audio: "", descripcion: "nino ropa de azafata de avion gorra medias negras largas tacones falda corta" },
+
 // =====================================================
             //  COSPLAY
             // =====================================================
