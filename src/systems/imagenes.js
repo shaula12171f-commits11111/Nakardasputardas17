@@ -366,6 +366,8 @@ const QuintiImagenesPrueba = {
 
             ropa_gyaru: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773691690007.jpg", audio: "", descripcion: "ropa de gyaru bikini morado  tanga en v morada medias blancas largas con puntos morados  collar de pinchos en el cuello dos pulseras  morada y negra" },
 
+            Nino_ropa_granjera: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_ropa_granjera.jpg", audio: "", descripcion: "oberol de granjera" },
+
 // =====================================================
             //  COSPLAY
             // =====================================================
