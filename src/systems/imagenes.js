@@ -501,6 +501,8 @@ const QuintiImagenesPrueba = {
 
                         Miku_pijama: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/Miku_pijama.jpg", audio: "", descripcion: "miku pijama azul recien levantada tanga azul" },
 
+            miku_bañandose: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/miku_bañandose.jpg", audio: "", descripcion: "miku se baña" },
+
 // =====================================================
             //  BESOS
             // =====================================================
