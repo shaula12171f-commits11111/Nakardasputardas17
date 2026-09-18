@@ -216,6 +216,8 @@ const QuintiImagenesPrueba = {
 
             nino_abre_la_boca: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_abre_la_boca.jpg", audio: "", descripcion: "nino abre la boca" },
 
+            nino_full_nelson: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_full_nelson.jpg", audio: "", descripcion: "" },
+
 // =====================================================
             //  CONDON
             // =====================================================
