@@ -806,7 +806,12 @@ const QuintiImagenesPrueba = {
             manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630346039_1.png", audio: "", descripcion: "" },
 
             // → Total Itsuki: 26 tags
-        }
+        
+            // =====================================================
+            //  CONDON
+            // =====================================================
+            Itsuki_compra_condones: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Itsuki/Itsuki_compra_condones.jpg", audio: "", descripcion: "itsuki compra condones" },
+}
     },
 
     Emilia: {
