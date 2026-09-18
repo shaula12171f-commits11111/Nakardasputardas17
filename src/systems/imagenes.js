@@ -272,6 +272,8 @@ const QuintiImagenesPrueba = {
 
             nino_chupa_pene_sin_manos_ropa_idol: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_chupa_pene_sin_manos_ropa_idol.png", audio: "", descripcion: "nino chupa pija sin manos con ropa de idol" },
 
+            le_chupo_el_culo_a_nino: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/le_chupo_el_culo_a_nino.jpg", audio: "", descripcion: "le chupo el culo a nino" },
+
 // =====================================================
             //  FACIAL / CUM
             // =====================================================
