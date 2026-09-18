@@ -566,7 +566,9 @@ const QuintiImagenesPrueba = {
             follando_en_la_ventana: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773691924726.jpg", audio: "", descripcion: "" },
             standfuck_follando_de_pie: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773691922528.jpg", audio: "", descripcion: "" },
 
-            // =====================================================
+                        follando_de_pie: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/follando_de_pie.jpg", audio: "", descripcion: "" },
+
+// =====================================================
             //  ANAL
             // =====================================================
             anal_cumming: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773757223397.jpg", audio: "", descripcion: "" },
