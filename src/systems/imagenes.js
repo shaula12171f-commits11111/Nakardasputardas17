@@ -214,6 +214,8 @@ const QuintiImagenesPrueba = {
 
             Nino_me_ve_mientras_estudio: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Nino_me_ve_mientras_estudio.jpg", audio: "", descripcion: "nino me ve mientras estudio" },
 
+            nino_abre_la_boca: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_abre_la_boca.jpg", audio: "", descripcion: "nino abre la boca" },
+
 // =====================================================
             //  CONDON
             // =====================================================
