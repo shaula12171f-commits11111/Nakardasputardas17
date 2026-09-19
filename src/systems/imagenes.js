@@ -222,6 +222,8 @@ const QuintiImagenesPrueba = {
 
             follando_full_nelson: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/follando_full_nelson.jpg", audio: "", descripcion: "" },
 
+            la_Beso_mientras_follamos_en_Full_nelson: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/la_Beso_mientras_follamos_en_Full_nelson.jpg", audio: "", descripcion: "" },
+
 // =====================================================
             //  CONDON
             // =====================================================
