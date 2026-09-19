@@ -224,6 +224,8 @@ const QuintiImagenesPrueba = {
 
             la_Beso_mientras_follamos_en_Full_nelson: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/la_Beso_mientras_follamos_en_Full_nelson.jpg", audio: "", descripcion: "" },
 
+            Agarro_la_mano_de_nino: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/Agarro_la_mano_de_nino.jpg", audio: "", descripcion: "agarro su mano" },
+
 // =====================================================
             //  CONDON
             // =====================================================
