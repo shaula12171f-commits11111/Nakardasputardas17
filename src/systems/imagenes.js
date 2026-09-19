@@ -220,6 +220,8 @@ const QuintiImagenesPrueba = {
 
             nino_full_nelson: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_full_nelson.jpg", audio: "", descripcion: "" },
 
+            follando_full_nelson: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/follando_full_nelson.jpg", audio: "", descripcion: "" },
+
 // =====================================================
             //  CONDON
             // =====================================================
