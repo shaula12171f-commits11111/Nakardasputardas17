@@ -274,6 +274,8 @@ const QuintiImagenesPrueba = {
 
             le_chupo_el_culo_a_nino: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/le_chupo_el_culo_a_nino.jpg", audio: "", descripcion: "le chupo el culo a nino" },
 
+            nino_ve_mi_verga_caida: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_ve_mi_verga_caida.png", audio: "", descripcion: "nino ve mi verga caida" },
+
 // =====================================================
             //  FACIAL / CUM
             // =====================================================
