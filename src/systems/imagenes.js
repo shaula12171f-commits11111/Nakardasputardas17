@@ -501,11 +501,8 @@ const QuintiImagenesPrueba = {
             meto_dedos_en_su_concha_nino_se_corre: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854105419.jpg", audio: "", descripcion: "nino se corre cuando le meto los deddos en su coño concha" },
 
             nino_squirt: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854107557.jpg", audio: "", descripcion: "nino squirtea despues de jugar con su coño con mis dedos" },
-     nino_matting_press: {
-      url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/matting_press.jpg",
-      audio: "",
-      descripcion: "la follo matting press ella trata de contener sus gemidos"
-    },       
+            nino_matting_press: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_matting_press.jpg", audio: "", descripcion: "ella intenta contener sus gemidos mientras la follo mattingpress" },
+
 }
  
    
