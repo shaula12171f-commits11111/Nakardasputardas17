@@ -744,8 +744,8 @@ const QuintiImagenesPrueba = {
             //  NEUTRO / HABLANDO
             // =====================================================
             hablando: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773415154644.jpg", audio: "", descripcion: "" },
-
-            // =====================================================
+            itsuki_matting_press: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Itsuki/itsuki_matting_press.jpg", audio: "la follo en matting press ella intenta contener sus gemidos", descripcion: "" },
+// =====================================================
             //  BESOS
             // =====================================================
             besando: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD12/main/imagenes/img_1773506379780.png", audio: "", descripcion: "" },
