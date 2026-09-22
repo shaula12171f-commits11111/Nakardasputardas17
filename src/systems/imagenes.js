@@ -305,7 +305,7 @@ const QuintiImagenesPrueba = {
                         nino_hace_assjob_usuario_se_corre: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1784504256061.png", audio: "", descripcion: "me corro mientras nino me hace una assjob" },
 
             handjob_me_corro_en_sus_tetas_cuerpo_SEX: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1781983221423.png", audio: "", descripcion: "eyaculo en las tetas y cuerpo de nino." },
-
+            nino_paja_mientras_besa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_paja_mientras_besa.jpg", audio: "", descripcion: "nino me pajea mientras me besa" },
 // =====================================================
             //  DOGGYSTYLE
             // =====================================================
