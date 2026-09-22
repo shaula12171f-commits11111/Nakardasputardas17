@@ -595,7 +595,7 @@ const QuintiImagenesPrueba = {
             //  DESNUDA / QUITÁNDOSE
             // =====================================================
             desnuda: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD19/main/imagenes/img_1773671000069.jpg", audio: "", descripcion: "" },
-            desnuda_en_cama: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986586569.png", audio: "", descripcion: "" },
+            desnuda_en_cama: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD67/main/imagenes/img_1781986589452.png", audio: "", descripcion: "" },
 
             // =====================================================
             //  ROPA / LENCERÍA
