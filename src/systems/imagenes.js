@@ -363,7 +363,7 @@ const QuintiImagenesPrueba = {
             agarrando_verga: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD76/main/imagenes/img_1788914354078.webp", audio: "", descripcion: "agarrando la verga del usuario." },
 
             pongo_mi_verga_en_el_medio_de_sus_nalgas_culo: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854336962.jpg", audio: "", descripcion: "pongo miverga en medio de su culo en esa raja que separa sus nalgas" },
-
+            le_chupo_el_ano_a_nino: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/le_chupo_el_ano_a_nino.jpg", audio: "", descripcion: "le chupo el ano a nino" },
 // =====================================================
             //  DESNUDA / QUITÁNDOSE
             // =====================================================
