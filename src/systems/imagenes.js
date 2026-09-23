@@ -737,12 +737,14 @@ const QuintiImagenesPrueba = {
             // =====================================================
             manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630296732_1.png", audio: "", descripcion: "" },
 
-            // → Total Yotsuba: 27 tags
-        }
-        // =====================================================
+            // =====================================================
         //  CONDON
         // =====================================================
             yotsuba_follando_En_misionero_con_condon: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Yotsuba/yotsuba_follando_En_misionero_con_condon.jpg", audio: "", descripcion: "yotsuba_follando_En_misionero_con_condon" },
+            
+            // → Total Yotsuba: 27 tags
+        }
+       
 },
 
     Itsuki: {
