@@ -57,8 +57,8 @@ const QuintiImagenesPrueba = {
             //  FACIAL / CUM
             // =====================================================
             me_corro_en_su_boca: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854981094.jpg", audio: "", descripcion: "" },
-
-            // =====================================================
+            me_corro_en_la_cara_de_ichika: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Ichika/me_corro_en_la_cara_de_ichika.jpg", audio: "", descripcion: "me_corro_en_la_cara_de_ichika" },
+// =====================================================
             //  CONDON
             // =====================================================
             ichika_bebiendo_el_senmen_del_condon: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778615779747.png", audio: "", descripcion: "Condon color rosado" },
