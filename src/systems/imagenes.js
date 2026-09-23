@@ -621,13 +621,14 @@ const QuintiImagenesPrueba = {
             //  POST SEXO / EXTRA
             // =====================================================
             manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630334116_1.png", audio: "", descripcion: "" },
-
-            // → Total Miku: 27 tags
-        }
-        // =====================================================
+ // =====================================================
         //  CONDON
         // =====================================================
             miku_follando_en_misionero_con_condon: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/miku_follando_en_misionero_con_condon.jpg", audio: "", descripcion: "miku_follando_en_misionero_con_condon" },
+            
+            // → Total Miku: 27 tags
+        }
+       
 },
 
     Yotsuba: {
