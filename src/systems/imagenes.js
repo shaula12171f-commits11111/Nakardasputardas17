@@ -236,7 +236,7 @@ const QuintiImagenesPrueba = {
             nino_comprando_condones: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788102172779.jpg", audio: "", descripcion: "nino compra condones" },
 
             nino_bebiendo_semen_del_condon_lleno: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788105124286.jpg", audio: "", descripcion: "nino setraga el semen del condon despues de follar" },
-
+            nino_follando_en_misionero_con_condon: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_follando_en_misionero_con_condon.jpg", audio: "", descripcion: "nino follando en misionero con condon" },
 // =====================================================
             //  BESOS
             // =====================================================
