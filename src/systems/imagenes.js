@@ -526,6 +526,7 @@ const QuintiImagenesPrueba = {
 
             miku_bañandose: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/miku_bañandose.jpg", audio: "", descripcion: "miku se baña" },
             Miku_matting_press: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/Miku_matting_press.jpg", audio: "", descripcion: "follando en matting press a miku ella trata de contener sus gemidos" },
+            la_follo_mientras_la_ahorco: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/la_follo_mientras_la_ahorco.jpg", audio: "", descripcion: "la follo mientras la ahorco mi brazo alrededor de su cuello" },
 // =====================================================
             //  BESOS
             // =====================================================
