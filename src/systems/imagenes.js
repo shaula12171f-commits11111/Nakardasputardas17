@@ -739,7 +739,11 @@ const QuintiImagenesPrueba = {
 
             // → Total Yotsuba: 27 tags
         }
-    },
+        // =====================================================
+        //  CONDON
+        // =====================================================
+            yotsuba_follando_En_misionero_con_condon: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Yotsuba/yotsuba_follando_En_misionero_con_condon.jpg", audio: "", descripcion: "yotsuba_follando_En_misionero_con_condon" },
+},
 
     Itsuki: {
         nombre: "Itsuki Nakano",
