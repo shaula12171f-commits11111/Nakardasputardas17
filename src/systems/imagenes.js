@@ -852,7 +852,8 @@ const QuintiImagenesPrueba = {
             // =====================================================
             Itsuki_compra_condones: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Itsuki/Itsuki_compra_condones.jpg", audio: "", descripcion: "itsuki compra condones" },
 }
-    },
+            Itsuki_follando_en_misionero_con_condon: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Itsuki/Itsuki_follando_en_misionero_con_condon.jpg", audio: "", descripcion: "Itsuki_follando_en_misionero_con_condon" },
+},
 
     Emilia: {
         nombre: "Emilia",
