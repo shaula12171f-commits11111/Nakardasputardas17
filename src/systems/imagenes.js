@@ -297,6 +297,7 @@ const QuintiImagenesPrueba = {
             semen_saliendo_del_ano_de_nino: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788105113064.jpg", audio: "", descripcion: "semen sale del ano de nino depsues de follar" },
             cleaning_blowjob: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/cleaning_blowjob.jpg", audio: "", descripcion: "me chupa la verga para limpiar el semen que quedo en un cleaning blowjob" },
             cleaning_blowjob_me_corro_mientras_ella_lo_Hace: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/cleaning_blowjob_me_corro_mientras_ella_lo_Hace.jpg", audio: "", descripcion: "me corro mientras nino hace el cleaning blowjob." },
+            disparo_mi_semen_desde_afuera_a_la_boca_de_nino: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/disparo_mi_semen_desde_afuera_a_la_boca_de_nino.jpg", audio: "", descripcion: "tiro mi semen desde afuera hacia la boca de nino que esta abierta" },
 // =====================================================
             //  HANDJOB / PAJA / ASSJOB
             // =====================================================
