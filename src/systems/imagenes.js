@@ -295,7 +295,7 @@ const QuintiImagenesPrueba = {
             despues_del_sexo_semen_derrama_de_su_concha_pongo_mi_verga_encima_de_su_culo: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854488588.jpg", audio: "", descripcion: "despues del sexo semen derrama de su coño y yo pongo mi verga en su culo encima" },
 
             semen_saliendo_del_ano_de_nino: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD74/main/imagenes/img_1788105113064.jpg", audio: "", descripcion: "semen sale del ano de nino depsues de follar" },
-
+            cleaning_blowjob: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/cleaning_blowjob.jpg", audio: "", descripcion: "me chupa la verga para limpiar el semen que quedo en un cleaning blowjob" },
 // =====================================================
             //  HANDJOB / PAJA / ASSJOB
             // =====================================================
