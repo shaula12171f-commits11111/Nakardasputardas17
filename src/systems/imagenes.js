@@ -624,7 +624,11 @@ const QuintiImagenesPrueba = {
 
             // → Total Miku: 27 tags
         }
-    },
+        // =====================================================
+        //  CONDON
+        // =====================================================
+            miku_follando_en_misionero_con_condon: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/miku_follando_en_misionero_con_condon.jpg", audio: "", descripcion: "miku_follando_en_misionero_con_condon" },
+},
 
     Yotsuba: {
         nombre: "Yotsuba Nakano",
