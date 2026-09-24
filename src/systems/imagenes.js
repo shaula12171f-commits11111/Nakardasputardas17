@@ -924,8 +924,8 @@ const QuintiImagenesPrueba = {
             //  CULO / NALGADAS / AGARRES
             // =====================================================
             // (sin imágenes todavía — agregá acá)
-
-            // =====================================================
+            agarro_el_culo_a_itsuki: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Itsuki/agarro_el_culo_a_itsuki.jpg", audio: "", descripcion: "agarro_el_culo_a_itsuki" },
+// =====================================================
             //  DEDOS / SQUIRT / CONCHA
             // =====================================================
             // (sin imágenes todavía — agregá acá)
