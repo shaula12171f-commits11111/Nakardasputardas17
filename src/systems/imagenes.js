@@ -835,8 +835,8 @@ const QuintiImagenesPrueba = {
             chupando_solo_la_punta_del_pene: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD4/main/imagenes/img_1773183720872.jpg", audio: "", descripcion: "" },
             chupando_todo_el_pene: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD4/main/imagenes/img_1773183771473.jpg", audio: "", descripcion: "" },
             lamiendo_pene: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778620269955.png", audio: "", descripcion: "" },
-
-            // =====================================================
+            itsuki_besa_la_punta_de_mi_polla: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789930968969.png", audio: "", descripcion: "itsuki_besa_la_punta_de_mi_polla besa mi glande" },
+// =====================================================
             //  FACIAL / CUM
             // =====================================================
             me_corro_en_su_boca: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772997286390.jpg", audio: "", descripcion: "" },
