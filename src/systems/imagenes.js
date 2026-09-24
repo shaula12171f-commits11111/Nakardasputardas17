@@ -628,7 +628,10 @@ const QuintiImagenesPrueba = {
             
             // → Total Miku: 27 tags
         }
-       
+        // =====================================================
+        //  CULO / NALGADAS / AGARRES
+        // =====================================================
+            agarro_el_culo_de_miku: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/agarro_el_culo_de_miku.jpg", audio: "", descripcion: "agarro_el_culo_de_miku" },
 },
 
     Yotsuba: {
