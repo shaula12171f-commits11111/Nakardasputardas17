@@ -788,8 +788,8 @@ const QuintiImagenesPrueba = {
             //  CULO / NALGADAS / AGARRES
             // =====================================================
             // (sin imágenes todavía — agregá acá)
-
-            // =====================================================
+            agarro_el_culo_a_yotsuba: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Yotsuba/agarro_el_culo_a_yotsuba.jpg", audio: "", descripcion: "agarro_el_culo_a_yotsuba" },
+// =====================================================
             //  DEDOS / SQUIRT / CONCHA
             // =====================================================
             // (sin imágenes todavía — agregá acá)
