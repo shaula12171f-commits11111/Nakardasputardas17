@@ -785,8 +785,8 @@ const QuintiImagenesPrueba = {
             //  TETAS
             // =====================================================
             // (sin imágenes todavía — agregá acá)
-
-            // =====================================================
+            chupo_las_tetas_de_yotsuba: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789930805431.png", audio: "", descripcion: "chupo_las_tetas_de_yotsuba" },
+// =====================================================
             //  CULO / NALGADAS / AGARRES
             // =====================================================
             // (sin imágenes todavía — agregá acá)
