@@ -285,6 +285,7 @@ const QuintiImagenesPrueba = {
 
             nino_ve_mi_verga_caida: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_ve_mi_verga_caida.png", audio: "", descripcion: "nino ve mi verga caida" },
             nino_abre_la_boca_y_muestra_el_semen_en_su_boca: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_abre_la_boca_y_muestra_el_semen_en_su_boca.jpg", audio: "", descripcion: "despues de mamar nino abre la boca para mostrar el semen que queda ahi" },
+            nino_besa_la_punta_De_mi_polla: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789930910435.png", audio: "", descripcion: "nino_besa_la_punta_De_mi_polla" },
 // =====================================================
             //  FACIAL / CUM
             // =====================================================
