@@ -634,7 +634,28 @@ const QuintiImagenesPrueba = {
           
             
             // → Total Miku: 27 tags
-        }
+        
+
+            // =====================================================
+            //  69
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  TETAS
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  DEDOS / SQUIRT / CONCHA
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  USUARIO MUESTRA VERGA
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+}
    
            
 },
@@ -751,7 +772,33 @@ const QuintiImagenesPrueba = {
             yotsuba_follando_En_misionero_con_condon: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Yotsuba/yotsuba_follando_En_misionero_con_condon.jpg", audio: "", descripcion: "yotsuba_follando_En_misionero_con_condon" },
             
             // → Total Yotsuba: 27 tags
-        }
+        
+
+            // =====================================================
+            //  69
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  TETAS
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  CULO / NALGADAS / AGARRES
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  DEDOS / SQUIRT / CONCHA
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  USUARIO MUESTRA VERGA
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+}
        
 },
 
@@ -861,7 +908,38 @@ const QuintiImagenesPrueba = {
             Itsuki_compra_condones: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Itsuki/Itsuki_compra_condones.jpg", audio: "", descripcion: "itsuki compra condones" },
  Itsuki_follando_en_misionero_con_condon: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Itsuki/Itsuki_follando_en_misionero_con_condon.jpg", audio: "", descripcion: "Itsuki_follando_en_misionero_con_condon" },
         
-        }
+        
+
+            // =====================================================
+            //  69
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  TETAS
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  CULO / NALGADAS / AGARRES
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  DEDOS / SQUIRT / CONCHA
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  ROPA / LENCERÍA
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  USUARIO MUESTRA VERGA
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+}
            
 },
 
@@ -952,7 +1030,53 @@ const QuintiImagenesPrueba = {
             // (sin imágenes todavía — agregá acá)
 
             // → Total Emilia: 21 tags
-        }
+        
+
+            // =====================================================
+            //  69
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  FACIAL / CUM
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  CONDON
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  HANDJOB / PAJA / ASSJOB
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  TETAS
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  DESNUDA / QUITÁNDOSE
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  ROPA / LENCERÍA
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  USUARIO MUESTRA VERGA
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+
+            // =====================================================
+            //  POST SEXO / EXTRA
+            // =====================================================
+            // (sin imágenes todavía — agregá acá)
+}
     }
 
 };
