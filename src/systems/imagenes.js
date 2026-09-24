@@ -647,8 +647,8 @@ const QuintiImagenesPrueba = {
             //  TETAS
             // =====================================================
             // (sin imágenes todavía — agregá acá)
-
-            // =====================================================
+            chupo_las_tetas_De_miku: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789930799815.png", audio: "", descripcion: "chupo_las_tetas_De_miku" },
+// =====================================================
             //  DEDOS / SQUIRT / CONCHA
             // =====================================================
             // (sin imágenes todavía — agregá acá)
