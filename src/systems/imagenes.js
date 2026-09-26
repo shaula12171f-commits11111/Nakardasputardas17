@@ -165,6 +165,7 @@ const QuintiImagenesPrueba = {
             // =====================================================
             // (sin imágenes todavía — agregá acá)
             cosplay_guerrera_putona: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Ichika/cosplay_guerrera_putona.jpg", audio: "", descripcion: "cosplay_guerrera_putona" },
+            cosplay_guerrera_putona_sexo_follando: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Ichika/cosplay_guerrera_putona_sexo_follando.jpg", audio: "", descripcion: "cosplay_guerrera_putona_sexo_follando le saco foto yt ella hace signo de paz con las manos" },
 // =====================================================
             //  LUGARES
             // =====================================================
