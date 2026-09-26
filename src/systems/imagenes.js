@@ -649,8 +649,8 @@ const QuintiImagenesPrueba = {
             //  69
             // =====================================================
             // (sin imágenes todavía — agregá acá)
-
-            // =====================================================
+            miku_69: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773064427172.jpg", audio: "", descripcion: "hacemos 69" },
+// =====================================================
             //  TETAS
             // =====================================================
             // (sin imágenes todavía — agregá acá)
