@@ -653,8 +653,8 @@ const QuintiImagenesPrueba = {
             //  DEDOS / SQUIRT / CONCHA
             // =====================================================
             // (sin imágenes todavía — agregá acá)
-
-            // =====================================================
+            meto_los_dedos_en_la_concha_de_miku: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773021282184.jpg", audio: "", descripcion: "meto_los_dedos_en_la_concha_de_miku" },
+// =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
             // (sin imágenes todavía — agregá acá)
