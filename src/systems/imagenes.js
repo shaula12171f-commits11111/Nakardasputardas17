@@ -613,8 +613,8 @@ const QuintiImagenesPrueba = {
             //  COSPLAY
             // =====================================================
             // (sin imágenes todavía — agregá acá)
-
-            // =====================================================
+            cosplay_enfermera_putona: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/cosplay_enfermera_putona.png", audio: "", descripcion: "medias blancas largas hasta los muslos. sombrero de enferma. stickers negros de corazon en los pezones" },
+// =====================================================
             //  LUGARES
             // =====================================================
             bikini_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/bikini_playa.jpg", audio: "", descripcion: "sombreo de paja grande liston azul bikini dorado" },
