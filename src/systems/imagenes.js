@@ -908,8 +908,8 @@ const QuintiImagenesPrueba = {
             //  LUGARES
             // =====================================================
             bikini_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Itsuki/bikini_playa.jpg", audio: "", descripcion: "sombrero de paja grande liston blanco bikini dorado" },
-
-            // =====================================================
+            playa_doggystyle_follando_en_las_rocas: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Itsuki/playa_doggystyle_follando_en_las_rocas.jpg", audio: "", descripcion: "playa_doggystyle_follando_en_las_rocas" },
+// =====================================================
             //  POST SEXO / EXTRA
             // =====================================================
             manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630346039_1.png", audio: "", descripcion: "" },
