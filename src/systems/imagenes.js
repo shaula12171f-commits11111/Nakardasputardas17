@@ -615,8 +615,8 @@ const QuintiImagenesPrueba = {
             //  ROPA / LENCERÍA
             // =====================================================
             ropa_idol: { url: "https://pbs.twimg.com/media/HFobfuKWMAAiAke?format=jpg&name=large", audio: "", descripcion: "" },
-
-            // =====================================================
+            porrista: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773064579892.jpg", audio: "", descripcion: "falda rosada ponpones dorados top pequeño blanco  banditas en sus pezones" },
+// =====================================================
             //  COSPLAY
             // =====================================================
             // (sin imágenes todavía — agregá acá)
