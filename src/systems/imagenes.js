@@ -324,8 +324,8 @@ const QuintiImagenesPrueba = {
             //  MISIONERO
             // =====================================================
             misionero: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD22/main/imagenes/img_1773854182648.jpg", audio: "", descripcion: "" },
-
-            // =====================================================
+            nino_misionero_en_mi_habitacion_la_follo: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Nino/nino_misionero_en_mi_habitacion_la_follo.jpg", audio: "", descripcion: "nino_misionero_en_mi_habitacion_la_follo" },
+// =====================================================
             //  COWGIRL / REVERSE
             // =====================================================
             reverse_cowgirl: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD21/main/imagenes/img_1773692621326.jpg", audio: "https://files.catbox.moe/mjyomo.mp3", descripcion: "" },
