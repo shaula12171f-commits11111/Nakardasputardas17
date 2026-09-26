@@ -164,8 +164,8 @@ const QuintiImagenesPrueba = {
             //  COSPLAY
             // =====================================================
             // (sin imágenes todavía — agregá acá)
-
-            // =====================================================
+            cosplay_guerrera_putona: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Ichika/cosplay_guerrera_putona.jpg", audio: "", descripcion: "cosplay_guerrera_putona" },
+// =====================================================
             //  LUGARES
             // =====================================================
             bikini_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Ichika/BikiniPlaya.jpg", audio: "", descripcion: "Bikini doorado sombrero de paja grande liston azul" },
