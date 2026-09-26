@@ -661,6 +661,7 @@ const QuintiImagenesPrueba = {
             // (sin imágenes todavía — agregá acá)
             meto_los_dedos_en_la_concha_de_miku: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773021282184.jpg", audio: "", descripcion: "meto_los_dedos_en_la_concha_de_miku" },
             miku_squirt_mientras_meto_los_dedos_en_su_concha: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773021293962.jpg", audio: "", descripcion: "se corre mientras le meto los deddos en su concha" },
+            miku_squirt_sola: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773021307179.jpg", audio: "", descripcion: "se mete los dedos sola squirt sola" },
 // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
