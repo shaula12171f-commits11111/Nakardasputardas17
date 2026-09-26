@@ -535,6 +535,7 @@ const QuintiImagenesPrueba = {
             miku_estudiando: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789928346309.png", audio: "", descripcion: "miku estudiando" },
             miku_nota_mi_presencia_mientras_estudia: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789928349278.png", audio: "", descripcion: "miku se da cuenta de mi mientras ella estudia" },
             hablo_a_miku_mientras_ella_estudia: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789928351844.png", audio: "", descripcion: "hablo_a_miku_mientras_ella_estudia" },
+            miku_se_aburre_de_estudiar_y_hace_senal_De_querer_chupar_verga: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789928357561.png", audio: "", descripcion: "miku hace una señal con las manos de querer chupar verga" },
 // =====================================================
             //  BESOS
             // =====================================================
