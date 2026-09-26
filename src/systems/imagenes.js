@@ -614,6 +614,7 @@ const QuintiImagenesPrueba = {
             // =====================================================
             // (sin imágenes todavía — agregá acá)
             cosplay_enfermera_putona: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/cosplay_enfermera_putona.png", audio: "", descripcion: "medias blancas largas hasta los muslos. sombrero de enferma. stickers negros de corazon en los pezones" },
+            cosplay_enfermera_sexo: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/cosplay_enfermera_sexo.png", audio: "", descripcion: "sexo con cosplay de enferma. en 4  en la cama del hospital" },
 // =====================================================
             //  LUGARES
             // =====================================================
