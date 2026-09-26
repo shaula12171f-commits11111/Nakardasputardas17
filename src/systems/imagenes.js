@@ -533,6 +533,7 @@ const QuintiImagenesPrueba = {
             pongo_mi_verga_en_la_Raja_que_separa_su_culo: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789928426502.png", audio: "", descripcion: "pongo mi verga en medio de sus nalgas sin meterla" },
             miku_desnuda_en_la_cama_de_costado: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789928521502.png", audio: "", descripcion: "miku esta acostada desnuda en mi cama de costado" },
             miku_estudiando: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789928346309.png", audio: "", descripcion: "miku estudiando" },
+            miku_nota_mi_presencia_mientras_estudia: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789928349278.png", audio: "", descripcion: "miku se da cuenta de mi mientras ella estudia" },
 // =====================================================
             //  BESOS
             // =====================================================
