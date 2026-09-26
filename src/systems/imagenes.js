@@ -623,6 +623,7 @@ const QuintiImagenesPrueba = {
             cosplay_enfermera_putona: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/cosplay_enfermera_putona.png", audio: "", descripcion: "medias blancas largas hasta los muslos. sombrero de enferma. stickers negros de corazon en los pezones" },
             cosplay_enfermera_sexo: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/cosplay_enfermera_sexo.png", audio: "", descripcion: "sexo con cosplay de enferma. en 4  en la cama del hospital" },
             cosplay_momia: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773064598023.jpg", audio: "", descripcion: "cosplay de momia" },
+            cosplay_diosa: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773064591775.jpg", audio: "", descripcion: "cosplay de diosa vestido pequeño y joyas por el cuerpo  brazaletes de oro cinturon de oro gema azul  collar de oro" },
 // =====================================================
             //  LUGARES
             // =====================================================
