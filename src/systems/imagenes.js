@@ -948,8 +948,8 @@ const QuintiImagenesPrueba = {
             //  ROPA / LENCERÍA
             // =====================================================
             // (sin imágenes todavía — agregá acá)
-
-            // =====================================================
+            bikini_rojo_coletas_playa: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Itsuki/bikini_rojo_coletas_playa.jpg", audio: "", descripcion: "bikini_rojo_coletas_playa" },
+// =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
             // (sin imágenes todavía — agregá acá)
