@@ -562,6 +562,7 @@ const QuintiImagenesPrueba = {
             chupando_todo_el_pene: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD4/main/imagenes/img_1773179165469.jpg", audio: "", descripcion: "" },
             lamiendo_pene: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD36/main/imagenes/img_1778619219396.png", audio: "", descripcion: "" },
             miku_besa_la_punta_De_mi_polla: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789930931313.png", audio: "", descripcion: "miku_besa_la_punta_De_mi_polla besa mi glande" },
+            miku_lame_el_tronco_de_mi_verga: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/miku_lame_el_tronco_de_mi_verga.png", audio: "", descripcion: "miku_lame_el_tronco_de_mi_verga" },
 // =====================================================
             //  FACIAL / CUM
             // =====================================================
