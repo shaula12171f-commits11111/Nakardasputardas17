@@ -824,9 +824,12 @@ const QuintiImagenesPrueba = {
             // =====================================================
             //  USUARIO MUESTRA VERGA
             // =====================================================
+                    
             // (sin imágenes todavía — agregá acá)
+   yotsuba_mira_una_verga_grande_Se_soprende: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD65/main/imagenes/img_1780941518698.png", audio: "", descripcion: "yotsuba_mira_una_verga_grande_Se_soprende" },
+    
 }
-            yotsuba_mira_una_verga_grande_Se_soprende: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD65/main/imagenes/img_1780941518698.png", audio: "", descripcion: "yotsuba_mira_una_verga_grande_Se_soprende" },
+         
 },
 
     Itsuki: {
@@ -971,8 +974,9 @@ const QuintiImagenesPrueba = {
             //  USUARIO MUESTRA VERGA
             // =====================================================
             // (sin imágenes todavía — agregá acá)
+             itsuki_mira_una_verga_grande_Se_sorprende: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD65/main/imagenes/img_1780941522162.png", audio: "", descripcion: "itsuki_mira_una_verga_grande_Se_sorprende" },
 }
-            itsuki_mira_una_verga_grande_Se_sorprende: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD65/main/imagenes/img_1780941522162.png", audio: "", descripcion: "itsuki_mira_una_verga_grande_Se_sorprende" },
+           
 },
 
     Emilia: {
