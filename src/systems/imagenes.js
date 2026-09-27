@@ -967,7 +967,7 @@ const QuintiImagenesPrueba = {
             // =====================================================
             // (sin imágenes todavía — agregá acá)
 }
-           
+            itsuki_mira_una_verga_grande_Se_sorprende: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD65/main/imagenes/img_1780941522162.png", audio: "", descripcion: "itsuki_mira_una_verga_grande_Se_sorprende" },
 },
 
     Emilia: {
