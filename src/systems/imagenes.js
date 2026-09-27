@@ -655,6 +655,7 @@ const QuintiImagenesPrueba = {
             
             // → Total Miku: 27 tags
             miku_me_agarra_del_brazo: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789928480874.png", audio: "", descripcion: "sus tetas chocan mi brazo" },
+            miku_muestra_su_culo: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/miku_muestra_su_culo.jpg", audio: "", descripcion: "miku_muestra_su_culo" },
 // =====================================================
             //  69
             // =====================================================
