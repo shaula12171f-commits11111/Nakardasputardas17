@@ -623,6 +623,7 @@ const QuintiImagenesPrueba = {
             // =====================================================
             ropa_idol: { url: "https://pbs.twimg.com/media/HFobfuKWMAAiAke?format=jpg&name=large", audio: "", descripcion: "" },
             porrista: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773064579892.jpg", audio: "", descripcion: "falda rosada ponpones dorados top pequeño blanco  banditas en sus pezones" },
+            miku_ropa_gyaru: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789927457749.png", audio: "", descripcion: "bikini rosado tanga rosada  de hilo en forma de v string  camisa blanca abierta" },
 // =====================================================
             //  COSPLAY
             // =====================================================
