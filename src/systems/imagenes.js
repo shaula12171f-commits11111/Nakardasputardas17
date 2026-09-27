@@ -162,8 +162,8 @@ const QuintiImagenesPrueba = {
             ropa_idol: { url: "https://pbs.twimg.com/media/HFoblZNWIAA9Pgy?format=jpg&name=small", audio: "", descripcion: "" },
             ropa_vestido: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD66/main/imagenes/img_1781640176371.webp", audio: "", descripcion: "" },
             selfie_lenceria: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD20/main/imagenes/img_1773687448917.jpg", audio: "", descripcion: "Selfie lenceria negra celular azul fomando foto al espejo en el fondo se ve una cama y una planta" },
-
-            // =====================================================
+            ichika_ropa_gyaru: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789927448486.png", audio: "", descripcion: "bikini morado camisa abierta bikini triangular tanga v string  falda corta" },
+// =====================================================
             //  COSPLAY
             // =====================================================
             // (sin imágenes todavía — agregá acá)
