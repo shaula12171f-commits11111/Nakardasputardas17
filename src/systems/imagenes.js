@@ -679,8 +679,7 @@ const QuintiImagenesPrueba = {
             // =====================================================
             // (sin imágenes todavía — agregá acá)
 }
-   
-           
+            miku_mira_una_verga_grande_se_sorprende: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD65/main/imagenes/img_1780941515852.png", audio: "", descripcion: "miku_mira_una_verga_grande_se_sorprende" },
 },
 
     Yotsuba: {
