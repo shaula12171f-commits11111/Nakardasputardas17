@@ -567,6 +567,7 @@ const QuintiImagenesPrueba = {
             // =====================================================
             me_corro_en_su_boca: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773021980596.jpg", audio: "", descripcion: "" },
             me_corro_en_la_espalda_de_miku: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/me_corro_en_la_espalda_de_miku.jpg", audio: "", descripcion: "me corro en la espalda de miku despues del doggystyle" },
+            pongo_mi_verga_en_la_cara_de_miku: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/pongo_mi_verga_en_la_cara_de_miku.jpg", audio: "", descripcion: "pongo_mi_verga_en_la_cara_de_miku" },
 // =====================================================
             //  HANDJOB / PAJA / ASSJOB
             // =====================================================
