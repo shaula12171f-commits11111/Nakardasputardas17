@@ -777,8 +777,8 @@ const QuintiImagenesPrueba = {
             //  ROPA / LENCERÍA
             // =====================================================
             yotsuba_se_sube_la_falda_y_muestra_su_tanga_morada: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD29/main/imagenes/img_1774996833813.png", audio: "", descripcion: "" },
-
-            // =====================================================
+            yotsuba_ropa_gyaru: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD81/main/imagenes/img_1789927461974.png", audio: "", descripcion: "bikini rosado triangular  tanga en v string rosada camisa abierta" },
+// =====================================================
             //  COSPLAY
             // =====================================================
             // (sin imágenes todavía — agregá acá)
