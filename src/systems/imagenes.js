@@ -134,8 +134,8 @@ const QuintiImagenesPrueba = {
             //  CULO / NALGADAS / AGARRES
             // =====================================================
             mostrando_culo_tanga: { url: "https://pbs.twimg.com/media/HGJ4KmyW8AAZfgm?format=jpg&name=small", audio: "", descripcion: "tanga negra" },
-            usuario_agarra_el_culo_a_Ichika: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD12/main/imagenes/img_1773506776196.jpg", audio: "", descripcion: "" },
-            usuario_nalguea_el_culo_a_Ichika: { url: "https://files.catbox.moe/kufrln.png", audio: "https://files.catbox.moe/x5ti47.mp3", descripcion: "" },
+            agarro_el_culo_a_Ichika: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD12/main/imagenes/img_1773506776196.jpg", audio: "", descripcion: "" },
+            nalgueo_el_culo_a_Ichika: { url: "https://files.catbox.moe/kufrln.png", audio: "https://files.catbox.moe/x5ti47.mp3", descripcion: "" },
 
             // =====================================================
             //  DEDOS / SQUIRT / CONCHA
