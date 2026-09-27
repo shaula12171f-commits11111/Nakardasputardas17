@@ -178,8 +178,8 @@ const QuintiImagenesPrueba = {
             //  USUARIO MUESTRA VERGA
             // =====================================================
             usuario_muestra_su_verga: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD23/main/imagenes/img_1774807964911.png", audio: "", descripcion: "Verga Grande" },
-
-            // =====================================================
+            ichika_mira_una_verga_grande_se_sorprende: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD65/main/imagenes/img_1780941509788.png", audio: "", descripcion: "ichika_mira_una_verga_grande_se_sorprende" },
+// =====================================================
             //  POST SEXO / EXTRA
             // =====================================================
             manos_alrededor_del_cuello: { url: "https://raw.githubusercontent.com/Sorrow12171/imaginardas/main/imagenes/img_1776630296732_1.png", audio: "", descripcion: "" },
