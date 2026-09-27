@@ -642,7 +642,8 @@ const QuintiImagenesPrueba = {
         // =====================================================
           
             miku_follando_en_misionero_con_condon: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/miku_follando_en_misionero_con_condon.jpg", audio: "", descripcion: "miku_follando_en_misionero_con_condon" },
-             // =====================================================
+            miku_comprando_condones: { url: "https://raw.githubusercontent.com/shaula12171f-commits11111/wwasaxccvbiquintidfar/main/Miku/miku_comprando_condones.jpg", audio: "", descripcion: "miku_comprando_condones" },
+// =====================================================
         //  CULO / NALGADAS / AGARRES
         // =====================================================
         
