@@ -578,7 +578,7 @@ const QuintiImagenesPrueba = {
             // =====================================================
             //  DOGGYSTYLE
             // =====================================================
-            doggystyle: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773408899336.jpg", audio: "", descripcion: "" },
+            doggystyle: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD8/main/imagenes/img_1773408899336.jpg", audio: "https://files.catbox.moe/nrtcm2.mp3", descripcion: "" },
             follando_doggy_le_jalo_el_cabello: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773064421096.jpg", audio: "", descripcion: "follando_doggy_le_jalo_el_cabello" },
 // =====================================================
             //  MISIONERO
