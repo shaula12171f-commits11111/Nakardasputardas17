@@ -677,10 +677,14 @@ const QuintiImagenesPrueba = {
             le_chupo_la_concha: { url: "https://raw.githubusercontent.com/SORFAR123123/XDXDXDXDXD/main/imagenes/img_1773064534447.jpg", audio: "", descripcion: "chupo la concha de miku" },
 // =====================================================
             //  USUARIO MUESTRA VERGA
+            
             // =====================================================
             // (sin imágenes todavía — agregá acá)
+     miku_mira_una_verga_grande_se_sorprende: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD65/main/imagenes/img_1780941515852.png", audio: "", descripcion: "miku_mira_una_verga_grande_se_sorprende" },
+            
+            
 }
-            miku_mira_una_verga_grande_se_sorprende: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD65/main/imagenes/img_1780941515852.png", audio: "", descripcion: "miku_mira_una_verga_grande_se_sorprende" },
+           
 },
 
     Yotsuba: {
