@@ -27,8 +27,8 @@ const QuintiImagenesPrueba = {
             abriendo_la_boca_para_besar: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD23/main/imagenes/img_1774805915994.png", audio: "", descripcion: "" },
             besando: { url: "https://raw.githubusercontent.com/SORFAR123123/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD23/main/imagenes/img_1774807962734.png", audio: "", descripcion: "" },
             besando_desnuda: { url: "https://raw.githubusercontent.com/SORFAR123123/Putas-de-fabri/main/imagenes/img_1772901835049.jpg", audio: "", descripcion: "" },
-
-            // =====================================================
+            beso_en_la_calle: { url: "https://raw.githubusercontent.com/Sorrow12171/XDDDDDDDDDDDDDDDDDDDDXDXDXDXDXDXD85/main/imagenes/img_1791059287792.webp", audio: "", descripcion: "nos besamos en la calle" },
+// =====================================================
             //  EMOCIONES
             // =====================================================
             // (sin imágenes todavía — agregá acá)
